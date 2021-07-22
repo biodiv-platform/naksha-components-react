@@ -30,6 +30,7 @@ export interface NakshaMapboxListProps {
     endpoint: string;
     store: string;
     workspace: string;
+    onClick?: any;
   };
 
   selectedLayers?: SelectedLayers[];

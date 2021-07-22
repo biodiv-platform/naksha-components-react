@@ -68,6 +68,11 @@ export default function useLayerManager() {
           layer: hlLayer,
           properties: feat.properties,
         });
+
+        // if geoserver has onClick event defined then call it
+        if (geoserver?.onClick) {
+          geoserver?.onClick(feat);
+        }
       } else if (feat.layer.id.startsWith(LAYER_PREFIX_GRID)) {
         onMapEventGrid(e.lngLat, feat, setClickPopup);
       }
@@ -299,17 +304,12 @@ export default function useLayerManager() {
       const source = map.getSource(prefixedId);
       const mapLayer = map.getLayer(prefixedId);
 
-      const {
-        success,
-        geojson,
-        paint,
-        stops,
-        squareSize,
-      } = await getGridLayerData(
-        layer.source.fetcher,
-        map.getBounds(),
-        viewPort?.zoom
-      );
+      const { success, geojson, paint, stops, squareSize } =
+        await getGridLayerData(
+          layer.source.fetcher,
+          map.getBounds(),
+          viewPort?.zoom
+        );
 
       if (success) {
         if (source) {

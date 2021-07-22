@@ -39,6 +39,10 @@ const fetchGridData = async (geoProps) => {
   return response.data.geohashAggregation;
 };
 
+const handleOnGeoserverLayerClick = (feat) => {
+  console.debug("gs_clicked!", feat);
+};
+
 export const NakshaMapboxListStory = () => (
   <NakshaMapboxList
     viewPort={defaultNakshaProps.viewPort}
@@ -52,6 +56,7 @@ export const NakshaMapboxListStory = () => (
       endpoint: "http://localhost:8010/proxy/geoserver",
       store: "naksha",
       workspace: "biodiv",
+      onClick: handleOnGeoserverLayerClick,
     }}
     onLayerDownload={handleOnDownload}
     layers={[
