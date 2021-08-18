@@ -57,7 +57,7 @@ export default function LayerUploadForm() {
       })
     ),
     defaultValues: {
-      layerType: shp.meta.type.toUpperCase(),
+      layerType: shp.meta?.type?.toUpperCase(),
       layerColumnDescription: Object.fromEntries(
         dbf.meta.keys.map((k) => [k, k])
       ),

@@ -1,11 +1,20 @@
 import { openDbf, openShp } from "shapefile";
 
+import { LAYER_TYPES } from "../icons/constants";
+
 export const parseSHP = (file, update) => {
   const readerShp = new FileReader();
   readerShp.onload = async () => {
     const sourceShp = await openShp(readerShp.result);
     const meta = (await sourceShp.read()).value;
-    update("shp", file, meta);
+    update("shp", file, {
+      ...meta,
+
+      // if unknown types are identified it will fallback to manual selection
+      type: LAYER_TYPES.includes(meta.type.toUpperCase())
+        ? meta.type
+        : undefined,
+    });
   };
   readerShp.readAsArrayBuffer(file);
 };
