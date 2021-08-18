@@ -2,7 +2,7 @@
   "name": "@ibp/naksha-upload",
   "author": "harshzalavadiya",
   "module": "dist/naksha-upload.esm.js",
-  "version": "3.10.1",
+  "version": "3.10.2",
   "license": "Apache-2.0",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -47,7 +47,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "2.6.0",
-    "@ibp/naksha-commons": "3.9.9",
+    "@ibp/naksha-commons": "3.10.2",
     "react-dropzone": "^11.3.2",
     "react-hook-form": "^7.9.0",
     "react-multi-select-component": "^4.0.2",
