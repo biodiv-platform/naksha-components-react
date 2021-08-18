@@ -2,7 +2,7 @@
   "name": "naksha-components-react",
   "author": "harshzalavadiya",
   "module": "dist/naksha.esm.js",
-  "version": "3.10.0",
+  "version": "3.10.1",
   "license": "Apache-2.0",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -41,6 +41,6 @@
     "@ibp/naksha-mapbox-draw": "3.9.9",
     "@ibp/naksha-mapbox-list": "3.10.0",
     "@ibp/naksha-mapbox-view": "3.9.9",
-    "@ibp/naksha-upload": "3.9.9"
+    "@ibp/naksha-upload": "3.10.1"
   }
 }

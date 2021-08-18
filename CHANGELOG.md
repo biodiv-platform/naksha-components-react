@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.10.1](https://github.com/strandls/naksha-components-react/compare/v3.10.0...v3.10.1) (2021-08-18)
+
+
+### Bug Fixes
+
+* :bug: auto layer type recognisation ([d480b17](https://github.com/strandls/naksha-components-react/commit/d480b17c7a2f0f73a3afa315c9494911205401cc))
+
+
+
+
+
 # [3.10.0](https://github.com/strandls/naksha-components-react/compare/v3.9.9...v3.10.0) (2021-07-22)
 
 
