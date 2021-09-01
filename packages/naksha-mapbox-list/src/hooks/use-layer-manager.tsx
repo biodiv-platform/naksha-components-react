@@ -369,6 +369,9 @@ export default function useLayerManager() {
     }
 
     setLayers((_draft) => {
+      if (!_draft[layerIndex].isAdded && add) {
+        _draft[layerIndex].ats = new Date().getTime();
+      }
       _draft[layerIndex].isAdded = add;
     });
   };
