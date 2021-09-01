@@ -72,6 +72,7 @@ export interface GeoserverLayer {
   isDownloadable?: boolean;
   bbox?: any[];
   isAdded?: boolean;
+  ats?;
   source: {
     type: LayerType;
     scheme?;

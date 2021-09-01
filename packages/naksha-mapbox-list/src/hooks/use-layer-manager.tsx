@@ -13,7 +13,12 @@ import {
   axToggleLayerPublishing,
   getGridLayerData,
 } from "../services/naksha";
-import { FEATURE_PROP, HL, LAYER_PREFIX, LAYER_PREFIX_GRID } from "../static/constants";
+import {
+  FEATURE_PROP,
+  HL,
+  LAYER_PREFIX,
+  LAYER_PREFIX_GRID,
+} from "../static/constants";
 import { useLayers } from "./use-layers";
 
 export default function useLayerManager() {
@@ -34,6 +39,12 @@ export default function useLayerManager() {
     setHoverPopup,
     onLayerDownload,
   } = useLayers();
+
+  const getTopMapLayerId = () => {
+    const map = mapRef?.current?.getMap();
+    const layers = map.getStyle().layers;
+    return layers.find((layer) => layer.id.includes(LAYER_PREFIX))?.id;
+  };
 
   /**
    * On clicking handler for map
@@ -157,7 +168,7 @@ export default function useLayerManager() {
     removeHighlightedLayers();
 
     infobarData?.forEach(({ layer }) => {
-      map.addLayer(layer);
+      map.addLayer(layer, getTopMapLayerId());
     });
   };
 
@@ -263,6 +274,12 @@ export default function useLayerManager() {
       if (add) {
         _draft[layerIndex].data = layerMeta;
       }
+
+      // only update ats time if layer is newly added
+      if (!_draft[layerIndex].isAdded) {
+        _draft[layerIndex].ats = new Date().getTime();
+      }
+
       _draft[layerIndex].isAdded = add;
     });
 
@@ -271,7 +288,7 @@ export default function useLayerManager() {
         map.addSource(id, layer.source);
       }
       removeLayer(map, id);
-      map.addLayer(layerMeta?.styles?.[styleIndex].colors);
+      map.addLayer(layerMeta?.styles?.[styleIndex].colors, getTopMapLayerId());
       updateToBBox(layer.bbox, updateBbox);
     } else {
       const t = infobarData?.filter(
@@ -325,12 +342,15 @@ export default function useLayerManager() {
             map.setPaintProperty(prefixedId, k, v);
           });
         } else {
-          map.addLayer({
-            id: prefixedId,
-            source: prefixedId,
-            type: "fill",
-            paint,
-          });
+          map.addLayer(
+            {
+              id: prefixedId,
+              source: prefixedId,
+              type: "fill",
+              paint,
+            },
+            getTopMapLayerId()
+          );
 
           const b = bbox(geojson);
           updateToBBox(

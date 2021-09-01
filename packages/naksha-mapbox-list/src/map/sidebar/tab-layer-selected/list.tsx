@@ -16,13 +16,15 @@ export default function LayersList({ q }: { q? }) {
   }, [layers]);
 
   useEffect(() => {
-    setFilteredLayers(
+    const newFilteredLayers = (
       q
         ? selectedLayers.filter((l) =>
             l.title.toLowerCase().includes(q.toLowerCase())
           )
         : selectedLayers
-    );
+    ).sort((a, b) => (b.ats || 0) - a.ats);
+
+    setFilteredLayers(newFilteredLayers);
   }, [q, selectedLayers]);
 
   return (
