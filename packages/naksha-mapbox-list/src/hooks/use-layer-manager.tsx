@@ -40,12 +40,6 @@ export default function useLayerManager() {
     onLayerDownload,
   } = useLayers();
 
-  const getTopMapLayerId = () => {
-    const map = mapRef?.current?.getMap();
-    const layers = map.getStyle().layers;
-    return layers.find((layer) => layer.id.includes(LAYER_PREFIX))?.id;
-  };
-
   /**
    * On clicking handler for map
    * - highlights features on vector layers
@@ -95,7 +89,7 @@ export default function useLayerManager() {
   const onMapHover = (e) => {
     let noFeature = true;
 
-    e?.features?.forEach((featureRaw) => {
+    e?.features?.reverse()?.forEach((featureRaw) => {
       const feat = featureRaw.toJSON();
       if (feat.layer.id.startsWith(LAYER_PREFIX_GRID)) {
         onMapEventGrid(e.lngLat, feat, setHoverPopup, "onHover");
@@ -168,7 +162,7 @@ export default function useLayerManager() {
     removeHighlightedLayers();
 
     infobarData?.forEach(({ layer }) => {
-      map.addLayer(layer, getTopMapLayerId());
+      map.addLayer(layer);
     });
   };
 
@@ -284,11 +278,14 @@ export default function useLayerManager() {
     });
 
     if (add) {
+      // prevent unnecessary re-renders for existing layer
+      if (layer.isAdded) return;
+
       if (!map.getSource(id)) {
         map.addSource(id, layer.source);
       }
       removeLayer(map, id);
-      map.addLayer(layerMeta?.styles?.[styleIndex].colors, getTopMapLayerId());
+      map.addLayer(layerMeta?.styles?.[styleIndex].colors);
       updateToBBox(layer.bbox, updateBbox);
     } else {
       const t = infobarData?.filter(
@@ -342,15 +339,12 @@ export default function useLayerManager() {
             map.setPaintProperty(prefixedId, k, v);
           });
         } else {
-          map.addLayer(
-            {
-              id: prefixedId,
-              source: prefixedId,
-              type: "fill",
-              paint,
-            },
-            getTopMapLayerId()
-          );
+          map.addLayer({
+            id: prefixedId,
+            source: prefixedId,
+            type: "fill",
+            paint,
+          });
 
           const b = bbox(geojson);
           updateToBBox(
