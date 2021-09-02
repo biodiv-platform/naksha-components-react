@@ -4,7 +4,7 @@
     "packages/*"
   ],
   "useWorkspaces": true,
-  "version": "3.10.4",
+  "version": "3.10.5",
   "command": {
     "version": {
       "exact": true

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.10.5](https://github.com/strandls/naksha-components-react/compare/v3.10.4...v3.10.5) (2021-09-02)
+
+
+### Bug Fixes
+
+* :bug: popup message fix ([fd40137](https://github.com/strandls/naksha-components-react/commit/fd401376e14e3149a765a3be0dfddc063b3eb0e6))
+
+
+
+
+
 ## [3.10.4](https://github.com/strandls/naksha-components-react/compare/v3.10.3...v3.10.4) (2021-09-01)
 
 **Note:** Version bump only for package root
