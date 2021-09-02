@@ -38,6 +38,8 @@ export default function useLayerManager() {
     setClickPopup,
     setHoverPopup,
     onLayerDownload,
+    lastSelectedLayerId,
+    setLastSelectedLayerId,
   } = useLayers();
 
   /**
@@ -89,17 +91,21 @@ export default function useLayerManager() {
   const onMapHover = (e) => {
     let noFeature = true;
 
-    e?.features?.reverse()?.forEach((featureRaw) => {
-      const feat = featureRaw.toJSON();
-      if (feat.layer.id.startsWith(LAYER_PREFIX_GRID)) {
-        onMapEventGrid(e.lngLat, feat, setHoverPopup, "onHover");
-        noFeature = false;
-      }
-      if (feat.layer.id.startsWith(LAYER_PREFIX)) {
-        onMapEventVector(e.lngLat, feat, setHoverPopup);
-        noFeature = false;
-      }
-    });
+    const lId = lastSelectedLayerId;
+
+    e?.features
+      ?.filter(({ layer }) => (lId ? layer.id === lId : true))
+      ?.forEach((featureRaw) => {
+        const feat = featureRaw.toJSON();
+        if (feat.layer.id.startsWith(LAYER_PREFIX_GRID)) {
+          onMapEventGrid(e.lngLat, feat, setHoverPopup, "onHover");
+          noFeature = false;
+        }
+        if (feat.layer.id.startsWith(LAYER_PREFIX)) {
+          onMapEventVector(e.lngLat, feat, setHoverPopup);
+          noFeature = false;
+        }
+      });
     if (noFeature) {
       setHoverPopup(null);
     }
@@ -264,6 +270,11 @@ export default function useLayerManager() {
     const layer = layers[layerIndex];
     const layerMeta = await getLayerStyle(layer, styleIndex);
 
+    // set last selected layerId for hover popup
+    if (add && !layer.isAdded) {
+      setLastSelectedLayerId(layer.id);
+    }
+
     setLayers((_draft) => {
       if (add) {
         _draft[layerIndex].data = layerMeta;
@@ -317,6 +328,9 @@ export default function useLayerManager() {
       const layer = layers[layerIndex];
       const source = map.getSource(prefixedId);
       const mapLayer = map.getLayer(prefixedId);
+
+      // set last selected layerId for hover popup
+      if (!layer.isAdded) setLastSelectedLayerId(layer.id);
 
       const { success, geojson, paint, stops, squareSize } =
         await getGridLayerData(

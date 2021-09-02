@@ -38,6 +38,9 @@ interface LayerContextProps extends NakshaMapboxListProps {
 
   bearerToken?;
   onLayerDownload?;
+
+  lastSelectedLayerId?;
+  setLastSelectedLayerId?;
 }
 
 const LayersContext = createContext<LayerContextProps>(defaultNakshaProps);
@@ -53,6 +56,7 @@ export const LayersProvider = (props: NakshaMapboxListProps) => {
   const [layers, setLayers] = useImmer(props.layers);
 
   const [selectedLayers, setSelectedLayers] = useImmer(props.selectedLayers);
+  const [lastSelectedLayerId, setLastSelectedLayerId] = useState<any>();
   const [infobarData, setInfobarData] = useState<any>([]);
   const [legend, setLegend] = useState({});
 
@@ -90,6 +94,9 @@ export const LayersProvider = (props: NakshaMapboxListProps) => {
 
         hoverPopup,
         setHoverPopup,
+
+        lastSelectedLayerId,
+        setLastSelectedLayerId,
       }}
     >
       <TranslationProvider localeStrings={LocaleStrings} lang={props.lang}>
