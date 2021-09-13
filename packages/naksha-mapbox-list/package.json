@@ -1,7 +1,7 @@
 {
   "name": "@ibp/naksha-mapbox-list",
   "author": "harshzalavadiya",
-  "version": "3.10.12",
+  "version": "3.10.14",
   "license": "Apache-2.0",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -48,16 +48,18 @@
     "@types/react": "^17.0.20",
     "@types/react-dom": "^17.0.9",
     "framer-motion": "^4.1.17",
+    "immer": "^9.0.6",
     "react": ">=17",
     "react-dom": "^17.0.2",
     "react-map-gl": "^6.1.17",
     "react-virtualized-auto-sizer": "^1.0.6",
     "react-window": "^1.8.6",
     "tslib": "^2.3.1",
-    "typescript": "^4.4.3"
+    "typescript": "^4.4.3",
+    "use-immer": "^0.6.0"
   },
   "dependencies": {
-    "@ibp/naksha-commons": "3.10.12",
+    "@ibp/naksha-commons": "3.10.14",
     "@turf/bbox": "^6.5.0",
     "boundingbox": "^1.2.5",
     "colorbrewer": "^1.5.1",
