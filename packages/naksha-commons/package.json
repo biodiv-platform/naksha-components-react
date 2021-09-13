@@ -1,7 +1,7 @@
 {
   "name": "@ibp/naksha-commons",
   "author": "harshzalavadiya",
-  "version": "3.10.9",
+  "version": "3.10.10",
   "license": "Apache-2.0",
   "type": "module",
   "source": "./src/index.tsx",
