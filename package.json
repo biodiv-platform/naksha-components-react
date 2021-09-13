@@ -35,6 +35,7 @@
     "@storybook/addon-links": "^6.3.8",
     "@storybook/react": "^6.3.8",
     "babel-loader": "^8.2.2",
+    "babel-plugin-inline-json-import": "^0.3.2",
     "concurrently": "^6.2.1",
     "cross-env": "^7.0.3",
     "git-cz": "^4.7.6",
