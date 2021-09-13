@@ -88,28 +88,26 @@ export default function useLayerManager() {
     setInfobarData(hlLayers);
   };
 
-  const onMapHover = (e) => {
-    let noFeature = true;
-
+  const onMapHover = debounce((e) => {
     const lId = lastSelectedLayerId;
 
-    e?.features
-      ?.filter(({ layer }) => (lId ? layer.id === lId : true))
-      ?.forEach((featureRaw) => {
-        const feat = featureRaw.toJSON();
-        if (feat.layer.id.startsWith(LAYER_PREFIX_GRID)) {
-          onMapEventGrid(e.lngLat, feat, setHoverPopup, "onHover");
-          noFeature = false;
-        }
-        if (feat.layer.id.startsWith(LAYER_PREFIX)) {
-          onMapEventVector(e.lngLat, feat, setHoverPopup);
-          noFeature = false;
-        }
-      });
-    if (noFeature) {
+    const featureRaw = e?.features?.find(({ layer }) =>
+      lId ? layer?.id === lId : true
+    );
+
+    if (!featureRaw || !lId) {
       setHoverPopup(null);
+      return;
     }
-  };
+
+    if (featureRaw.layer.id.startsWith(LAYER_PREFIX_GRID)) {
+      onMapEventGrid(e.lngLat, featureRaw.toJSON(), setHoverPopup, "onHover");
+    }
+
+    if (featureRaw.layer.id.startsWith(LAYER_PREFIX)) {
+      onMapEventVector(e.lngLat, featureRaw.toJSON(), setHoverPopup);
+    }
+  }, 50);
 
   const onMapEventGrid = (lngLat, feature, set, eventProp = "onClick") => {
     const layer = layers.find(
@@ -330,7 +328,7 @@ export default function useLayerManager() {
       const mapLayer = map.getLayer(prefixedId);
 
       // set last selected layerId for hover popup
-      if (!layer.isAdded) setLastSelectedLayerId(layer.id);
+      if (!layer.isAdded) setLastSelectedLayerId(prefixedId);
 
       const { success, geojson, paint, stops, squareSize } =
         await getGridLayerData(

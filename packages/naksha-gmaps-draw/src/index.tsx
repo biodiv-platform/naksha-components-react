@@ -16,7 +16,7 @@ export interface NakshaGmapsDrawProps {
   defaultViewPort?;
   defaultFeatures?;
   onFeaturesChange?;
-  gmapApiAccessToken: string;
+  gmapApiAccessToken?;
   isControlled?: boolean;
   isReadOnly?: boolean;
   isMultiple?: boolean;

@@ -19,10 +19,10 @@ interface ItemProps {
   style;
 }
 
-const Item = memo<ItemProps>(({ data: { q = "", data }, index, style }) => {
+const Item = memo<ItemProps>(({ data, index, style }) => {
   const { toggleLayer, handleOnLayerDownload } = useLayerManager();
   const [isLoading, setIsLoading] = useState(false);
-  const layer = data[index];
+  const layer = data?.data[index];
 
   const handleOnChange = async (e) => {
     setIsLoading(true);
@@ -64,7 +64,11 @@ const Item = memo<ItemProps>(({ data: { q = "", data }, index, style }) => {
         />
         <div>
           <Text mb={1}>
-            <Highlight style={overflowStyle1} title={layer.title} search={q}>
+            <Highlight
+              style={overflowStyle1}
+              title={layer.title}
+              search={data?.q || ""}
+            >
               {layer.title}
             </Highlight>
           </Text>

@@ -11,7 +11,9 @@ export default function Legend() {
   } = useLayers();
   const { t } = useT();
 
-  return visible ? (
+  if (!visible) return null;
+
+  return (
     <Box
       m={4}
       mb={8}
@@ -44,5 +46,5 @@ export default function Legend() {
         1 {t("square")} = {squareSize} x {squareSize} km
       </div>
     </Box>
-  ) : null;
+  );
 }

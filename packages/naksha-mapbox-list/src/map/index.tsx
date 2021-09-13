@@ -30,12 +30,8 @@ export default function Map() {
     setHoverPopup,
   } = useLayers();
 
-  const {
-    reloadLayers,
-    onMapClick,
-    onMapHover,
-    renderHLData,
-  } = useLayerManager();
+  const { reloadLayers, onMapClick, onMapHover, renderHLData } =
+    useLayerManager();
 
   const [isReady, setIsReady] = useState<boolean>();
   const debouncedViewPort = useDebounce(viewPort, 500);
@@ -93,7 +89,7 @@ export default function Map() {
         <MarkersList />
       </MapGL>
       {loadToC && <Sidebar />}
-      {infobarData?.length ? <InfoBar key={infobarData[0]?.layer?.id} /> : null}
+      {infobarData?.length && <InfoBar key={infobarData[0]?.layer?.id} />}
     </Box>
   );
 }

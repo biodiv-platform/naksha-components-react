@@ -40,17 +40,17 @@ export const defaultMapStyles = [
   {
     text: "Streets",
     key: BaseLayer.MAP_STREETS,
-    style: "mapbox://styles/mapbox/streets-v11",
+    style: "mapbox://styles/mapbox/streets-v11?optimize=true",
   },
   {
     text: "Satellite",
     key: BaseLayer.MAP_SATELLITE,
-    style: "mapbox://styles/mapbox/satellite-streets-v11",
+    style: "mapbox://styles/mapbox/satellite-streets-v11?optimize=true",
   },
   {
     text: "Dark",
     key: BaseLayer.MAP_DARK,
-    style: "mapbox://styles/mapbox/dark-v10",
+    style: "mapbox://styles/mapbox/dark-v10?optimize=true",
   },
   {
     text: "OSM",

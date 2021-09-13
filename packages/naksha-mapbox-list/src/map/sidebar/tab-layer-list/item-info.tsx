@@ -38,7 +38,13 @@ const ListItem = ({ icon: Icon, children, title }: ListItemProps) => (
   </Box>
 );
 
-export default function ItemInfo({ layer, onDownload, mb = 0 }) {
+interface ItemInfoProps {
+  layer;
+  onDownload;
+  mb?;
+}
+
+export default function ItemInfo({ layer, onDownload, mb }: ItemInfoProps) {
   const { managePublishing } = useLayers();
   const { t } = useT();
 
@@ -63,7 +69,7 @@ export default function ItemInfo({ layer, onDownload, mb = 0 }) {
           "NA"
         )}
       </ListItem>
-      {layer.source.type !== "grid" ? (
+      {layer.source.type !== "grid" && (
         <Flex justifyContent="space-between" mt={2}>
           {managePublishing && (
             <ManagePublishing
@@ -129,7 +135,7 @@ export default function ItemInfo({ layer, onDownload, mb = 0 }) {
             </Portal>
           </Popover>
         </Flex>
-      ) : null}
+      )}
     </Box>
   );
 }

@@ -36,19 +36,24 @@ const VectorLayerInfo = React.memo(function (props: any) {
 });
 
 export default function PopupContainer({
-  data: { element: Element, lngLat, ...rest },
+  data,
   set,
-  closeButton = true,
+  closeButton,
 }: IPopupContainerProps) {
-  return Element ? (
+  if (!data.element) return null;
+
+  const Element = data?.element === 1 ? VectorLayerInfo : data?.element;
+
+  return (
     <Popup
       onClose={() => set(null)}
-      closeButton={closeButton}
+      closeButton={closeButton ?? true}
       closeOnClick={false}
-      latitude={lngLat[1]}
-      longitude={lngLat[0]}
+      key={data?.layerId}
+      latitude={data.lngLat[1]}
+      longitude={data.lngLat[0]}
     >
-      {Element === 1 ? <VectorLayerInfo {...rest} /> : <Element {...rest} />}
+      <Element key={data?.layerId} {...data} />
     </Popup>
-  ) : null;
+  );
 }

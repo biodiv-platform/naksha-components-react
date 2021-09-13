@@ -1,6 +1,6 @@
 import { IconButton } from "@chakra-ui/react";
 import { useT } from "@ibp/naksha-commons";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import useLayerManager from "../../../hooks/use-layer-manager";
 import { IconDelete, IconEyeOff, IconEyeOn } from "../../icons";
@@ -16,15 +16,17 @@ export default function ManagePublishing({ layerStatus, layerId }) {
     DELETE: t("delete"),
   };
 
-  useEffect(() => {
-    toggleLayerPublishing(layerId, isPublished);
-  }, [isPublished]);
-
   const onLayerDelete = async () => {
     // eslint-disable-next-line no-restricted-globals
     if (confirm(t("are_you_sure"))) {
       await deleteLayer(layerId);
     }
+  };
+
+  const onPublishChanged = () => {
+    const status = !isPublished;
+    setIsPublished(status);
+    toggleLayerPublishing(layerId, status);
   };
 
   return (
@@ -36,7 +38,7 @@ export default function ManagePublishing({ layerStatus, layerId }) {
         aria-label={isPublished ? ACTIONS.PENDING : ACTIONS.PUBLISH}
         title={isPublished ? ACTIONS.PENDING : ACTIONS.PUBLISH}
         icon={isPublished ? <IconEyeOff /> : <IconEyeOn />}
-        onClick={() => setIsPublished(!isPublished)}
+        onClick={onPublishChanged}
       />
       <IconButton
         variant="outline"

@@ -15,9 +15,11 @@ const Popup = (props) => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const HoverPopup = ({ feature }) => {
-  return <div>{feature?.properties?.count} Observations</div>;
-};
+const HoverPopup = ({ feature }) => (
+  <div key={feature?.properties?.count}>
+    {feature?.properties?.count} Observations
+  </div>
+);
 
 const handleOnDownload = async (layer) => {
   console.debug(layer);
@@ -29,7 +31,7 @@ const fetchGridData = async (geoProps) => {
     ...geoProps,
     view: "map",
     geoField: "location",
-    taxon: 5275,
+    // taxon: 5275,
   };
 
   const response = await axios.post(
@@ -64,7 +66,7 @@ export const NakshaMapboxListStory = () => (
       {
         id: "global-observations",
         title: "Global Observations",
-        isAdded: true,
+        isAdded: false,
         source: { type: "grid", fetcher: fetchGridData },
         onClick: Popup,
         onHover: HoverPopup,
