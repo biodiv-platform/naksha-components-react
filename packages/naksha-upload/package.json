@@ -1,7 +1,7 @@
 {
   "name": "@ibp/naksha-upload",
   "author": "harshzalavadiya",
-  "version": "3.10.8",
+  "version": "3.10.9",
   "license": "Apache-2.0",
   "type": "module",
   "source": "./src/index.tsx",
@@ -48,7 +48,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "2.8.0",
-    "@ibp/naksha-commons": "^3.10.8",
+    "@ibp/naksha-commons": "3.10.9",
     "react-dropzone": "^11.3.4",
     "react-hook-form": "^7.15.3",
     "react-multi-select-component": "^4.1.10",
