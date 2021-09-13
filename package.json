@@ -21,7 +21,13 @@
     "release:local": "lerna publish --no-git-tag-version --force-publish --no-private --no-push --registry=\"http://localhost:4873/\"",
     "storybook": "start-storybook -p 3000"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@babel/cli": "^7.15.4",
+    "@babel/preset-env": "^7.15.6",
+    "@babel/preset-react": "^7.14.5",
+    "@babel/preset-typescript": "^7.15.0",
+    "@babel/runtime": "^7.15.4"
+  },
   "devDependencies": {
     "@babel/core": "^7.15.5",
     "@storybook/addon-actions": "^6.3.8",
@@ -29,6 +35,8 @@
     "@storybook/addon-links": "^6.3.8",
     "@storybook/react": "^6.3.8",
     "babel-loader": "^8.2.2",
+    "concurrently": "^6.2.1",
+    "cross-env": "^7.0.3",
     "git-cz": "^4.7.6",
     "lerna": "^4.0.0",
     "prettier": "^2.4.0",

@@ -3,22 +3,29 @@
   "author": "harshzalavadiya",
   "version": "3.10.10",
   "license": "Apache-2.0",
-  "type": "module",
-  "source": "./src/index.tsx",
-  "exports": "./dist/index.modern.js",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.esm.js",
-  "types": "./dist/index.d.ts",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/types/index.d.ts",
+  "typings": "dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/cjs/index.js",
+      "default": "./dist/esm/index.js"
+    }
+  },
   "repository": "strandls/naksha-components-react",
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
   "engines": {
     "node": ">=14"
   },
   "scripts": {
-    "build": "microbundle --sourcemap false --jsx React.createElement",
+    "prebuild": "rimraf dist",
+    "build": "concurrently yarn:build:*",
+    "build:esm": "cross-env BABEL_ENV=esm babel src --root-mode upward --extensions .ts,.tsx -d dist/esm --source-maps",
+    "build:cjs": "cross-env BABEL_ENV=cjs babel src --root-mode upward --extensions .ts,.tsx -d dist/cjs --source-maps",
+    "build:types": "tsc --emitDeclarationOnly --declaration --declarationDir dist/types",
     "lint": "eslint src --ext .ts,.tsx --config ../../.eslintrc.json"
   },
   "peerDependencies": {
