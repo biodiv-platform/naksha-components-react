@@ -11681,10 +11681,10 @@ react-map-gl@^6.1.17:
     resize-observer-polyfill "^1.5.1"
     viewport-mercator-project "^7.0.4"
 
-react-multi-select-component@^4.1.10:
-  version "4.1.10"
-  resolved "https://registry.yarnpkg.com/react-multi-select-component/-/react-multi-select-component-4.1.10.tgz#b3786cd3e087aad03a072a3d82168e5ad3389ae7"
-  integrity sha512-h4QcM10tFWkhdjzxqLVqVslDZ+wyUeELCRHYpkmaG6UG9IgUj85uAB9xSTTUFhJh6K8CoKy5RbjRwF2SYgHvEg==
+react-multi-select-component@4.1.1-0.canary-1:
+  version "4.1.1-0.canary-1"
+  resolved "https://registry.yarnpkg.com/react-multi-select-component/-/react-multi-select-component-4.1.1-0.canary-1.tgz#ebe7e5b6c37292bfa812559f566f16819530296f"
+  integrity sha512-7dH+c8A5g7exwvooQUgh9XSmWfg+VWIVX+oL0a9tNdfFy7CpBZJY59CMff4S0B7dUer786Hhwmntq5zqLxNa9Q==
 
 react-popper-tooltip@^3.1.1:
   version "3.1.1"
