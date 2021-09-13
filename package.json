@@ -35,8 +35,5 @@
     "react-docgen-typescript-loader": "^3.7.2",
     "ts-loader": "^9.2.5",
     "yarn-deduplicate": "^3.1.0"
-  },
-  "resolutions": {
-    "@turf/difference": "6.0.1"
   }
 }

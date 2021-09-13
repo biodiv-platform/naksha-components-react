@@ -1,32 +1,32 @@
 {
   "name": "@ibp/naksha-upload",
   "author": "harshzalavadiya",
-  "module": "dist/naksha-upload.esm.js",
   "version": "3.10.8",
   "license": "Apache-2.0",
-  "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
+  "type": "module",
+  "source": "./src/index.tsx",
+  "exports": "./dist/index.modern.js",
+  "main": "./dist/index.esm.js",
+  "module": "./dist/index.esm.js",
+  "types": "./dist/index.d.ts",
   "repository": "strandls/naksha-components-react",
   "files": [
     "dist",
     "src"
   ],
   "engines": {
-    "node": ">=10"
+    "node": ">=14"
   },
   "scripts": {
-    "start": "tsdx watch",
-    "build": "tsdx build",
-    "lint": "eslint src --ext .ts,.tsx --config ../../.eslintrc.json",
-    "prepare": "tsdx build"
+    "build": "microbundle -f es,modern --sourcemap false --jsx React.createElement",
+    "lint": "eslint src --ext .ts,.tsx --config ../../.eslintrc.json"
   },
   "peerDependencies": {
     "@chakra-ui/react": "^1.6.7",
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
     "framer-motion": "^4.1.17",
-    "react": ">=17",
-    "react-multi-select-component": "^4.1.10"
+    "react": ">=17"
   },
   "publishConfig": {
     "access": "public"
@@ -39,18 +39,19 @@
     "@types/react-dom": "^17.0.9",
     "framer-motion": "^4.1.17",
     "immer": "^9.0.6",
+    "microbundle": "^0.13.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "tsdx": "^0.14.1",
     "tslib": "^2.3.1",
     "typescript": "^4.4.3",
     "use-immer": "^0.6.0"
   },
   "dependencies": {
     "@hookform/resolvers": "2.8.0",
-    "@ibp/naksha-commons": "3.10.7",
+    "@ibp/naksha-commons": "^3.10.8",
     "react-dropzone": "^11.3.4",
     "react-hook-form": "^7.15.3",
+    "react-multi-select-component": "^4.1.10",
     "shapefile": "^0.6.6",
     "yup": "^0.32.9"
   }
