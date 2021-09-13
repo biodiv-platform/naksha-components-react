@@ -6,7 +6,7 @@
   "type": "module",
   "source": "./src/index.tsx",
   "exports": "./dist/index.modern.js",
-  "main": "./dist/index.esm.js",
+  "main": "./dist/index.cjs",
   "module": "./dist/index.esm.js",
   "types": "./dist/index.d.ts",
   "repository": "strandls/naksha-components-react",
@@ -18,7 +18,7 @@
     "node": ">=14"
   },
   "scripts": {
-    "build": "microbundle -f es,modern --sourcemap false --jsx React.createElement",
+    "build": "microbundle --sourcemap false --jsx React.createElement",
     "lint": "eslint src --ext .ts,.tsx --config ../../.eslintrc.json"
   },
   "peerDependencies": {
