@@ -2,7 +2,7 @@
   "name": "@ibp/naksha-mapbox-view",
   "author": "harshzalavadiya",
   "module": "dist/example.esm.js",
-  "version": "3.10.2",
+  "version": "3.10.7",
   "license": "Apache-2.0",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -38,6 +38,6 @@
     "typescript": "^4.4.3"
   },
   "dependencies": {
-    "@ibp/naksha-commons": "3.10.2"
+    "@ibp/naksha-commons": "3.10.7"
   }
 }

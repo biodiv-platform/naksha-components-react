@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.10.7](https://github.com/strandls/naksha-components-react/compare/v3.10.6...v3.10.7) (2021-09-13)
+
+
+### Performance Improvements
+
+* :zap: rendering optimizations ([3174e6a](https://github.com/strandls/naksha-components-react/commit/3174e6a35b432204475efbc854383cec877960d6))
+
+
+
+
+
 ## [3.10.2](https://github.com/strandls/naksha-components-react/compare/v3.10.1...v3.10.2) (2021-08-18)
 
 **Note:** Version bump only for package @ibp/naksha-gmaps-draw
