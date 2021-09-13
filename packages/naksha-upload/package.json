@@ -21,6 +21,7 @@
     "prepare": "tsdx build"
   },
   "peerDependencies": {
+    "react-multi-select-component": "^4.1.10",
     "@chakra-ui/react": "^1.6.7",
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
@@ -50,7 +51,6 @@
     "@ibp/naksha-commons": "3.10.7",
     "react-dropzone": "^11.3.4",
     "react-hook-form": "^7.15.3",
-    "react-multi-select-component": "^4.1.10",
     "shapefile": "^0.6.6",
     "yup": "^0.32.9"
   }
