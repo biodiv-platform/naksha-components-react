@@ -55,6 +55,7 @@
   "dependencies": {
     "@hookform/resolvers": "2.8.0",
     "@ibp/naksha-commons": "3.10.12",
+    "naksha-components-react": "^3.5.0-canary.12",
     "react-dropzone": "^11.3.4",
     "react-hook-form": "^7.15.3",
     "react-multi-select-component": "^4.1.1-0.canary-3",
