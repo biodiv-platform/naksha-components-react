@@ -29,11 +29,12 @@ const fetchGridData = async (geoProps) => {
     ...geoProps,
     view: "map",
     geoField: "location",
-    taxon: 5275
+    taxon: 5275,
   };
 
-  const response = await axios.get(
+  const response = await axios.post(
     `http://localhost:8010/proxy/observation-api/api/v1/observation/list/extended_observation/_doc`,
+    {},
     { params }
   );
   return response.data.geohashAggregation;

@@ -21,38 +21,38 @@
     "prepare": "tsdx build"
   },
   "peerDependencies": {
-    "@chakra-ui/react": "^1.6.4",
-    "@emotion/react": "^11.4.0",
+    "@chakra-ui/react": "^1.6.7",
+    "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
     "framer-motion": "^4.1.17",
     "react": "^17.0.2",
-    "react-map-gl": "^6.1.16",
-    "react-virtualized-auto-sizer": "^1.0.5",
+    "react-map-gl": "^6.1.17",
+    "react-virtualized-auto-sizer": "^1.0.6",
     "react-window": "^1.8.6"
   },
   "publishConfig": {
     "access": "public"
   },
   "devDependencies": {
-    "@chakra-ui/react": "^1.6.4",
-    "@emotion/react": "^11.4.0",
+    "@chakra-ui/react": "^1.6.7",
+    "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
-    "@types/react": "^17.0.11",
-    "@types/react-dom": "^17.0.8",
+    "@types/react": "^17.0.20",
+    "@types/react-dom": "^17.0.9",
     "framer-motion": "^4.1.17",
     "react": ">=17",
     "react-dom": "^17.0.2",
-    "react-map-gl": "^6.1.16",
-    "react-virtualized-auto-sizer": "^1.0.5",
+    "react-map-gl": "^6.1.17",
+    "react-virtualized-auto-sizer": "^1.0.6",
     "react-window": "^1.8.6",
     "tsdx": "^0.14.1",
-    "tslib": "^2.3.0",
-    "typescript": "^4.3.4"
+    "tslib": "^2.3.1",
+    "typescript": "^4.4.3"
   },
   "dependencies": {
     "@ibp/naksha-commons": "3.10.2",
-    "@turf/bbox": "^6.4.0",
-    "boundingbox": "^1.2.4",
+    "@turf/bbox": "^6.5.0",
+    "boundingbox": "^1.2.5",
     "colorbrewer": "^1.5.1",
     "geohash": "^0.0.1",
     "react-gbus": "^1.1.2",

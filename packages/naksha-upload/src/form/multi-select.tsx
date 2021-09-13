@@ -7,7 +7,7 @@ import {
 import styled from "@emotion/styled";
 import React from "react";
 import { useController } from "react-hook-form";
-import MultiSelect from "react-multi-select-component";
+import { MultiSelect } from "react-multi-select-component";
 
 const MultiSelectBox = styled.div`
   .multi-select {
