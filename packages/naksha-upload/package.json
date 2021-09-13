@@ -57,7 +57,7 @@
     "@ibp/naksha-commons": "3.10.15",
     "react-dropzone": "^11.3.4",
     "react-hook-form": "^7.15.3",
-    "react-multi-select-component": "^4.1.1-0.canary-3",
+    "react-multi-select-component": "^4.1.1-0.canary-9",
     "shapefile": "^0.6.6",
     "yup": "^0.32.9"
   }
