@@ -4,6 +4,7 @@ import React, {
   createContext,
   MutableRefObject,
   useContext,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -41,6 +42,7 @@ interface LayerContextProps extends NakshaMapboxListProps {
 
   lastSelectedLayerId?;
   setLastSelectedLayerId?;
+  removeSelectedLayerId?;
 }
 
 const LayersContext = createContext<LayerContextProps>(defaultNakshaProps);
@@ -56,12 +58,27 @@ export const LayersProvider = (props: NakshaMapboxListProps) => {
   const [layers, setLayers] = useImmer(props.layers);
 
   const [selectedLayers, setSelectedLayers] = useImmer(props.selectedLayers);
-  const [lastSelectedLayerId, setLastSelectedLayerId] = useState<any>();
+  const [lastSelectedLayerIdI, setLastSelectedLayerIdI] = useState<any[]>([]);
   const [infobarData, setInfobarData] = useState<any>([]);
   const [legend, setLegend] = useState({});
 
   const [clickPopup, setClickPopup] = useState<any>();
   const [hoverPopup, setHoverPopup] = useState<any>();
+
+  const setLastSelectedLayerId = (layerId) => {
+    setLastSelectedLayerIdI([...lastSelectedLayerIdI, layerId]);
+  };
+
+  const removeSelectedLayerId = (layerId) => {
+    setLastSelectedLayerIdI(
+      lastSelectedLayerIdI.filter((id) => id !== layerId)
+    );
+  };
+
+  const lastSelectedLayerId = useMemo(
+    () => lastSelectedLayerIdI?.slice(-1)?.[0],
+    [lastSelectedLayerIdI]
+  );
 
   return (
     <LayersContext.Provider
@@ -97,6 +114,7 @@ export const LayersProvider = (props: NakshaMapboxListProps) => {
 
         lastSelectedLayerId,
         setLastSelectedLayerId,
+        removeSelectedLayerId,
       }}
     >
       <TranslationProvider localeStrings={LocaleStrings} lang={props.lang}>

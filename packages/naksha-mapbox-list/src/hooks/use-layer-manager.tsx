@@ -40,6 +40,7 @@ export default function useLayerManager() {
     onLayerDownload,
     lastSelectedLayerId,
     setLastSelectedLayerId,
+    removeSelectedLayerId,
   } = useLayers();
 
   /**
@@ -390,6 +391,7 @@ export default function useLayerManager() {
    */
   const removeLayer = (map, id: string) => {
     if (map.getLayer(id)) {
+      removeSelectedLayerId(id);
       map.removeLayer(id);
     }
   };
