@@ -1,7 +1,7 @@
 {
   "name": "@ibp/naksha-mapbox-list",
   "author": "harshzalavadiya",
-  "version": "3.10.15",
+  "version": "3.10.18",
   "license": "Apache-2.0",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -59,7 +59,7 @@
     "use-immer": "^0.6.0"
   },
   "dependencies": {
-    "@ibp/naksha-commons": "3.10.15",
+    "@ibp/naksha-commons": "3.10.18",
     "@turf/bbox": "^6.5.0",
     "boundingbox": "^1.2.5",
     "colorbrewer": "^1.5.1",

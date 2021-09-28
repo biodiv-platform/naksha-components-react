@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.10.18](https://github.com/strandls/naksha-components-react/compare/v3.10.8...v3.10.18) (2021-09-28)
+
+
+### Bug Fixes
+
+* :bug: layer ordering issue fix ([d3bfa2d](https://github.com/strandls/naksha-components-react/commit/d3bfa2db6710e5e3d28e52273641d4212c01038f))
+
+
+
+
+
 ## [3.10.17](https://github.com/strandls/naksha-components-react/compare/v3.10.16...v3.10.17) (2021-09-13)
 
 **Note:** Version bump only for package root
