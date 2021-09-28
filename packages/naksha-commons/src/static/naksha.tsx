@@ -40,17 +40,17 @@ export const defaultMapStyles = [
   {
     text: "Streets",
     key: BaseLayer.MAP_STREETS,
-    style: "mapbox://styles/mapbox/streets-v11?optimize=true",
+    style: "mapbox://styles/biodiv/cku4aoj5k1g9h17o5r3tjsntn",
   },
   {
     text: "Satellite",
     key: BaseLayer.MAP_SATELLITE,
-    style: "mapbox://styles/mapbox/satellite-streets-v11?optimize=true",
+    style: "mapbox://styles/biodiv/cku49ca8q1esz18o7gxfjmh5r",
   },
   {
     text: "Dark",
     key: BaseLayer.MAP_DARK,
-    style: "mapbox://styles/mapbox/dark-v10?optimize=true",
+    style: "mapbox://styles/biodiv/cku4a35961fgo17mykoq76se1",
   },
   {
     text: "OSM",
