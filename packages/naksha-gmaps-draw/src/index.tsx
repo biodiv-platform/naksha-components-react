@@ -135,7 +135,7 @@ export function NakshaGmapsDraw({
                 ],
                 drawingMode: GMAP_FEATURE_TYPES.POLYGON,
                 featureFactory: onFeatureAdded,
-              }}
+              } as any}
             />
           )}
         </GoogleMap>
