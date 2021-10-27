@@ -12,4 +12,5 @@ const NakshaLayerUpload = (props) => (
   </LayerUploadProvider>
 );
 
-export { NakshaLayerUpload, LayerUploadProps };
+export type { LayerUploadProps };
+export { NakshaLayerUpload };

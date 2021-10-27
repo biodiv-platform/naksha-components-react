@@ -122,4 +122,5 @@ function NakshaMapboxDraw({
   );
 }
 
-export { NakshaMapboxDraw, NakshaMapboxDrawProps };
+export type { NakshaMapboxDrawProps };
+export { NakshaMapboxDraw };
