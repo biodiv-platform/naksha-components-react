@@ -1,6 +1,6 @@
 import { Box, Button, Flex, Heading } from "@chakra-ui/react";
 import { useT } from "@ibp/naksha-commons";
-import React, { useEffect } from "react";
+import React from "react";
 
 import useLayerUpload from "../hooks/use-layer-upload";
 import FileWithType from "../icons/file-with-type";
