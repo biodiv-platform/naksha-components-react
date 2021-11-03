@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.10.24](https://github.com/strandls/naksha-components-react/compare/v3.10.23...v3.10.24) (2021-11-03)
+
+**Note:** Version bump only for package naksha-components-react
+
+
+
+
+
 ## [3.10.23](https://github.com/strandls/naksha-components-react/compare/v3.10.22...v3.10.23) (2021-10-28)
 
 **Note:** Version bump only for package naksha-components-react
