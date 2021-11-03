@@ -289,7 +289,7 @@ export default function useLayerManager() {
 
     if (add) {
       // prevent unnecessary re-renders for existing layer
-      if (layer.isAdded) return;
+      if (layer.isAdded && lastSelectedLayerId) return;
 
       if (!map.getSource(id)) {
         map.addSource(id, layer.source);
