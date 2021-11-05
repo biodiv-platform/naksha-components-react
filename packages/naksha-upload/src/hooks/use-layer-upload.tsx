@@ -1,6 +1,7 @@
 import { TranslationProvider } from "@ibp/naksha-commons";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useImmer } from "use-immer";
+
 import LocaleStrings from "../i18n/strings";
 
 export interface LayerUploadProps {
@@ -41,7 +42,7 @@ export const LayerUploadProvider = (props: LayerUploadProps) => {
   });
 
   useEffect(() => {
-    if (shapeFiles.dbf.file && shapeFiles.dbf.meta && shapeFiles.shx.meta) {
+    if (shapeFiles.dbf.file && shapeFiles.dbf.file && shapeFiles.shx.file) {
       setCanContinue(true);
     }
   }, [shapeFiles]);
