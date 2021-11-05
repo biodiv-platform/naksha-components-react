@@ -1,7 +1,7 @@
 {
   "name": "@ibp/naksha-upload",
   "author": "harshzalavadiya",
-  "version": "3.10.23",
+  "version": "3.10.25",
   "license": "Apache-2.0",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
