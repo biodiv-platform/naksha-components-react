@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.11.0](https://github.com/strandls/naksha-components-react/compare/v3.10.18...v3.11.0) (2021-11-15)
+
+
+### Bug Fixes
+
+* :ambulance: storybook build fix ([71fdde5](https://github.com/strandls/naksha-components-react/commit/71fdde5923989704c1914accc17ed1dbf3063cd3))
+
+
+### Features
+
+* :sparkles: added toolbar options ([412f7b5](https://github.com/strandls/naksha-components-react/commit/412f7b59e62dc2c3faae4b4428afabeeaeba801e))
+
+
+
+
+
 ## [3.10.18](https://github.com/strandls/naksha-components-react/compare/v3.10.8...v3.10.18) (2021-09-28)
 
 
