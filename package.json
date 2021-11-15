@@ -46,7 +46,8 @@
     "lerna": "^4.0.0",
     "prettier": "^2.4.0",
     "react-docgen-typescript-loader": "^3.7.2",
-    "ts-loader": "^9.2.5",
+    "storybook-addon-turbo-build": "^1.0.1",
+    "ts-loader": "^9.2.6",
     "yarn-deduplicate": "^3.1.0"
   }
 }

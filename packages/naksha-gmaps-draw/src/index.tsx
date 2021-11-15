@@ -4,6 +4,7 @@ import React, { useEffect, useReducer, useRef, useState } from "react";
 
 import NakshaAutocomplete from "./autocomplete";
 import ClearFeatures from "./features/clear-features";
+import NakshaImport from "./import";
 import { ACTION_TYPES, featuresReducer } from "./reducers/features";
 import { GMAP_FEATURE_TYPES, GMAP_OPTIONS } from "./static/constants";
 import {
@@ -19,10 +20,13 @@ export interface NakshaGmapsDrawProps {
   gmapApiAccessToken?;
   isControlled?: boolean;
   isReadOnly?: boolean;
+  isImport?: boolean;
   isMultiple?: boolean;
   isAutocomplete?: boolean;
   gmapRegion?;
   mapStyle?: React.CSSProperties;
+  importInputComponent?;
+  importButtonComponent?;
   autocompleteComponent?;
 }
 
@@ -34,9 +38,12 @@ export function NakshaGmapsDraw({
   isControlled,
   isReadOnly,
   isMultiple,
+  isImport,
   isAutocomplete,
   gmapRegion,
   mapStyle,
+  importInputComponent,
+  importButtonComponent,
   autocompleteComponent,
 }: NakshaGmapsDrawProps) {
   const mapRef = useRef<any>(null);
@@ -116,6 +123,15 @@ export function NakshaGmapsDraw({
             gmapRegion={gmapRegion}
           />
         )}
+        {isImport && (
+          <NakshaImport
+            InputComponent={importInputComponent || <input />}
+            ButtonComponent={
+              importButtonComponent || <button children="import" />
+            }
+            addFeature={addFeature}
+          />
+        )}
         <GoogleMap
           id="naksha-gmaps-draw"
           mapContainerStyle={mapStyle || { height: "100%", width: "100%" }}
@@ -128,14 +144,17 @@ export function NakshaGmapsDraw({
           {isMultiple && <ClearFeatures onClick={onClearFeatures} />}
           {!isReadOnly && (
             <Data
-              options={{
-                controls: [
-                  GMAP_FEATURE_TYPES.POINT,
-                  GMAP_FEATURE_TYPES.POLYGON,
-                ],
-                drawingMode: GMAP_FEATURE_TYPES.POLYGON,
-                featureFactory: onFeatureAdded,
-              }}
+              options={
+                {
+                  controls: [
+                    GMAP_FEATURE_TYPES.POINT,
+                    GMAP_FEATURE_TYPES.POLYGON,
+                    GMAP_FEATURE_TYPES.LINESTRING,
+                  ],
+                  drawingMode: GMAP_FEATURE_TYPES.POLYGON,
+                  featureFactory: onFeatureAdded,
+                } as any
+              }
             />
           )}
         </GoogleMap>
