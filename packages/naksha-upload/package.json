@@ -56,7 +56,7 @@
     "@hookform/resolvers": "2.8.3",
     "@ibp/naksha-commons": "3.10.22",
     "react-dropzone": "^11.4.2",
-    "react-hook-form": "^7.19.5",
+    "react-hook-form": "^7.19.4",
     "react-multi-select-component": "^4.1.14",
     "shapefile": "^0.6.6",
     "yup": "^0.32.11"
