@@ -10,7 +10,7 @@ import MapGL, { Layer, Source, WebMercatorViewport } from "react-map-gl";
 
 import { NakshaMapboxViewProps } from "./interfaces";
 import Navigation from "./navigation";
-import { featureStyle, pointStyle } from "./static/constants";
+import { featureStyle, lineStyle, pointStyle } from "./static/constants";
 
 /**
  * Renders Provided geojson.
@@ -88,6 +88,7 @@ export function NakshaMapboxView({
       {data && (
         <Source type="geojson" data={data}>
           <Layer {...pointStyle} />
+          <Layer {...lineStyle} />
           <Layer {...featureStyle} />
         </Source>
       )}
