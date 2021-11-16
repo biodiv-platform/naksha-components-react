@@ -2736,11 +2736,6 @@
     fast-deep-equal "^3.1.3"
     supercluster "^7.1.3"
 
-"@hookform/resolvers@2.8.2":
-  version "2.8.2"
-  resolved "https://registry.yarnpkg.com/@hookform/resolvers/-/resolvers-2.8.2.tgz#590dcc23212a659bad08212138261c3950ef09f1"
-  integrity sha512-oDTGrm7yHxT4VIv4kJcfjvWvozCbdcL0/jrpbAkeo39FYn78XnKOrrGTNmrXdfu+EQVkNIdZ47IYRFManZ4jUA==
-
 "@hookform/resolvers@2.8.3":
   version "2.8.3"
   resolved "https://registry.yarnpkg.com/@hookform/resolvers/-/resolvers-2.8.3.tgz#d362360f6057bcca7318ad22d49e5f0c47290e27"
@@ -2764,61 +2759,6 @@
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/@hutson/parse-repository-url/-/parse-repository-url-3.0.2.tgz#98c23c950a3d9b6c8f0daed06da6c3af06981340"
   integrity sha512-H9XAx3hc0BQHY6l+IFSWHDySypcXsvsuLhgYLUGywmJ5pswRVQJUHpOsobnLYp2ZUaUlKiKDrgWWhosOwAEM8Q==
-
-"@ibp/naksha-commons@3.10.22":
-  version "3.10.22"
-  resolved "https://registry.yarnpkg.com/@ibp/naksha-commons/-/naksha-commons-3.10.22.tgz#508d4bbe2fa74872d2e66452cd3e3f5850f85a99"
-  integrity sha512-KpEbofzfOFLnCCRpGv3tFcRPMVIEc/vlKJ0Ybmdd3PMT7aaEO6YiOq0B94UptEN7tOILWPw5APnvohLQm4bcXQ==
-
-"@ibp/naksha-gmaps-draw@3.10.22":
-  version "3.10.22"
-  resolved "https://registry.yarnpkg.com/@ibp/naksha-gmaps-draw/-/naksha-gmaps-draw-3.10.22.tgz#a0b5255d4c2ea0588b627dcdf6c60822233115fc"
-  integrity sha512-CmrvbDnxIUsB+qSb8EuiinlaqQGMbhMpWg3bpwSbIpfmm2R13CVmqccyyDgbu6o5tVFVnY6x1o+7dXfPtgJEJw==
-  dependencies:
-    "@ibp/naksha-commons" "3.10.22"
-    "@turf/bbox" "^6.5.0"
-
-"@ibp/naksha-mapbox-draw@3.10.22":
-  version "3.10.22"
-  resolved "https://registry.yarnpkg.com/@ibp/naksha-mapbox-draw/-/naksha-mapbox-draw-3.10.22.tgz#9f8d995c1ce536f5cc667f4ee67cbcbefcc57bea"
-  integrity sha512-qJqvVf2FSbxNqO84ZzDcbn8qHXTz4BqlqKfsMB0rqiBdTaDiEp2j6roKmDm3VMtFZpQleNaH7FtGKsJQJyKQzw==
-  dependencies:
-    "@ibp/naksha-commons" "3.10.22"
-
-"@ibp/naksha-mapbox-list@3.10.24":
-  version "3.10.24"
-  resolved "https://registry.yarnpkg.com/@ibp/naksha-mapbox-list/-/naksha-mapbox-list-3.10.24.tgz#442a92d9d2dd387d5e5a09f6903d269a85b5dab7"
-  integrity sha512-6KqavSvvfb2fzy1rsOf7hp0iccGdN8HiVlKbm2xXPtYQO6Ld1s1FzeLvj88edkXRy7TfmUnSt7sCR3XAHveRSQ==
-  dependencies:
-    "@ibp/naksha-commons" "3.10.22"
-    "@turf/bbox" "^6.5.0"
-    boundingbox "^1.2.5"
-    colorbrewer "^1.5.1"
-    geohash "^0.0.1"
-    react-gbus "^1.1.2"
-    react-highlighter "^0.4.3"
-    redaxios "^0.4.1"
-    ts-debounce "^3.0.0"
-
-"@ibp/naksha-mapbox-view@3.10.22":
-  version "3.10.22"
-  resolved "https://registry.yarnpkg.com/@ibp/naksha-mapbox-view/-/naksha-mapbox-view-3.10.22.tgz#fb616d4d8ef96bf23e9af5dc2fafde7b729bbffd"
-  integrity sha512-cY9y36iMeF3uP7g0tvLhcSk0Q9BTXb9GMYE2dXAF5Mb5bZToVuw9X0u3k8mYDh58cJ+Ybah8C/sbouCZ9iRSfw==
-  dependencies:
-    "@ibp/naksha-commons" "3.10.22"
-
-"@ibp/naksha-upload@3.10.25":
-  version "3.10.25"
-  resolved "https://registry.yarnpkg.com/@ibp/naksha-upload/-/naksha-upload-3.10.25.tgz#70e8b764dd690817df6c2308ad573c09510e1de7"
-  integrity sha512-DkuddQczKxC9SRg8VeD+iGdAWvWeqd8OEd1SVbdx5CAeoQQfl9+JmXlfi+61ZNIq0IejSerJmYUr5BdcUtkbYA==
-  dependencies:
-    "@hookform/resolvers" "2.8.2"
-    "@ibp/naksha-commons" "3.10.22"
-    react-dropzone "^11.4.2"
-    react-hook-form "^7.18.0"
-    react-multi-select-component "^4.1.13"
-    shapefile "^0.6.6"
-    yup "^0.32.11"
 
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.1.0"
@@ -5422,6 +5362,15 @@
     "@types/scheduler" "*"
     csstype "^3.0.2"
 
+"@types/react@^17.0.35":
+  version "17.0.35"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.35.tgz#217164cf830267d56cd1aec09dcf25a541eedd4c"
+  integrity sha512-r3C8/TJuri/SLZiiwwxQoLAoavaczARfT9up9b4Jr65+ErAUX3MIkU0oMOQnrpfgHme8zIqZLX7O5nnjm5Wayw==
+  dependencies:
+    "@types/prop-types" "*"
+    "@types/scheduler" "*"
+    csstype "^3.0.2"
+
 "@types/scheduler@*":
   version "0.16.2"
   resolved "https://registry.yarnpkg.com/@types/scheduler/-/scheduler-0.16.2.tgz#1a62f89525723dde24ba1b01b092bf5df8ad4d39"
@@ -6482,14 +6431,6 @@ boolbase@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/boolbase/-/boolbase-1.0.0.tgz#68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
   integrity sha1-aN/1++YMUes3cl6p4+0xDcwed24=
-
-boundingbox@^1.2.5:
-  version "1.2.5"
-  resolved "https://registry.yarnpkg.com/boundingbox/-/boundingbox-1.2.5.tgz#530b8ae1b2b4c061f778514fbd4a02aa9915fb51"
-  integrity sha512-/rQl2manDAm2KIjPIvAsK6SAvz5GEG+wM+pYOqdliTiJ2LQlTOMOEGk2ww8pjEdWpsgbdlzbPbdyAorLEsBfCw==
-  dependencies:
-    geojson-bounds "^1.0.2"
-    haversine "^1.1.1"
 
 boundingbox@^1.3.0:
   version "1.3.0"
@@ -13332,7 +13273,7 @@ react-highlighter@^0.4.3:
     escape-string-regexp "^1.0.5"
     prop-types "^15.6.0"
 
-react-hook-form@^7.18.0, react-hook-form@^7.19.4:
+react-hook-form@^7.19.5:
   version "7.19.5"
   resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.19.5.tgz#cc6087419facf2fb57d47d5b0d4a8ca63201298f"
   integrity sha512-+M9gd0nWWASuEitf5PQGOGNElnHknzY3rGISrPDXwsOmZb7c/jyvkRUqk4OJXaZit1ZwesSv+EysttdAeFEfmw==
@@ -13388,7 +13329,7 @@ react-map-gl@^6.1.17:
     resize-observer-polyfill "^1.5.1"
     viewport-mercator-project "^7.0.4"
 
-react-multi-select-component@^4.1.13, react-multi-select-component@^4.1.14:
+react-multi-select-component@^4.1.14:
   version "4.1.14"
   resolved "https://registry.yarnpkg.com/react-multi-select-component/-/react-multi-select-component-4.1.14.tgz#3a1bbdec3eb0ba68a51608c1e455496ac0b0bfe3"
   integrity sha512-pAameZYTdm0D0Ivgd/nzFZOOfE7ES8lHOphMSvZ3EDfsMJtLTaRubzefC86yXelZW4YigAQquQhKmhGLcjGU1g==
@@ -15168,11 +15109,6 @@ trough@^1.0.0:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/trough/-/trough-1.0.5.tgz#b8b639cefad7d0bb2abd37d433ff8293efa5f406"
   integrity sha512-rvuRbTarPXmMb79SmzEp8aqXNKcK+y0XaB298IXueQ8I2PsrATcPBCSPyK/dDNa2iWOhKlfNnOjdAOTBU/nkFA==
-
-ts-debounce@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/ts-debounce/-/ts-debounce-3.0.0.tgz#9beedf59c04de3b5bef8ff28bd6885624df357be"
-  integrity sha512-7jiRWgN4/8IdvCxbIwnwg2W0bbYFBH6BxFqBjMKk442t7+liF2Z1H6AUCcl8e/pD93GjPru+axeiJwFmRww1WQ==
 
 ts-debounce@^4.0.0:
   version "4.0.0"

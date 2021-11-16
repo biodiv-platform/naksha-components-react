@@ -35,7 +35,7 @@
     "access": "public"
   },
   "devDependencies": {
-    "@types/react": "^17.0.34",
+    "@types/react": "^17.0.35",
     "@types/react-dom": "^17.0.11",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -43,11 +43,11 @@
     "typescript": "^4.4.4"
   },
   "dependencies": {
-    "@ibp/naksha-commons": "3.10.22",
-    "@ibp/naksha-gmaps-draw": "3.10.22",
-    "@ibp/naksha-mapbox-draw": "3.10.22",
-    "@ibp/naksha-mapbox-list": "3.10.24",
-    "@ibp/naksha-mapbox-view": "3.10.22",
-    "@ibp/naksha-upload": "3.10.25"
+    "@ibp/naksha-commons": "3.11.0",
+    "@ibp/naksha-gmaps-draw": "3.11.0",
+    "@ibp/naksha-mapbox-draw": "3.11.0",
+    "@ibp/naksha-mapbox-list": "3.11.0",
+    "@ibp/naksha-mapbox-view": "3.11.0",
+    "@ibp/naksha-upload": "3.11.1"
   }
 }
