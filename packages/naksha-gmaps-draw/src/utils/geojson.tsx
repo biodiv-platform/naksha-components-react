@@ -56,6 +56,19 @@ export const geometryToGeoJsonFeature = (geometry) => {
       };
     }
 
+    case GMAP_FEATURE_TYPES.LINESTRING: {
+      const clist: any[] = [];
+
+      const toLatLng = (c) => clist.push([c.lng(), c.lat()]);
+      geometry.forEachLatLng(toLatLng);
+
+      return {
+        type: GMAP_FEATURE_TYPES.LINESTRING,
+        properties: { id },
+        coordinates: clist,
+      };
+    }
+
     default:
       return null;
   }

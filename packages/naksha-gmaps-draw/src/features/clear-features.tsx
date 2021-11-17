@@ -4,7 +4,7 @@ const ButtonStyle: CSSProperties = {
   background: "white",
   position: "absolute",
   top: "5px",
-  left: "84px",
+  left: "106px",
   padding: "0.4rem",
   borderRadius: "0.15rem",
   outline: 0,

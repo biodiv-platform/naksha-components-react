@@ -8,7 +8,6 @@ export interface NakshaMapboxDrawProps {
   defaultFeatures?: any[];
   onFeaturesChange?: Function;
   isControlled?: boolean;
-  isPolygon?: boolean;
   isReadOnly?: boolean;
   isMultiple?: boolean;
 }

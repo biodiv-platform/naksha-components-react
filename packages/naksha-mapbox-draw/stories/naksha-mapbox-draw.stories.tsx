@@ -14,7 +14,6 @@ export const ExampleStory = () => (
     defaultFeatures={[]}
     onFeaturesChange={onFeaturesChange}
     isControlled={true}
-    isPolygon={false}
     isReadOnly={false}
     isMultiple={false}
   />
