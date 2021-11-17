@@ -1,7 +1,7 @@
 {
   "name": "naksha-components-react",
   "author": "harshzalavadiya",
-  "version": "3.10.18",
+  "version": "3.10.25",
   "license": "Apache-2.0",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -35,19 +35,19 @@
     "access": "public"
   },
   "devDependencies": {
-    "@types/react": "^17.0.20",
-    "@types/react-dom": "^17.0.9",
+    "@types/react": "^17.0.35",
+    "@types/react-dom": "^17.0.11",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "tslib": "^2.3.1",
-    "typescript": "^4.4.3"
+    "typescript": "^4.4.4"
   },
   "dependencies": {
-    "@ibp/naksha-commons": "3.10.18",
-    "@ibp/naksha-gmaps-draw": "3.10.18",
-    "@ibp/naksha-mapbox-draw": "3.10.18",
-    "@ibp/naksha-mapbox-list": "3.10.18",
-    "@ibp/naksha-mapbox-view": "3.10.18",
-    "@ibp/naksha-upload": "3.10.18"
+    "@ibp/naksha-commons": "3.11.0",
+    "@ibp/naksha-gmaps-draw": "3.11.2",
+    "@ibp/naksha-mapbox-draw": "3.11.2",
+    "@ibp/naksha-mapbox-list": "3.11.2",
+    "@ibp/naksha-mapbox-view": "3.11.3",
+    "@ibp/naksha-upload": "3.11.2"
   }
 }

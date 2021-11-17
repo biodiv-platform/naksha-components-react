@@ -11,9 +11,9 @@ export const NakshaLayerUploadStory = () => {
   return (
     <Box height="100vh" p={4} overflowY="auto">
       <NakshaLayerUpload
-        endpoint="http://localhost:8010/proxy/naksha-api/api/layer/upload"
+        nakshaEndpoint="http://localhost:8010/proxy/naksha-api/api/layer/upload"
         callback={handleOnCallback}
-        bearerToken="Bearer x"
+        bearerToken={process.env.STORYBOOK_x_NAKSHA_TOKEN}
       />
     </Box>
   );

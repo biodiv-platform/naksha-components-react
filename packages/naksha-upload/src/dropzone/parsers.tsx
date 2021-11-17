@@ -45,6 +45,7 @@ export const parseDBF = (file, update) => {
   readerDbf.readAsArrayBuffer(file);
 };
 
-export const parseSHX = (file, update) => {
-  update("shx", file, {});
+export const parseDefault = (file: File, update) => {
+  const extension = file.name.split('.').pop()
+  update(extension, file, {});
 };

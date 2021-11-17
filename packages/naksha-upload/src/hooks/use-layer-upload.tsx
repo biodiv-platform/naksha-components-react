@@ -1,6 +1,7 @@
 import { TranslationProvider } from "@ibp/naksha-commons";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useImmer } from "use-immer";
+
 import LocaleStrings from "../i18n/strings";
 
 export interface LayerUploadProps {
@@ -41,7 +42,7 @@ export const LayerUploadProvider = (props: LayerUploadProps) => {
   });
 
   useEffect(() => {
-    if (shapeFiles.dbf.file && shapeFiles.dbf.meta && shapeFiles.shx.meta) {
+    if (shapeFiles.dbf.file && shapeFiles.dbf.file && shapeFiles.shx.file) {
       setCanContinue(true);
     }
   }, [shapeFiles]);
@@ -56,9 +57,11 @@ export const LayerUploadProvider = (props: LayerUploadProps) => {
     setScreen(2);
     try {
       const formData: any = new FormData();
-      formData.append("dbf", shapeFiles.dbf.file);
-      formData.append("shp", shapeFiles.shp.file);
-      formData.append("shx", shapeFiles.shx.file);
+
+      Object.keys(shapeFiles).map((type) =>
+        formData.append(type, shapeFiles?.[type]?.file)
+      );
+
       formData.append(
         "metadata",
         new File([JSON.stringify(metadata)], "metadata.json", {

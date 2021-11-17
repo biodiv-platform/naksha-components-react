@@ -43,7 +43,7 @@ export default function StyledTable({ columns, data }) {
           {data.map((item, index) => (
             <tr key={index}>
               {columns.map(({ selector }, index) => (
-                <td key={index}>{item[selector]?.toString()}</td>
+                <td key={index}>{item?.[selector]?.toString()}</td>
               ))}
             </tr>
           ))}

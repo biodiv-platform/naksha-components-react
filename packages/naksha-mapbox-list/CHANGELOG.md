@@ -3,6 +3,49 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.10.24](https://github.com/strandls/naksha-components-react/compare/v3.10.23...v3.10.24) (2021-11-03)
+
+
+### Bug Fixes
+
+* :bug; initial layer not loaded ([4233d6e](https://github.com/strandls/naksha-components-react/commit/4233d6ebd37d1f67ef6b5c79e36e3d15bed5565d))
+
+
+
+
+
+## [3.10.22](https://github.com/strandls/naksha-components-react/compare/v3.10.21...v3.10.22) (2021-10-27)
+
+**Note:** Version bump only for package @ibp/naksha-mapbox-list
+
+
+
+
+
+## [3.10.21](https://github.com/strandls/naksha-components-react/compare/v3.10.20...v3.10.21) (2021-10-27)
+
+**Note:** Version bump only for package @ibp/naksha-mapbox-list
+
+
+
+
+
+## [3.10.20](https://github.com/strandls/naksha-components-react/compare/v3.10.19...v3.10.20) (2021-09-29)
+
+**Note:** Version bump only for package @ibp/naksha-mapbox-list
+
+
+
+
+
+## [3.10.19](https://github.com/strandls/naksha-components-react/compare/v3.10.18...v3.10.19) (2021-09-28)
+
+**Note:** Version bump only for package @ibp/naksha-mapbox-list
+
+
+
+
+
 ## [3.10.18](https://github.com/strandls/naksha-components-react/compare/v3.10.8...v3.10.18) (2021-09-28)
 
 

@@ -1,5 +1,3 @@
-export * from "./interfaces";
-
 export * from "./static/gmaps";
 export * from "./static/licenses";
 export * from "./static/naksha";

@@ -6,6 +6,7 @@ import { adminBoundries } from "../static/naksha";
  * @param {string} [country="IN"]
  */
 export const updateWorldViewRef = (mapRef, country = "IN") => {
+  return;
   if (mapRef) {
     adminBoundries.forEach(function (adminLayer) {
       mapRef.current

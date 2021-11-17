@@ -6,20 +6,20 @@ import { useDropzone } from "react-dropzone";
 import useLayerUpload from "../hooks/use-layer-upload";
 import { FILE_TYPES } from "../icons/constants";
 import FilePreview from "./file-preview";
-import { parseDBF, parseSHP, parseSHX } from "./parsers";
+import { parseDBF, parseDefault, parseSHP } from "./parsers";
 
 export default function LayerUploadDropzone() {
   const { updateShapeFile } = useLayerUpload();
   const { t } = useT();
 
-  const onDrop = (files) => {
+  const onDrop = async (files) => {
     for (const file of files) {
       if (file.name.endsWith(FILE_TYPES.DBF)) {
         parseDBF(file, updateShapeFile);
       } else if (file.name.endsWith(FILE_TYPES.SHP)) {
         parseSHP(file, updateShapeFile);
-      } else if (file.name.endsWith(FILE_TYPES.SHX)) {
-        parseSHX(file, updateShapeFile);
+      } else {
+        parseDefault(file, updateShapeFile);
       }
     }
   };
@@ -27,6 +27,7 @@ export default function LayerUploadDropzone() {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: Object.values(FILE_TYPES),
+    multiple: true,
   });
 
   return (
@@ -50,7 +51,7 @@ export default function LayerUploadDropzone() {
             {t("drop_message")}
             <br />
             <Text color="gray.500">
-              {Object.values(FILE_TYPES).toString()} {t("only")}
+              {Object.values(FILE_TYPES).join(", ")} {t("only")}
             </Text>
           </Box>
         )}

@@ -7,12 +7,12 @@ import {
 import { ViewMode } from "@nebula.gl/edit-modes";
 import React, { useEffect, useRef, useState } from "react";
 import MapGL from "react-map-gl";
-import { DrawPolygonMode, DrawRectangleMode, Editor } from "react-map-gl-draw";
+import { DrawPolygonMode, Editor } from "react-map-gl-draw";
 
-import ClearFeatures from "./clear-features";
 import { NakshaMapboxDrawProps } from "./interfaces";
 import Navigation from "./navigation";
 import { CURSOR_PENCIL } from "./static/constants";
+import MapboxDrawToolbar from "./toolbar";
 
 const featureStyle = {
   stroke: "#f03b20",
@@ -43,13 +43,16 @@ function NakshaMapboxDraw({
   baseLayer,
   mapboxApiAccessToken,
   isControlled,
-  isPolygon,
   isReadOnly,
   isMultiple,
 }: NakshaMapboxDrawProps) {
   const mapRef = useRef<any>(null);
   const [viewPort, setViewPort] = useState(defaultViewPort || dv);
   const [features, setFeatures] = useState(defaultFeatures || []);
+
+  const [mode, setMode] = useState(
+    isReadOnly ? new ViewMode() : new DrawPolygonMode()
+  );
 
   useEffect(() => {
     if (onFeaturesChange) {
@@ -104,22 +107,23 @@ function NakshaMapboxDraw({
       mapboxApiAccessToken={mapboxApiAccessToken}
     >
       <Navigation onViewportChange={setViewPort} />
-      {!isReadOnly && <ClearFeatures onClick={clearFeatures} />}
+      {!isReadOnly && (
+        <MapboxDrawToolbar clearFeatures={clearFeatures} setMode={setMode} />
+      )}
       <Editor
         clickRadius={12}
-        mode={
-          isReadOnly
-            ? new ViewMode()
-            : isPolygon
-            ? new DrawPolygonMode()
-            : new DrawRectangleMode()
-        }
+        mode={mode}
         onUpdate={onUpdate}
         features={features}
-        featureStyle={() => featureStyle}
+        featureStyle={(e) =>
+          e?.feature?.geometry?.type === "LineString"
+            ? { ...featureStyle, fillOpacity: 0 }
+            : featureStyle
+        }
       />
     </MapGL>
   );
 }
 
-export { NakshaMapboxDraw, NakshaMapboxDrawProps };
+export type { NakshaMapboxDrawProps };
+export { NakshaMapboxDraw };

@@ -1,7 +1,6 @@
-import { defaultViewPort } from "@ibp/naksha-commons";
 import React from "react";
 
-import { NakshaMapboxView } from "../src";
+import { NakshaGmapsView } from "../src";
 
 const geojson = {
   type: "FeatureCollection",
@@ -44,17 +43,20 @@ const geojson = {
   ],
 };
 
-export const ExampleStory = () => (
-  <NakshaMapboxView
-    defaultViewPort={defaultViewPort}
-    mapboxApiAccessToken={process.env.STORYBOOK_MAPBOX_TOKEN || "pk.xyz"}
-    data={geojson}
-  />
+export const NakshaGmapsDrawStory = () => (
+  <div style={{ height: "100vh", width: "100vw" }}>
+    <NakshaGmapsView
+      gmapApiAccessToken={process.env.STORYBOOK_GMAP_TOKEN}
+      features={geojson}
+      // Restricts autocomplete + customization searches to India
+      gmapRegion="IN"
+    />
+  </div>
 );
 
 const meta = {
-  title: "@ibp/naksha-mapbox-view",
-  component: NakshaMapboxView,
+  title: "@ibp/naksha-gmaps-view",
+  component: NakshaGmapsDrawStory,
 };
 
 export default meta;

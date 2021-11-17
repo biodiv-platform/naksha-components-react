@@ -4,15 +4,41 @@ const toPath = (_path) => path.join(process.cwd(), _path);
 
 module.exports = {
   stories: ["../packages/**/stories/**/*.stories.@(js|jsx|ts|tsx)"],
-  addons: ["@storybook/addon-links", "@storybook/addon-essentials"],
+  addons: [
+    "@storybook/addon-links",
+    "@storybook/addon-essentials",
+    {
+      name: "storybook-addon-turbo-build",
+      options: {
+        optimizationLevel: 2,
+      },
+    },
+  ],
   // https://storybook.js.org/docs/react/configure/typescript#mainjs-configuration
   typescript: {
     check: true, // type-check stories during Storybook build
     reactDocgen: false,
   },
   webpackFinal: async (config) => {
+    config.module.rules.push({
+      type: "javascript/auto",
+      test: /\.mjs$/,
+      include: /node_modules/,
+    });
+
     return {
       ...config,
+      module: {
+        ...config.module,
+        rules: [
+          ...config.module.rules,
+          {
+            test: /\.mjs$/,
+            include: /node_modules/,
+            type: "javascript/auto",
+          },
+        ],
+      },
       resolve: {
         ...config.resolve,
         alias: {

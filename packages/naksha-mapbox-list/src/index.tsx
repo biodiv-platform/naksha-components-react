@@ -13,4 +13,5 @@ function NakshaMapboxList(props: NakshaMapboxListProps) {
   );
 }
 
-export { defaultNakshaProps, ExtendedMarkerProps, NakshaMapboxList };
+export type { ExtendedMarkerProps };
+export { defaultNakshaProps, NakshaMapboxList };

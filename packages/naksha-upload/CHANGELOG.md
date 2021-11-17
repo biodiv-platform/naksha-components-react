@@ -3,6 +3,57 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.10.25](https://github.com/strandls/naksha-components-react/compare/v3.10.24...v3.10.25) (2021-11-05)
+
+**Note:** Version bump only for package @ibp/naksha-upload
+
+
+
+
+
+## [3.10.23](https://github.com/strandls/naksha-components-react/compare/v3.10.22...v3.10.23) (2021-10-28)
+
+
+### Bug Fixes
+
+* 👷 lint ([e71b6e3](https://github.com/strandls/naksha-components-react/commit/e71b6e38ee9bc67217d42699b80b4920d286462e))
+
+
+
+
+
+## [3.10.22](https://github.com/strandls/naksha-components-react/compare/v3.10.21...v3.10.22) (2021-10-27)
+
+**Note:** Version bump only for package @ibp/naksha-upload
+
+
+
+
+
+## [3.10.21](https://github.com/strandls/naksha-components-react/compare/v3.10.20...v3.10.21) (2021-10-27)
+
+**Note:** Version bump only for package @ibp/naksha-upload
+
+
+
+
+
+## [3.10.20](https://github.com/strandls/naksha-components-react/compare/v3.10.19...v3.10.20) (2021-09-29)
+
+**Note:** Version bump only for package @ibp/naksha-upload
+
+
+
+
+
+## [3.10.19](https://github.com/strandls/naksha-components-react/compare/v3.10.18...v3.10.19) (2021-09-28)
+
+**Note:** Version bump only for package @ibp/naksha-upload
+
+
+
+
+
 ## [3.10.18](https://github.com/strandls/naksha-components-react/compare/v3.10.8...v3.10.18) (2021-09-28)
 
 **Note:** Version bump only for package @ibp/naksha-upload
