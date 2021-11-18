@@ -116,22 +116,24 @@ export function NakshaGmapsDraw({
       }
     >
       <>
-        {isAutocomplete && (
-          <NakshaAutocomplete
-            InputComponent={autocompleteComponent || <input />}
-            addFeature={addFeature}
-            gmapRegion={gmapRegion}
-          />
-        )}
-        {isImport && (
-          <NakshaImport
-            InputComponent={importInputComponent || <input />}
-            ButtonComponent={
-              importButtonComponent || <button children="import" />
-            }
-            addFeature={addFeature}
-          />
-        )}
+        <div className="map-toolbar" style={{ display: "flex" }}>
+          {isAutocomplete && (
+            <NakshaAutocomplete
+              InputComponent={autocompleteComponent || <input />}
+              addFeature={addFeature}
+              gmapRegion={gmapRegion}
+            />
+          )}
+          {isImport && (
+            <NakshaImport
+              InputComponent={importInputComponent || <input />}
+              ButtonComponent={
+                importButtonComponent || <button children="import" />
+              }
+              addFeature={addFeature}
+            />
+          )}
+        </div>
         <GoogleMap
           id="naksha-gmaps-draw"
           mapContainerStyle={mapStyle || { height: "100%", width: "100%" }}
