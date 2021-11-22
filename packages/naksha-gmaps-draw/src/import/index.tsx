@@ -11,7 +11,7 @@ export default function NakshaImport({
   const handleOnAddFeature = () => {
     try {
       const txtLatLng = importInputRef?.current?.value;
-      const numLatLng = txtLatLng.split(",").map(Number);
+      const numLatLng = txtLatLng.split(",").map(Number)?.reverse();
 
       addFeature({
         type: GMAP_FEATURE_TYPES.POINT,
