@@ -134,11 +134,16 @@ export const getGridLayerData = async (
   }
 };
 
-export const axDownloadLayer = async (endpoint, token, layerName) => {
+export const axDownloadLayer = async (
+  endpoint,
+  token,
+  layerName,
+  layerTitle
+) => {
   try {
     await axios.post(
       `${endpoint}/layer/download`,
-      { layerName, attributeList: [], filterArray: [] },
+      { layerName, layerTitle, attributeList: [], filterArray: [] },
       { headers: { Authorization: token } }
     );
   } catch (e) {

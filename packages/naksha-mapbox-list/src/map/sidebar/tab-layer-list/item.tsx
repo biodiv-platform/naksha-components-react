@@ -84,7 +84,7 @@ const Item = memo<ItemProps>(({ data, index, style }) => {
       </Stack>
       <ItemInfo
         layer={layer}
-        onDownload={() => handleOnLayerDownload(layer.id)}
+        onDownload={() => handleOnLayerDownload(layer.id, layer.title)}
       />
     </Stack>
   );

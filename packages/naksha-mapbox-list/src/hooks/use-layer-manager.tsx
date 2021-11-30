@@ -446,10 +446,10 @@ export default function useLayerManager() {
     });
   };
 
-  const handleOnLayerDownload = async (layerId) => {
+  const handleOnLayerDownload = async (layerId, layerTitle) => {
     const { success, data } = await onLayerDownload(layerId);
     if (success) {
-      axDownloadLayer(nakshaApiEndpoint, data, layerId);
+      axDownloadLayer(nakshaApiEndpoint, data, layerId, layerTitle);
     }
   };
 

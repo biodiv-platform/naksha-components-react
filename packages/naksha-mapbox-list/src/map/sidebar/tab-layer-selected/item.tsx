@@ -64,7 +64,7 @@ const Item = ({ layer, q }: ItemProps) => {
 
       <ItemInfo
         layer={layer}
-        onDownload={() => handleOnLayerDownload(layer.id)}
+        onDownload={() => handleOnLayerDownload(layer.id, layer.title)}
         mb={4}
       />
 
