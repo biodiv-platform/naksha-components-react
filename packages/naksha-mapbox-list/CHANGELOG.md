@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.12.7](https://github.com/strandls/naksha-components-react/compare/v3.12.6...v3.12.7) (2021-11-30)
+
+**Note:** Version bump only for package @ibp/naksha-mapbox-list
+
+
+
+
+
 ## [3.12.3](https://github.com/strandls/naksha-components-react/compare/v3.12.2...v3.12.3) (2021-11-17)
 
 **Note:** Version bump only for package @ibp/naksha-mapbox-list
