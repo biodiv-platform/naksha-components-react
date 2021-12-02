@@ -3,6 +3,7 @@ export const GMAP_FEATURE_TYPES = {
   POLYGON: "Polygon",
   LINESTRING: "LineString",
   RECTANGLE: "Rectangle",
+  RAW: "Raw",
   NONE: null,
 };
 

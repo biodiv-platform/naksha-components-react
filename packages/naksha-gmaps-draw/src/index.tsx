@@ -7,6 +7,7 @@ import ClearFeatures from "./features/clear-features";
 import NakshaImport from "./import";
 import { ACTION_TYPES, featuresReducer } from "./reducers/features";
 import { GMAP_FEATURE_TYPES, GMAP_OPTIONS } from "./static/constants";
+import TraceLocation from "./trace-location";
 import {
   calculateBounds,
   geometryToGeoJsonFeature,
@@ -28,6 +29,8 @@ export interface NakshaGmapsDrawProps {
   importInputComponent?;
   importButtonComponent?;
   autocompleteComponent?;
+  showTrace?;
+  traceButtonComponent?;
 }
 
 export function NakshaGmapsDraw({
@@ -45,6 +48,8 @@ export function NakshaGmapsDraw({
   importInputComponent,
   importButtonComponent,
   autocompleteComponent,
+  showTrace,
+  traceButtonComponent,
 }: NakshaGmapsDrawProps) {
   const mapRef = useRef<any>(null);
   const [viewPort] = useState(mapboxToGmapsViewPort(defaultViewPort));
@@ -134,6 +139,14 @@ export function NakshaGmapsDraw({
             />
           )}
         </div>
+        {showTrace && (
+          <TraceLocation
+            TraceButtonComponent={
+              traceButtonComponent || <button children="trace" />
+            }
+            onFeatureAdded={onFeatureAdded}
+          />
+        )}
         <GoogleMap
           id="naksha-gmaps-draw"
           mapContainerStyle={mapStyle || { height: "100%", width: "100%" }}
