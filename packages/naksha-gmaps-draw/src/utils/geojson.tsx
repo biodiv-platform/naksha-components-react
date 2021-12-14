@@ -56,6 +56,19 @@ export const geometryToGeoJsonFeature = (geometry) => {
       };
     }
 
+    case GMAP_FEATURE_TYPES.RAW: {
+      const clist: any[] = geometry.data;
+
+      // To make first and last equal
+      clist.push(clist[0]);
+
+      return {
+        type: GMAP_FEATURE_TYPES.POLYGON,
+        properties: { id },
+        coordinates: [clist],
+      };
+    }
+
     case GMAP_FEATURE_TYPES.LINESTRING: {
       const clist: any[] = [];
 

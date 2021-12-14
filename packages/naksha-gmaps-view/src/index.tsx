@@ -11,6 +11,7 @@ export interface NakshaGmapsViewProps {
   gmapApiAccessToken?;
   gmapRegion?;
   mapStyle?: React.CSSProperties;
+  maxZoom?;
 }
 
 export function NakshaGmapsView({
@@ -19,6 +20,7 @@ export function NakshaGmapsView({
   gmapRegion,
   features,
   mapStyle,
+  maxZoom,
 }: NakshaGmapsViewProps) {
   const mapRef = useRef<any>(null);
   const [viewPort] = useState(mapboxToGmapsViewPort(defaultViewPort));
@@ -62,7 +64,7 @@ export function NakshaGmapsView({
         mapContainerStyle={mapStyle || { height: "100%", width: "100%" }}
         zoom={viewPort.zoom}
         center={viewPort.center}
-        options={GMAP_OPTIONS}
+        options={{ ...GMAP_OPTIONS, maxZoom }}
         ref={mapRef}
         onLoad={onMapLoaded}
       />
