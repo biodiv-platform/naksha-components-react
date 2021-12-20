@@ -27,7 +27,6 @@ export function NakshaGmapsView({
   const mapRef = useRef<any>(null);
   const [viewPort] = useState(mapboxToGmapsViewPort(defaultViewPort));
   const [isLoaded, setIsLoaded] = useState<boolean>();
-  const maxZ = maxZoom || 12;
 
   const reloadFeatures = () => {
     // Clear Map
@@ -44,10 +43,19 @@ export function NakshaGmapsView({
 
       // Calculate bounds from GeoJson
       const bounds = calculateBounds(fullGeoJson);
+
       bounds && mapRef.current.state.map.fitBounds(bounds);
 
-      const z = mapRef.current.state.map.getZoom();
-      mapRef.current.state.map.setZoom(Math.min(maxZ, z));
+      if (maxZoom) {
+        google.maps.event.addListenerOnce(
+          mapRef.current.state.map,
+          "idle",
+          function () {
+            const z = mapRef.current.state.map.getZoom();
+            mapRef.current.state.map.setZoom(Math.min(maxZoom, z));
+          }
+        );
+      }
     }
   };
 
