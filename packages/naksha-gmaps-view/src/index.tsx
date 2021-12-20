@@ -12,6 +12,7 @@ export interface NakshaGmapsViewProps {
   gmapRegion?;
   mapStyle?: React.CSSProperties;
   maxZoom?;
+  options?;
 }
 
 export function NakshaGmapsView({
@@ -21,10 +22,12 @@ export function NakshaGmapsView({
   features,
   mapStyle,
   maxZoom,
+  options,
 }: NakshaGmapsViewProps) {
   const mapRef = useRef<any>(null);
   const [viewPort] = useState(mapboxToGmapsViewPort(defaultViewPort));
   const [isLoaded, setIsLoaded] = useState<boolean>();
+  const maxZ = maxZoom || 12;
 
   const reloadFeatures = () => {
     // Clear Map
@@ -42,6 +45,9 @@ export function NakshaGmapsView({
       // Calculate bounds from GeoJson
       const bounds = calculateBounds(fullGeoJson);
       bounds && mapRef.current.state.map.fitBounds(bounds);
+
+      const z = mapRef.current.state.map.getZoom();
+      mapRef.current.state.map.setZoom(Math.min(maxZ, z));
     }
   };
 
@@ -64,7 +70,7 @@ export function NakshaGmapsView({
         mapContainerStyle={mapStyle || { height: "100%", width: "100%" }}
         zoom={viewPort.zoom}
         center={viewPort.center}
-        options={{ ...GMAP_OPTIONS, maxZoom }}
+        options={{ ...GMAP_OPTIONS, ...(options || {}) }}
         ref={mapRef}
         onLoad={onMapLoaded}
       />
