@@ -31,6 +31,8 @@ export interface NakshaGmapsDrawProps {
   autocompleteComponent?;
   showTrace?;
   traceButtonComponent?;
+  maxZoom?;
+  options?;
 }
 
 export function NakshaGmapsDraw({
@@ -50,6 +52,8 @@ export function NakshaGmapsDraw({
   autocompleteComponent,
   showTrace,
   traceButtonComponent,
+  maxZoom,
+  options,
 }: NakshaGmapsDrawProps) {
   const mapRef = useRef<any>(null);
   const [viewPort] = useState(mapboxToGmapsViewPort(defaultViewPort));
@@ -71,6 +75,17 @@ export function NakshaGmapsDraw({
       // Calculate bounds from GeoJson
       const bounds = calculateBounds(fullGeoJson);
       bounds && mapRef.current.state.map.fitBounds(bounds);
+
+      if (maxZoom) {
+        google.maps.event.addListenerOnce(
+          mapRef.current.state.map,
+          "idle",
+          function () {
+            const z = mapRef.current.state.map.getZoom();
+            mapRef.current.state.map.setZoom(Math.min(maxZoom, z));
+          }
+        );
+      }
     }
   };
 
@@ -168,6 +183,7 @@ export function NakshaGmapsDraw({
                   ],
                   drawingMode: GMAP_FEATURE_TYPES.POLYGON,
                   featureFactory: onFeatureAdded,
+                  ...(options || {}),
                 } as any
               }
             />
