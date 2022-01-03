@@ -25,6 +25,7 @@ export interface NakshaGmapsDrawProps {
   isMultiple?: boolean;
   isAutocomplete?: boolean;
   gmapRegion?;
+  autoCompleteRegion?;
   mapStyle?: React.CSSProperties;
   importInputComponent?;
   importButtonComponent?;
@@ -46,6 +47,7 @@ export function NakshaGmapsDraw({
   isImport,
   isAutocomplete,
   gmapRegion,
+  autoCompleteRegion,
   mapStyle,
   importInputComponent,
   importButtonComponent,
@@ -141,7 +143,7 @@ export function NakshaGmapsDraw({
             <NakshaAutocomplete
               InputComponent={autocompleteComponent || <input />}
               addFeature={addFeature}
-              gmapRegion={gmapRegion}
+              gmapRegion={autoCompleteRegion ?? gmapRegion}
             />
           )}
           {isImport && (
