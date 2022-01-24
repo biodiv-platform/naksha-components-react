@@ -5,12 +5,12 @@ export const ACTION_TYPES = {
 };
 
 export function featuresReducer(
-  state = [] as any[],
+  state,
   { action, data, isMultiple }: { action: string; data?; isMultiple? }
 ) {
   switch (action) {
     case ACTION_TYPES.ADD:
-      return isMultiple ? [...state, data] : [data];
+      return isMultiple ? [...(state || []), data] : [data];
 
     case ACTION_TYPES.CLEAR:
       return [];
