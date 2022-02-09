@@ -99,7 +99,7 @@ const NakshaGmapsDraw = React.forwardRef(
       if (isLoaded) {
         onFeaturesChange && onFeaturesChange(features);
         if (ref) {
-          ref.current = { addFeature };
+          ref.current = { addFeature, replaceFeature };
         }
         reloadFeatures();
       }
@@ -122,6 +122,10 @@ const NakshaGmapsDraw = React.forwardRef(
 
     const addFeature = (feature) => {
       dispatch({ action: ACTION_TYPES.ADD, data: feature, isMultiple });
+    };
+
+    const replaceFeature = (feature) => {
+      dispatch({ action: ACTION_TYPES.REPLACE, data: [feature] });
     };
 
     const onFeatureAdded = (geometry) => {
