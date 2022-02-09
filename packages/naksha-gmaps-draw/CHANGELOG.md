@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.13.0](https://github.com/strandls/naksha-components-react/compare/v3.12.15...v3.13.0) (2022-02-09)
+
+
+### Features
+
+* :sparkles: added replaceFeature ([b7a0377](https://github.com/strandls/naksha-components-react/commit/b7a0377dba3664be571d24228beb9fedc2ab9d7d))
+
+
+
+
+
 ## [3.12.15](https://github.com/strandls/naksha-components-react/compare/v3.12.14...v3.12.15) (2022-01-28)
 
 **Note:** Version bump only for package @ibp/naksha-gmaps-draw
