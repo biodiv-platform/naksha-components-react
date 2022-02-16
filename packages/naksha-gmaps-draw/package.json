@@ -1,7 +1,7 @@
 {
   "name": "@ibp/naksha-gmaps-draw",
   "author": "harshzalavadiya",
-  "version": "3.13.0",
+  "version": "3.13.1",
   "license": "Apache-2.0",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
