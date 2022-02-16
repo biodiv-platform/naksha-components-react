@@ -1,6 +1,6 @@
 import { GMAPS_LIBRARIES, mapboxToGmapsViewPort } from "@ibp/naksha-commons";
 import { Data, GoogleMap, LoadScriptNext } from "@react-google-maps/api";
-import React, { useEffect, useReducer, useRef, useState } from "react";
+import React, { useEffect, useMemo, useReducer, useRef, useState } from "react";
 
 import NakshaAutocomplete from "./autocomplete";
 import ClearFeatures from "./features/clear-features";
@@ -62,9 +62,13 @@ const NakshaGmapsDraw = React.forwardRef(
     ref: any
   ) => {
     const mapRef = useRef<any>(null);
-    const [viewPort] = useState(mapboxToGmapsViewPort(defaultViewPort));
     const [features, dispatch] = useReducer(featuresReducer, defaultFeatures);
     const [isLoaded, setIsLoaded] = useState<boolean>();
+
+    const viewPort = useMemo(
+      () => mapboxToGmapsViewPort(defaultViewPort),
+      [defaultViewPort]
+    );
 
     const reloadFeatures = () => {
       // Clear Map
