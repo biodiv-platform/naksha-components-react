@@ -1,12 +1,37 @@
-*.log
-.DS_Store
-.cache
-.env
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+node_modules
+.pnp
+.pnp.js
+
+# testing
+coverage
+
+# next.js
+.next/
+out/
+build
+
+# tsup
 dist
 
-node_modules
-packages/*/node_modules
-packages/*/dist
+# misc
+.DS_Store
+*.pem
 
-# yarn workspace only need root yarn.lock, ignore all yarn.lock(s) in subfolders
-*/**/yarn.lock
+# debug
+npm-debug.log*
+lerna-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# local env files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# turbo
+.turbo

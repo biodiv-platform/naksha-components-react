@@ -1,2 +1,30 @@
-export const CURSOR_PENCIL =
-  "url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAABGklEQVQ4T63UPSuGURgH8N/jE+BD2KSQwaLYvJTFaPGSyeiLPANlIdktJoRPQI+SAYNRyUh5S6fOqdPteTl3Oevd+XVd/+tcd8M/nUZNZxSHuMMy3tL9OtAYTjEQL19gPmGlUD/mcIC+rItLzOK9BArtnGAL39irYBvY7QUF5CxmMoJNfGE/YiGjSbS6QQm5wSNW8IM1fGIbizgPrXaCUrA5kqIJ2CqO8dJtaglpxUrCpfyEdhZSJZ2gHLnHeglSbW08vpNrPNRBcighYSKvGCqtpNpaSP4DSzjCTAa1zaS6Wmlq4YU+o4mrOJHp+Pz/BNtuP3NoCrcYxk5cyiIkzyhUFKB0itrJK0sVTWAw+/AU16L4L9Nr14qhXz9ESBNBOodaAAAAAElFTkSuQmCC) 0 18, pointer";
+export const featureStyle: any = {
+  id: "data",
+  type: "fill",
+  paint: {
+    "fill-color": "#f03b20",
+    "fill-opacity": 0.2,
+  },
+  filter: ["==", ["geometry-type"], "Polygon"],
+};
+
+export const pointStyle: any = {
+  type: "circle",
+  paint: {
+    "circle-radius": 8,
+    "circle-color": "#f03b20",
+    "circle-opacity": 0.8,
+  },
+  filter: ["==", ["geometry-type"], "Point"],
+};
+
+export const lineStyle: any = {
+  type: "line",
+  paint: {
+    "line-color": "#f03b20",
+    "line-width": 1.6,
+    "line-dasharray": [6, 3],
+    "line-opacity": 0.8,
+  },
+  filter: ["==", ["geometry-type"], "LineString"],
+};

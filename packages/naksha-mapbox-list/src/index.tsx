@@ -1,17 +1,26 @@
+import { TranslationProvider } from "@ibp/naksha-commons";
 import React from "react";
+import { MapProvider } from "react-map-gl";
 
+import localeStrings from "../locales";
+import Map from "./components/map";
 import { LayersProvider } from "./hooks/use-layers";
-import { ExtendedMarkerProps, NakshaMapboxListProps } from "./interfaces";
-import Map from "./map";
+import { NakshaMapboxListProps } from "./interfaces";
 import { defaultNakshaProps } from "./static/constants";
 
-function NakshaMapboxList(props: NakshaMapboxListProps) {
-  return (
-    <LayersProvider {...defaultNakshaProps} {...props}>
-      <Map />
-    </LayersProvider>
+export const NakshaMapboxList = (props: NakshaMapboxListProps) => {
+  const mp = React.useMemo(
+    () => ({ ...defaultNakshaProps, ...props }),
+    [props]
   );
-}
 
-export type { ExtendedMarkerProps };
-export { defaultNakshaProps, NakshaMapboxList };
+  return (
+    <MapProvider>
+      <TranslationProvider localeStrings={localeStrings} lang={mp.lang}>
+        <LayersProvider mp={mp}>
+          <Map />
+        </LayersProvider>
+      </TranslationProvider>
+    </MapProvider>
+  );
+};

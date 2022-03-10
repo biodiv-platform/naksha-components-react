@@ -5,5 +5,5 @@ draw polygons over mapbox-gl
 ## Installing
 
 ```sh
-yarn add @ibp/naksha-mapbox-draw react-map-gl react-map-gl-draw
+yarn add @ibp/naksha-mapbox-draw react-map-gl
 ```

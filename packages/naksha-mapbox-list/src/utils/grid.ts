@@ -1,6 +1,7 @@
 import BoundingBox from "boundingbox";
-
 import { GeoHash } from "geohash";
+
+import { PROPERTY_ID } from "../static/constants";
 
 /**
  * Takes zoom level of map and returns Precision, Level and Square Size (in kms)
@@ -57,7 +58,7 @@ const processRectangles = function (data, level) {
       maxlat: bboxEnd.latitude[1],
       maxlon: bboxEnd.longitude[1],
     }).toGeoJSON();
-    features.push({ ...feature, properties: { count } });
+    features.push({ ...feature, properties: { count, [PROPERTY_ID]: hash } });
   });
 
   return features;
@@ -74,7 +75,7 @@ const processSquares = (data) => {
       maxlat: bbox.latitude[1],
       maxlon: bbox.longitude[1],
     }).toGeoJSON();
-    features.push({ ...feature, properties: { count } });
+    features.push({ ...feature, properties: { count, [PROPERTY_ID]: hash } });
   }
 
   return features;

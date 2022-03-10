@@ -1,4 +1,4 @@
-import { GMAPS_LIBRARIES, mapboxToGmapsViewPort } from "@ibp/naksha-commons";
+import { GMAPS_LIBRARIES, mapboxToGmapsViewState } from "@ibp/naksha-commons";
 import { GoogleMap, LoadScriptNext } from "@react-google-maps/api";
 import React, { useEffect, useRef, useState } from "react";
 
@@ -25,7 +25,7 @@ export function NakshaGmapsView({
   options,
 }: NakshaGmapsViewProps) {
   const mapRef = useRef<any>(null);
-  const [viewPort] = useState(mapboxToGmapsViewPort(defaultViewPort));
+  const [viewPort] = useState(mapboxToGmapsViewState(defaultViewPort));
   const [isLoaded, setIsLoaded] = useState<boolean>();
 
   const reloadFeatures = () => {

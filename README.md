@@ -8,9 +8,9 @@
 
 Map Components for Biodiversity Informatics Platform
 
-![Grid Layer](./preview/geohash-grid-layer.gif)
+![geohash-grid-layer](https://user-images.githubusercontent.com/5774849/157698247-e125ba02-a2a0-45b9-83e3-119e53026e97.gif)
 
-![Geoserver Vector Layer](./preview/geoserver-vector-layer.gif)
+![geoserver-vector-layer](https://user-images.githubusercontent.com/5774849/157698405-ad1e4e18-58c4-4407-90bf-1468c1bca558.gif)
 
 ## 🔌 Packages
 
@@ -20,47 +20,18 @@ Map Components for Biodiversity Informatics Platform
 - [@ibp/naksha-mapbox-draw](./packages/naksha-mapbox-draw/README.md) ![@ibp/naksha-mapbox-draw](https://img.shields.io/bundlephobia/minzip/@ibp/naksha-mapbox-draw/latest?z)
 - [@ibp/naksha-mapbox-list](./packages/naksha-mapbox-list/README.md) ![@ibp/naksha-mapbox-list](https://img.shields.io/bundlephobia/minzip/@ibp/naksha-mapbox-list/latest)
 - [@ibp/naksha-mapbox-view](./packages/naksha-mapbox-view/README.md) ![@ibp/naksha-mapbox-view](https://img.shields.io/bundlephobia/minzip/@ibp/naksha-mapbox-view/latest)
-- [@ibp/naksha-upload](./packages/naksha-upload/README.md) ![@ibp/naksha-upload](https://img.shields.io/bundlephobia/minzip/@ibp/naksha-upload/latest)
 
 ## 📦 Development Setup
 
 ```sh
 git clone https://github.com/strandls/naksha-components-react.git
 yarn install
-yarn bootstrap
-```
-
-## 📚 Storybook
-
-for each library examples are available as storybook stories at `packages/**/stories/*.stories.tsx`
-
-```sh
-yarn storybook
-```
-
-## 🌀 Using without `@chakra-ui/react`
-
-If you are using any component in a project where `chakra-ui` is not initialized/used you need to do so manually like below
-
-```jsx
-import { ChakraProvider } from "@chakra-ui/react";
-import { ComponentX } from "naksha-components-react";
-
-<ChakraProvider>
-  <ComponentX />
-</ChakraProvider>;
+yarn dev
 ```
 
 ## 🔧 Configuration
 
 Code quality checks are done with `prettier`, `eslint`.
-
-## 🤠 Credits
-
-- [tsdx](https://github.com/jaredpalmer/tsdx)
-- [typescript](https://github.com/microsoft/TypeScript)
-- [chakra-ui](https://github.com/chakra-ui/chakra-ui)
-- [react-map-gl](https://github.com/uber/react-map-gl)
 
 ## 🙏 Contributing
 

@@ -1,13 +1,12 @@
-import { BaseLayer } from "@ibp/naksha-commons";
-import { ViewportProps } from "react-map-gl";
+import { MapStyles } from "@ibp/naksha-commons";
+import { ViewState } from "react-map-gl";
 
-export interface NakshaMapboxDrawProps {
-  defaultViewPort?: Partial<ViewportProps>;
-  mapboxApiAccessToken: string;
-  baseLayer?: BaseLayer;
-  defaultFeatures?: any[];
-  onFeaturesChange?: Function;
+export interface NakshaMapboxViewProps {
+  defaultViewState?: Partial<ViewState>;
+  mapboxAccessToken: string;
+  mapStyle?: MapStyles;
+  data?;
+  onDataChange?;
   isControlled?: boolean;
-  isReadOnly?: boolean;
   isMultiple?: boolean;
 }

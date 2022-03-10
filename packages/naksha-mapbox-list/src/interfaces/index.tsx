@@ -1,13 +1,7 @@
-import { ViewportProps } from "react-map-gl";
-import { BaseLayer } from "@ibp/naksha-commons";
+import { ViewState } from "react-map-gl";
+import { MapStyles } from "@ibp/naksha-commons";
 
 type LayerType = "grid" | "vector" | "raster";
-
-interface SelectedLayers {
-  id: string;
-  type: LayerType;
-  source?: string;
-}
 
 export interface ExtendedMarkerProps {
   latitude: number;
@@ -16,14 +10,14 @@ export interface ExtendedMarkerProps {
 }
 
 export interface NakshaMapboxListProps {
-  viewPort?: Partial<ViewportProps>;
+  defaultViewState?: Partial<ViewState>;
 
   loadToC?: boolean;
   showToC?: boolean;
 
   managePublishing?: boolean;
   nakshaEndpointToken?: string;
-  mapboxApiAccessToken: string;
+  mapboxAccessToken: string;
   nakshaApiEndpoint?: string;
   bearerToken?: string;
   geoserver?: {
@@ -33,11 +27,10 @@ export interface NakshaMapboxListProps {
     onClick?: any;
   };
 
-  selectedLayers?: SelectedLayers[];
-  baseLayer?: BaseLayer;
+  selectedLayers?: string[];
+  mapStyle?: MapStyles;
   layers?: GeoserverLayer[];
   onLayerDownload?;
-  markers?: ExtendedMarkerProps[];
   lang?;
 
   children?;
@@ -66,6 +59,7 @@ export interface GeoserverLayer {
   license?: string;
   tags?: string[];
   createdBy?: string;
+  layerStatus?: string;
   author?: { name: string };
   url?: string;
   createdDate?: string;
