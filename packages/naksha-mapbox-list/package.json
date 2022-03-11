@@ -1,6 +1,6 @@
 {
   "name": "@ibp/naksha-mapbox-list",
-  "version": "4.0.1",
+  "version": "4.0.3",
   "author": "harshzalavadiya",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

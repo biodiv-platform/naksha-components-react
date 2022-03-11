@@ -1,6 +1,6 @@
 {
   "name": "naksha-components-react",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "author": "harshzalavadiya",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -21,10 +21,10 @@
   },
   "dependencies": {
     "@ibp/eslint-preset": "4.0.1",
-    "@ibp/naksha-gmaps-draw": "4.0.2",
-    "@ibp/naksha-gmaps-view": "4.0.1",
+    "@ibp/naksha-gmaps-draw": "4.0.3",
+    "@ibp/naksha-gmaps-view": "4.0.3",
     "@ibp/naksha-mapbox-draw": "4.0.1",
-    "@ibp/naksha-mapbox-list": "4.0.1",
+    "@ibp/naksha-mapbox-list": "4.0.3",
     "@ibp/naksha-mapbox-view": "4.0.1",
     "@ibp/tsconfig": "4.0.1"
   },
