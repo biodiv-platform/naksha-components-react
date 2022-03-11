@@ -6,29 +6,25 @@ import { useControl } from "react-map-gl";
 import DeletePanel from "./delete-panel";
 
 interface DrawControlProps {
-  data?;
-  onDataChange?;
+  features?;
+  setFeatures?;
   isControlled?: boolean;
   isMultiple?: boolean;
-  autoFocus;
 }
 
 const UPDATE_EVENT = "rmsc-draw-updated";
 
 export default function DrawControl(props: DrawControlProps) {
-  const [features, setFeatures] = useState<any[]>(props.data?.features || []);
-
   useListener(onUpdate, [UPDATE_EVENT]);
 
   function onUpdate(e) {
-    const _newFeatures = [...features, ...e.features];
+    const _newFeatures = [...props.features, ...e.features];
     const _features = props.isMultiple
       ? _newFeatures
       : [_newFeatures[_newFeatures.length - 1]];
 
-    setFeatures(_features);
-
     draw.deleteAll();
+    props.setFeatures(_features);
   }
 
   const draw = useControl(
@@ -48,21 +44,7 @@ export default function DrawControl(props: DrawControlProps) {
     { position: "top-left" }
   );
 
-  const onDelete = () => setFeatures([]);
-
-  useEffect(() => {
-    props.onDataChange &&
-      props.onDataChange({ type: "FeatureCollection", features });
-  }, [features]);
-
-  useEffect(() => {
-    if (
-      props.isControlled &&
-      JSON.stringify(features) !== JSON.stringify(props.data?.features)
-    ) {
-      setFeatures(props.data?.features || []);
-    }
-  }, [props.data]);
+  const onDelete = () => props.setFeatures([]);
 
   return <DeletePanel onDelete={onDelete} />;
 }

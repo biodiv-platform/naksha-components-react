@@ -13,16 +13,29 @@ export default function Map(props: NakshaMapboxViewProps) {
   const { mapv } = useMap();
   const [mapStyle] = useState(defaultMapStyles[props?.mapStyle || 0].style);
   const [viewState] = useState(props.defaultViewState || defaultViewState);
+  const [features, setFeatures] = useState<any[]>(props.data?.features || []);
 
   const autoFocus = () => {
-    if (!props.data?.features?.length || !mapv) return;
+    if (!features?.length || !mapv) return;
 
-    const _bbox = bbox(props.data);
+    const _bbox = bbox({ type: "FeatureCollection", features });
     mapv.fitBounds(_bbox as any, { padding: 40, duration: 1000 });
   };
 
   useEffect(() => {
+    props.onDataChange &&
+      props.onDataChange({ type: "FeatureCollection", features });
+
     autoFocus();
+  }, [features]);
+
+  useEffect(() => {
+    if (
+      props.isControlled &&
+      JSON.stringify(features) !== JSON.stringify(props.data?.features)
+    ) {
+      setFeatures(props.data?.features || []);
+    }
   }, [props.data]);
 
   return (
@@ -37,13 +50,12 @@ export default function Map(props: NakshaMapboxViewProps) {
     >
       <NavControl position="top-right" showZoom={true} showCompass={true} />
       <DrawControl
-        data={props.data}
-        onDataChange={props.onDataChange}
+        features={features}
+        setFeatures={setFeatures}
         isControlled={props.isControlled}
         isMultiple={props.isMultiple}
-        autoFocus={autoFocus}
       />
-      <GeojsonLayer data={props.data} />
+      <GeojsonLayer features={features} />
     </MapGL>
   );
 }
