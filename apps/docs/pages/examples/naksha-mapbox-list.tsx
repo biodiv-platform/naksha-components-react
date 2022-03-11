@@ -59,7 +59,6 @@ export default function NakshaMapboxListPage() {
           {
             id: "global-observations",
             title: "Global Observations",
-            isAdded: false,
             source: { type: "grid", fetcher: fetchGridData },
             onClick: Popup,
             onHover: HoverPopup,
@@ -68,6 +67,7 @@ export default function NakshaMapboxListPage() {
               type: "extended_records",
               geoField: "location",
               summaryColumn: ["count"],
+              propertyMap: { count: "Count" },
             },
           },
         ]}

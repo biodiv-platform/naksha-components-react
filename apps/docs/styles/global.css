@@ -13,3 +13,11 @@ body,
   max-width: 800px;
   margin: 0 auto;
 }
+
+button,
+input,
+select {
+  box-sizing: border-box;
+  border-width: 0;
+  border-style: solid;
+}

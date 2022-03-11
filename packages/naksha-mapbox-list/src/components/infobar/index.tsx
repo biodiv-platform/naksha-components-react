@@ -13,10 +13,10 @@ export default function InfoBar() {
 
   return (
     <div
-      className={tw`absolute top-4 right-4 bottom-4 bg-white rounded-lg shadow-md max-w-sm w-full z-10 flex flex-col`}
+      className={tw`absolute top-4 right-4 bottom-4 bg-white rounded-lg overflow-hidden shadow-md max-w-sm w-full z-10 flex flex-col`}
     >
       <div
-        className={tw`border-b-2 h-12 px-4 flex items-center gap-3 flex-shrink-0`}
+        className={tw`bg-gray-100 h-12 px-4 flex items-center gap-3 flex-shrink-0`}
       >
         <CrossHairIcon /> {t("infobar")}
       </div>

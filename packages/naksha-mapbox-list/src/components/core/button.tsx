@@ -1,6 +1,8 @@
 import React from "react";
 import { tw } from "twind";
 
+import { LayersIcon } from "./icons";
+
 export const Button = (props) => {
   return (
     <button
@@ -20,3 +22,20 @@ export const IconButton = (props) => {
     />
   );
 };
+
+export const CloseButton = (props?) => (
+  <button
+    className={tw`absolute top-0 right-0 h-12 w-12 border-b-2 border-gray-300 bg-red-50 cursor-pointer hover:bg-red-100 text-red-800 text-lg`}
+    children="✕"
+    {...props}
+  />
+);
+
+export const LayersButton = (props?) => (
+  <button
+    className={tw`absolute top-4 left-4 rounded-lg z-10 h-12 w-12 bg-blue-600 cursor-pointer hover:bg-blue-700 text-white text-lg flex items-center justify-center`}
+    {...props}
+  >
+    <LayersIcon />
+  </button>
+);

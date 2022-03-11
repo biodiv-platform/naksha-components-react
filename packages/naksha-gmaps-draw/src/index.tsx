@@ -15,10 +15,10 @@ import {
 } from "./utils/geojson";
 
 export interface NakshaGmapsDrawProps {
-  defaultViewPort?;
-  defaultFeatures?;
-  onFeaturesChange?;
-  gmapApiAccessToken?;
+  defaultViewState?;
+  data?;
+  onDataChange?;
+  gmapAccessToken?;
   isControlled?: boolean;
   isReadOnly?: boolean;
   isImport?: boolean;
@@ -39,10 +39,10 @@ export interface NakshaGmapsDrawProps {
 const NakshaGmapsDraw = React.forwardRef(
   (
     {
-      defaultViewPort,
-      defaultFeatures,
-      onFeaturesChange,
-      gmapApiAccessToken,
+      defaultViewState,
+      data,
+      onDataChange,
+      gmapAccessToken,
       isControlled,
       isReadOnly,
       isMultiple,
@@ -62,12 +62,12 @@ const NakshaGmapsDraw = React.forwardRef(
     ref: any
   ) => {
     const mapRef = useRef<any>(null);
-    const [features, dispatch] = useReducer(featuresReducer, defaultFeatures);
+    const [features, dispatch] = useReducer(featuresReducer, data);
     const [isLoaded, setIsLoaded] = useState<boolean>();
 
     const viewPort = useMemo(
-      () => mapboxToGmapsViewState(defaultViewPort),
-      [defaultViewPort]
+      () => mapboxToGmapsViewState(defaultViewState),
+      [defaultViewState]
     );
 
     const reloadFeatures = () => {
@@ -101,7 +101,7 @@ const NakshaGmapsDraw = React.forwardRef(
 
     useEffect(() => {
       if (isLoaded) {
-        onFeaturesChange && onFeaturesChange(features);
+        onDataChange && onDataChange(features);
         if (ref) {
           ref.current = { addFeature, replaceFeature };
         }
@@ -110,19 +110,19 @@ const NakshaGmapsDraw = React.forwardRef(
     }, [isLoaded, features]);
 
     /**
-     *  can simulate isControlled if `defaultFeatures` are going to be changed
+     *  can simulate isControlled if `data` are going to be changed
      */
     useEffect(() => {
       if (
         isControlled &&
-        JSON.stringify(features) !== JSON.stringify(defaultFeatures)
+        JSON.stringify(features) !== JSON.stringify(data)
       ) {
         dispatch({
           action: ACTION_TYPES.REPLACE,
-          data: defaultFeatures,
+          data: data,
         });
       }
-    }, [defaultFeatures]);
+    }, [data]);
 
     const addFeature = (feature) => {
       dispatch({ action: ACTION_TYPES.ADD, data: feature, isMultiple });
@@ -145,7 +145,7 @@ const NakshaGmapsDraw = React.forwardRef(
 
     return (
       <LoadScriptNext
-        googleMapsApiKey={gmapApiAccessToken}
+        googleMapsApiKey={gmapAccessToken}
         region={gmapRegion}
         libraries={
           isAutocomplete

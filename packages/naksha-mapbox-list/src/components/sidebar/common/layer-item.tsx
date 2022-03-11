@@ -78,7 +78,10 @@ export default function LayerItem({ item, extended }: LayerItemProps) {
   };
 
   return (
-    <div className={tw`z-20 p-3 border-t bg-white`}>
+    <div
+      className={tw`z-20 p-3 bg-white`}
+      style={{ borderTop: "1px solid #e5e7eb" }}
+    >
       <div className={tw`flex gap-3`}>
         <div className={tw`flex-shrink-0`}>
           <CheckboxInput

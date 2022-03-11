@@ -15,12 +15,12 @@ export default function InfoBarPanel({ data }) {
 
   const getPropertyData = async () => {
     const currentLayer: any = layer.selectedLayers.find(
-      (l) => l.id === data.sourceLayer
+      (l) => l.id === (data.sourceLayer || data.source)
     );
 
-    const properties = Object.entries(currentLayer.data.propertyMap).map(
-      ([k, v]) => [v, data.properties[k]]
-    );
+    const properties = Object.entries(
+      currentLayer?.data?.propertyMap || {}
+    ).map(([k, v]) => [v, data?.properties?.[k]] || "-");
 
     setLayerInfo({ title: currentLayer.title, properties });
   };

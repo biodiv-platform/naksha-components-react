@@ -8,7 +8,7 @@ export default function NakshaGmapsDrawPage() {
         isAutocomplete={true}
         isMultiple={true}
         isImport={true}
-        gmapApiAccessToken={process.env.STORYBOOK_GMAP_TOKEN}
+        gmapAccessToken={process.env.STORYBOOK_GMAP_TOKEN}
         // Restricts autocomplete + customization searches to India
         gmapRegion="IN"
       />

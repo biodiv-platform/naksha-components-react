@@ -46,7 +46,7 @@ export default function NakshaGmapsViewPage() {
   return (
     <div style={{ height: "100vh", width: "100vw" }}>
       <NakshaGmapsView
-        gmapApiAccessToken={process.env.STORYBOOK_GMAP_TOKEN}
+        gmapAccessToken={process.env.STORYBOOK_GMAP_TOKEN}
         features={geojson}
         // Restricts autocomplete + customization searches to India
         gmapRegion="IN"

@@ -52,7 +52,7 @@ export const SearchInput = (props: InputProps) => (
     </span>
     <input
       type="search"
-      className={tw`w-full py-2 pl-10 pr-4 text-gray-700 bg-white border rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring`}
+      className={tw`w-full py-2 pl-10 pr-4 text-gray-700 bg-white border border-gray-300 text-base rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring`}
       {...props}
     />
   </div>
