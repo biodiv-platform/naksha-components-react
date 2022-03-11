@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.4](https://github.com/strandls/naksha-components-react/compare/v4.0.3...v4.0.4) (2022-03-11)
+
+
+### Bug Fixes
+
+* :bug: uncontrolled not working properly ([df3b519](https://github.com/strandls/naksha-components-react/commit/df3b519e893289a525bf03a88d879916ce07b9a4))
+
+
+
+
+
 ## [4.0.1](https://github.com/strandls/naksha-components-react/compare/v3.13.1...v4.0.1) (2022-03-10)
 
 **Note:** Version bump only for package @ibp/naksha-mapbox-draw
