@@ -55,6 +55,13 @@ export default function NakshaMapboxListPage() {
           workspace: "biodiv",
         }}
         onLayerDownload={console.log}
+        markers={[
+          {
+            latitude: 23.241346,
+            longitude: 78.046875,
+            colorHex: "07BEF1",
+          },
+        ]}
         layers={[
           {
             id: "global-observations",

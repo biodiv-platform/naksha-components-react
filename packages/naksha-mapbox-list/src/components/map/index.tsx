@@ -8,6 +8,7 @@ import { SELECTION_STYLE } from "../../static/constants";
 import InfoBar from "../infobar";
 import Sidebar from "../sidebar";
 import { MapLayer } from "./layers";
+import MarkersList from "./markers-list";
 import HoverPopup from "./popup";
 
 const NavControl: any = NavigationControl;
@@ -53,6 +54,7 @@ export default function Map() {
         onMouseMove={handleOnMouseMove}
       >
         <NavControl position="top-right" showZoom={true} showCompass={true} />
+        <MarkersList />
         {layer.selectedLayers.map((_l, index) => {
           const beforeId = index > 0 ? layer.selectedIds[index - 1] : undefined;
 

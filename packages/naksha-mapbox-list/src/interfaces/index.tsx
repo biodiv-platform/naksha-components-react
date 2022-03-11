@@ -33,6 +33,8 @@ export interface NakshaMapboxListProps {
   onLayerDownload?;
   lang?;
 
+  markers?: ExtendedMarkerProps[];
+
   children?;
 }
 
