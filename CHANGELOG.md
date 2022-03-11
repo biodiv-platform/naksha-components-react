@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.1.0](https://github.com/strandls/naksha-components-react/compare/v4.0.5...v4.1.0) (2022-03-11)
+
+
+### Features
+
+* :sparkles: added markers ([93ea475](https://github.com/strandls/naksha-components-react/commit/93ea4751deffc5b903d39795df8038ed843e1c34))
+
+
+
+
+
 ## [4.0.5](https://github.com/strandls/naksha-components-react/compare/v4.0.4...v4.0.5) (2022-03-11)
 
 **Note:** Version bump only for package naksha-turborepo
