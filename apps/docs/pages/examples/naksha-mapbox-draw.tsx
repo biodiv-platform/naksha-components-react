@@ -71,14 +71,14 @@ const changedGeojson = {
 export default function NakshaMapboxDrawPage() {
   const [controlled, setControlled] = useState(false);
   const [multiple, setMultiple] = useState(false);
-  const [data, setData] = useState(geojson);
+  const [data, setData] = useState(geojson.features);
 
   return (
     <div className={tw`h-[100vh] w-[100vw]`}>
       <NakshaMapboxDraw
         mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
-        data={data}
-        onDataChange={setData}
+        features={data}
+        onFeaturesChange={setData}
         isControlled={controlled}
         isMultiple={multiple}
       />
@@ -95,7 +95,9 @@ export default function NakshaMapboxDrawPage() {
           Multiple {JSON.stringify(multiple)}
         </label>
         <br />
-        <button onClick={() => setData(changedGeojson)}>Change GeoJSON</button>
+        <button onClick={() => setData(changedGeojson.features)}>
+          Change GeoJSON
+        </button>
       </div>
     </div>
   );

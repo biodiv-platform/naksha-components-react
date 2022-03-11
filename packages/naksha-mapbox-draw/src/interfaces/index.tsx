@@ -5,8 +5,8 @@ export interface NakshaMapboxViewProps {
   defaultViewState?: Partial<ViewState>;
   mapboxAccessToken: string;
   mapStyle?: MapStyles;
-  data?;
-  onDataChange?;
+  features?;
+  onFeaturesChange?;
   isControlled?: boolean;
   isMultiple?: boolean;
 }

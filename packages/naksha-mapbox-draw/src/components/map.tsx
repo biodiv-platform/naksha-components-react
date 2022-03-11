@@ -13,7 +13,7 @@ export default function Map(props: NakshaMapboxViewProps) {
   const { mapv } = useMap();
   const [mapStyle] = useState(defaultMapStyles[props?.mapStyle || 0].style);
   const [viewState] = useState(props.defaultViewState || defaultViewState);
-  const [features, setFeatures] = useState<any[]>(props.data?.features || []);
+  const [features, setFeatures] = useState<any[]>(props.features || []);
 
   const autoFocus = () => {
     if (!features?.length || !mapv) return;
@@ -23,8 +23,7 @@ export default function Map(props: NakshaMapboxViewProps) {
   };
 
   useEffect(() => {
-    props.onDataChange &&
-      props.onDataChange({ type: "FeatureCollection", features });
+    props.onFeaturesChange && props.onFeaturesChange(features);
 
     autoFocus();
   }, [features]);
@@ -32,11 +31,11 @@ export default function Map(props: NakshaMapboxViewProps) {
   useEffect(() => {
     if (
       props.isControlled &&
-      JSON.stringify(features) !== JSON.stringify(props.data?.features)
+      JSON.stringify(features) !== JSON.stringify(props.features)
     ) {
-      setFeatures(props.data?.features || []);
+      setFeatures(props.features || []);
     }
-  }, [props.data]);
+  }, [props.features]);
 
   return (
     <MapGL
