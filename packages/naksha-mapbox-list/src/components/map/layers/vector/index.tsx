@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { Layer, Source } from "react-map-gl";
 
 import useLayers from "../../../../hooks/use-layers";
@@ -21,13 +21,19 @@ export default function VectorLayer({ layer: data, beforeId }) {
   const { layer } = useLayers();
 
   const layerProps = useMemo(
-    () => data.data?.styles?.[data.data?.styleIndex].colors,
+    () => data.data?.styles?.[data.data?.styleIndex]?.colors,
     [data, layer.selectedFeatures]
   );
 
   const highlightData = layer.selectedFeaturesId?.[data.id];
 
-  return (
+  useEffect(() => {
+    if (!layerProps) {
+      layer.toggle({ layerId: data.id, add: true, focus: false });
+    }
+  }, [layerProps]);
+
+  return layerProps ? (
     <Source {...data.source}>
       <Layer beforeId={beforeId} {...layerProps} />
       {highlightData && ( // Highlighted Layer Styles
@@ -40,5 +46,5 @@ export default function VectorLayer({ layer: data, beforeId }) {
         />
       )}
     </Source>
-  );
+  ) : null;
 }
