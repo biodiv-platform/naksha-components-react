@@ -28,6 +28,8 @@ export interface NakshaMapboxListProps {
   };
 
   selectedLayers?: string[];
+  onSelectedLayersChange?;
+
   mapStyle?: MapStyles;
   layers?: GeoserverLayer[];
   onLayerDownload?;

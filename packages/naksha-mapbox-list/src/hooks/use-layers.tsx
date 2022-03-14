@@ -109,6 +109,12 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
     return sortedLayers;
   }, [layers, selectedLayerIds]);
 
+  useEffect(() => {
+    if (mp.onSelectedLayersChange) {
+      mp.onSelectedLayersChange(selectedLayerIds);
+    }
+  }, [selectedLayerIds]);
+
   const getLayerIndexById = (layerId) => {
     return layers.findIndex((layer) => layer.id === layerId);
   };
