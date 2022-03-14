@@ -116,7 +116,7 @@ export default function LayerItem({ item, extended }: LayerItemProps) {
       <div className={tw`flex flex-col gap-1`}>
         <LayerInfoLine icon={<EyeIcon />} title={item.layerStatus}>
           {item.layerStatus}
-          {item.layerStatus && (
+          {item.layerStatus && mp.managePublishing && (
             <>
               <button
                 className={tw`text-blue-600 focus:outline-none ml-4`}
