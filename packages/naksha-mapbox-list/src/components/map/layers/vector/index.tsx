@@ -33,18 +33,19 @@ export default function VectorLayer({ layer: data, beforeId }) {
     }
   }, [layerProps]);
 
-  return layerProps ? (
+  return (
     <Source {...data.source}>
-      <Layer beforeId={beforeId} {...layerProps} />
-      {highlightData && ( // Highlighted Layer Styles
-        <Layer
-          {...layerProps}
-          beforeId={beforeId}
-          id={`hl_${data.id}`}
-          filter={["in", PROPERTY_ID, ...highlightData]}
-          paint={paint[layerProps.type]}
-        />
-      )}
+      {layerProps && <Layer beforeId={beforeId} {...layerProps} />}
+      {highlightData &&
+        layerProps && ( // Highlighted Layer Styles
+          <Layer
+            {...layerProps}
+            beforeId={beforeId}
+            id={`hl_${data.id}`}
+            filter={["in", PROPERTY_ID, ...highlightData]}
+            paint={paint[layerProps.type]}
+          />
+        )}
     </Source>
-  ) : null;
+  );
 }

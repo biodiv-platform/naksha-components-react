@@ -55,6 +55,11 @@ export default function NakshaMapboxListPage() {
           workspace: "biodiv",
         }}
         onLayerDownload={console.log}
+        // selectedLayers={[
+        //   "global-observations",
+        //   "lyr_3_agar_soil",
+        //   "lyr_1_agar_geology",
+        // ]}
         markers={[
           {
             latitude: 23.241346,
