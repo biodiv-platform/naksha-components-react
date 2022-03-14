@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.1.0](https://github.com/strandls/naksha-components-react/compare/v4.0.5...v4.1.0) (2022-03-11)
+
+
+### Features
+
+* :sparkles: added markers ([93ea475](https://github.com/strandls/naksha-components-react/commit/93ea4751deffc5b903d39795df8038ed843e1c34))
+
+
+
+
+
+## [4.0.3](https://github.com/strandls/naksha-components-react/compare/v4.0.2...v4.0.3) (2022-03-11)
+
+**Note:** Version bump only for package @ibp/naksha-mapbox-list
+
+
+
+
+
+## [4.0.1](https://github.com/strandls/naksha-components-react/compare/v3.13.1...v4.0.1) (2022-03-10)
+
+**Note:** Version bump only for package @ibp/naksha-mapbox-list
+
+
+
+
+
 ## [3.12.7](https://github.com/strandls/naksha-components-react/compare/v3.12.6...v3.12.7) (2021-11-30)
 
 **Note:** Version bump only for package @ibp/naksha-mapbox-list

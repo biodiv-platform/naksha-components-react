@@ -1,13 +1,13 @@
-import { defaultViewPort } from "../static/naksha";
+import { defaultViewState } from "../static/naksha";
 
 /**
- * transforms Mapbox viewport to Google Maps viewport
+ * transforms Mapbox viewstate to Google Maps viewstate
  *
- * @param {object} [vp=defaultViewPort] mapbox viewport
+ * @param {object} [vp=defaultViewState] mapbox viewstate
  * @param {number} [zoomOffset=1] auto adjest zoom level for google maps
  * @return {*}
  */
-export const mapboxToGmapsViewPort = (vp = defaultViewPort, zoomOffset = 1) => {
+export const mapboxToGmapsViewState = (vp = defaultViewState, zoomOffset = 1) => {
   return {
     center: {
       lat: vp.latitude,

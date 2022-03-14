@@ -1,4 +1,4 @@
-import { GMAPS_LIBRARIES, mapboxToGmapsViewPort } from "@ibp/naksha-commons";
+import { GMAPS_LIBRARIES, mapboxToGmapsViewState } from "@ibp/naksha-commons";
 import { GoogleMap, LoadScriptNext } from "@react-google-maps/api";
 import React, { useEffect, useRef, useState } from "react";
 
@@ -6,9 +6,9 @@ import { GMAP_OPTIONS } from "./static/constants";
 import { calculateBounds } from "./utils/geojson";
 
 export interface NakshaGmapsViewProps {
-  defaultViewPort?;
+  defaultViewState?;
   features?;
-  gmapApiAccessToken?;
+  gmapAccessToken?;
   gmapRegion?;
   mapStyle?: React.CSSProperties;
   maxZoom?;
@@ -16,8 +16,8 @@ export interface NakshaGmapsViewProps {
 }
 
 export function NakshaGmapsView({
-  defaultViewPort,
-  gmapApiAccessToken,
+  defaultViewState,
+  gmapAccessToken,
   gmapRegion,
   features,
   mapStyle,
@@ -25,7 +25,7 @@ export function NakshaGmapsView({
   options,
 }: NakshaGmapsViewProps) {
   const mapRef = useRef<any>(null);
-  const [viewPort] = useState(mapboxToGmapsViewPort(defaultViewPort));
+  const [viewPort] = useState(mapboxToGmapsViewState(defaultViewState));
   const [isLoaded, setIsLoaded] = useState<boolean>();
 
   const reloadFeatures = () => {
@@ -69,7 +69,7 @@ export function NakshaGmapsView({
 
   return (
     <LoadScriptNext
-      googleMapsApiKey={gmapApiAccessToken}
+      googleMapsApiKey={gmapAccessToken}
       region={gmapRegion}
       libraries={GMAPS_LIBRARIES.DEFAULT}
     >

@@ -3,6 +3,60 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.1.0](https://github.com/strandls/naksha-components-react/compare/v4.0.5...v4.1.0) (2022-03-11)
+
+
+### Features
+
+* :sparkles: added markers ([93ea475](https://github.com/strandls/naksha-components-react/commit/93ea4751deffc5b903d39795df8038ed843e1c34))
+
+
+
+
+
+## [4.0.5](https://github.com/strandls/naksha-components-react/compare/v4.0.4...v4.0.5) (2022-03-11)
+
+**Note:** Version bump only for package naksha-turborepo
+
+
+
+
+
+## [4.0.4](https://github.com/strandls/naksha-components-react/compare/v4.0.3...v4.0.4) (2022-03-11)
+
+
+### Bug Fixes
+
+* :bug: uncontrolled not working properly ([df3b519](https://github.com/strandls/naksha-components-react/commit/df3b519e893289a525bf03a88d879916ce07b9a4))
+
+
+
+
+
+## [4.0.3](https://github.com/strandls/naksha-components-react/compare/v4.0.2...v4.0.3) (2022-03-11)
+
+**Note:** Version bump only for package naksha-turborepo
+
+
+
+
+
+## [4.0.2](https://github.com/strandls/naksha-components-react/compare/v4.0.1...v4.0.2) (2022-03-11)
+
+**Note:** Version bump only for package naksha-turborepo
+
+
+
+
+
+## [4.0.1](https://github.com/strandls/naksha-components-react/compare/v3.13.1...v4.0.1) (2022-03-10)
+
+**Note:** Version bump only for package naksha-turborepo
+
+
+
+
+
 ## [3.13.1](https://github.com/strandls/naksha-components-react/compare/v3.13.0...v3.13.1) (2022-02-16)
 
 **Note:** Version bump only for package root

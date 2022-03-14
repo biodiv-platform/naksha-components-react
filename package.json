@@ -1,54 +1,34 @@
 {
-  "name": "root",
+  "name": "naksha-turborepo",
+  "version": "0.0.0",
   "private": true,
   "workspaces": [
+    "apps/*",
     "packages/*"
   ],
   "repository": "strandls/naksha-components-react",
   "author": "harshzalavadiya",
   "license": "Apache-2.0",
   "scripts": {
-    "bootstrap": "lerna bootstrap --use-workspaces",
-    "build-storybook": "build-storybook",
-    "build": "lerna run build --no-private --stream",
-    "clean": "lerna clean --yes && rm -rf node_modules",
-    "commit": "git-cz",
-    "dedup": "yarn-deduplicate --strategy highest yarn.lock",
-    "format": "prettier --config ./.prettierrc --write .",
-    "lint": "lerna run lint --no-private --stream",
-    "prerelease": "yarn build",
+    "build": "turbo run build",
+    "dev": "turbo run dev --parallel",
+    "lint": "turbo run lint",
+    "clean": "turbo run clean && rm -rf node_modules dist",
+    "prerelease": "yarn run build",
     "release": "lerna publish --no-private",
     "release:local": "lerna publish --no-git-tag-version --force-publish --no-private --no-push --registry=\"http://localhost:4873/\"",
-    "storybook": "start-storybook -p 3000"
-  },
-  "dependencies": {
-    "@babel/cli": "^7.16.0",
-    "@babel/preset-env": "^7.16.4",
-    "@babel/preset-react": "^7.16.0",
-    "@babel/preset-typescript": "^7.16.0",
-    "@babel/runtime": "^7.16.3"
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
-    "@babel/core": "^7.16.0",
-    "@babel/plugin-transform-runtime": "^7.16.4",
-    "@storybook/addon-actions": "^6.3.12",
-    "@storybook/addon-essentials": "^6.3.12",
-    "@storybook/addon-links": "^6.3.12",
-    "@storybook/react": "^6.3.12",
-    "@typescript-eslint/parser": "^5.4.0",
-    "babel-loader": "^8.2.3",
-    "babel-plugin-inline-json-import": "^0.3.2",
-    "concurrently": "^6.4.0",
-    "cross-env": "^7.0.3",
-    "eslint": "^8.2.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-react": "^7.27.0",
-    "git-cz": "^4.8.0",
-    "lerna": "^4.0.0",
-    "prettier": "^2.4.1",
-    "react-docgen-typescript-loader": "^3.7.2",
-    "storybook-addon-turbo-build": "^1.0.1",
-    "ts-loader": "^9.2.6",
-    "yarn-deduplicate": "^3.1.0"
+    "prettier": "^2.5.1",
+    "turbo": "latest"
+  },
+  "engines": {
+    "npm": ">=7.0.0",
+    "node": ">=14.0.0"
+  },
+  "packageManager": "yarn@1.22.17",
+  "dependencies": {
+    "lerna": "^4.0.0"
   }
 }

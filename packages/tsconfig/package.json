@@ -1,0 +1,13 @@
+{
+  "name": "@ibp/tsconfig",
+  "version": "4.0.1",
+  "main": "index.js",
+  "files": [
+    "base.json",
+    "nextjs.json",
+    "react-library.json"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

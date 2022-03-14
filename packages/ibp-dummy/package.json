@@ -1,0 +1,32 @@
+{
+  "name": "@ibp/dummy",
+  "version": "4.0.0",
+  "author": "harshzalavadiya",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "private": true,
+  "license": "Apache-2.0",
+  "repository": "strandls/naksha-components-react",
+  "files": [
+    "dist/**"
+  ],
+  "scripts": {
+    "clean": "rm -rf node_modules dist .turbo",
+    "build": "tsup src/index.tsx --legacy-output --minify --format esm,cjs --dts --external react",
+    "dev": "tsup src/index.tsx --legacy-output --format esm,cjs --watch --dts --external react"
+  },
+  "peerDependencies": {
+    "react": ">=17.0.0"
+  },
+  "devDependencies": {
+    "@ibp/eslint-preset": "*",
+    "@ibp/tsconfig": "*",
+    "@types/react-dom": "^17.0.11",
+    "@types/react": "^17.0.39",
+    "react": ">=17.0.0",
+    "tsup": "^5.11.13",
+    "typescript": "^4.5.5"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "@ibp/eslint-preset",
+  "version": "4.0.1",
+  "main": "index.js",
+  "license": "Apache-2.0",
+  "files": [
+    "eslint-preset.js"
+  ],
+  "dependencies": {
+    "eslint-config-next": "^12.1.0",
+    "eslint-config-prettier": "^8.4.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
