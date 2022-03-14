@@ -72,9 +72,7 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
   const [selectionStyle, setSelectionStyle] = useState(SELECTION_STYLE.TOP);
 
   const [layers, setLayers] = useState<GeoserverLayer[]>(_mp.layers || []);
-  const [selectedLayerIds, setSelectedLayerIds] = useState(
-    mp.selectedLayers || []
-  );
+  const [selectedLayerIds, setSelectedLayerIds] = useState<string[]>([]);
 
   const [hoverFeatures, setHoverFeatures] = useState<any>();
 
@@ -227,6 +225,19 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
       setLayers(layers.filter((l) => l.id !== layerId));
     }
   };
+
+  useEffect(() => {
+    /*
+     * This helps in safely loading layers (i.e. only load geoserver based layers once metadata is available)
+     */
+    if (layers.length) {
+      for (const sl of mp.selectedLayers || []) {
+        if (getLayerIndexById(sl) !== -1 && !selectedLayerIds.includes(sl)) {
+          toggleLayer({ layerId: sl, add: true });
+        }
+      }
+    }
+  }, [layers.length]);
 
   return (
     <LayersContext.Provider

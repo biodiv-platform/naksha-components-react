@@ -12,12 +12,7 @@ const MarkersList = () => {
   return (
     <>
       {markersMemoized?.map(({ latitude, longitude, colorHex }, index) => (
-        <Marker1
-          key={index}
-          latitude={latitude}
-          longitude={longitude}
-          offset={[-35, -15]}
-        >
+        <Marker1 key={index} latitude={latitude} longitude={longitude}>
           <img
             style={{ cursor: "pointer" }}
             alt="Marker"
