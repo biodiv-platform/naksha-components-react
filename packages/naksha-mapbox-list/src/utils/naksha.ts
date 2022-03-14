@@ -1,6 +1,5 @@
 import produce from "immer";
 
-import { GeoserverLayer } from "../interfaces";
 import {
   axGetGeoserverLayerStyle,
   axGetGeoserverLayerStyleList,
@@ -10,30 +9,41 @@ import {
  * pre-processes layers list
  *
  */
-export const parseGeoserverLayersXml = (
+export const parseGeoserverLayersXml = async (
   layers,
   nakshaApiEndpoint,
-  endpoint,
-  workspace,
+  geoserver,
   selectedLayers
-): GeoserverLayer[] => {
-  const selectedLayersIDs = selectedLayers.map(({ id }) => id);
+) => {
+  const parsedLayers: any[] = [];
 
-  return layers.map((l, index) => ({
-    ...l,
-    index,
-    id: l.name,
-    thumbnail: nakshaApiEndpoint + l.thumbnail,
-    source: {
-      type: "vector",
-      scheme: "tms",
-      tiles: [
-        `${endpoint}/gwc/service/tms/1.0.0/${workspace}:${l.name}@EPSG%3A900913@pbf/{z}/{x}/{y}.pbf`,
-      ],
-    },
-    data: { styles: [] },
-    isAdded: selectedLayersIDs.includes(l.name),
-  }));
+  for (const l of layers) {
+    const isAdded = selectedLayers.includes(l.name);
+    const _l = {
+      ...l,
+      id: l.name,
+      thumbnail: nakshaApiEndpoint + l.thumbnail,
+      source: {
+        type: "vector",
+        scheme: "tms",
+        tiles: [
+          `${geoserver.endpoint}/gwc/service/tms/1.0.0/${geoserver.workspace}:${l.name}@EPSG%3A900913@pbf/{z}/{x}/{y}.pbf`,
+        ],
+      },
+      data: { styles: [] },
+      isAdded,
+    };
+
+    if (isAdded) {
+      // if layer is already added pre-fetch it's initial style
+      const _ld = await getLayerStyle(_l, 0, nakshaApiEndpoint, geoserver);
+      parsedLayers.push({ ..._l, data: _ld });
+    } else {
+      parsedLayers.push(_l);
+    }
+  }
+
+  return parsedLayers;
 };
 
 /**

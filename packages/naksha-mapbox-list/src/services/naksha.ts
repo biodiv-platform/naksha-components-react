@@ -14,13 +14,13 @@ export const axGetGeoserverLayers = async (
     const res = await axios.get(`${nakshaApiEndpoint}/layer/all`, {
       headers: { Authorization: nakshaEndpointToken },
     });
-    return parseGeoserverLayersXml(
+    const finalLayers = await parseGeoserverLayersXml(
       res.data,
       nakshaApiEndpoint,
-      geoserver.endpoint,
-      geoserver.workspace,
+      geoserver,
       selectedLayers
     );
+    return finalLayers;
   } catch (e) {
     console.error(e);
     return [];

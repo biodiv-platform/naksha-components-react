@@ -120,8 +120,8 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
   };
 
   const updateLayerById = (layerId, updatedLayer) => {
-    return setLayers(
-      layers.map((l) => (l.id === layerId ? { ...l, ...updatedLayer } : l))
+    setLayers((_layers) =>
+      _layers.map((l) => (l.id === layerId ? { ...l, ...updatedLayer } : l))
     );
   };
 
@@ -145,33 +145,35 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
   const onMapHover = async (e) => {
     if (!selectedLayerIds.length) return; // if no layer is selected popup is unncessary
 
-    const lastLayerId = selectedLayerIds[0];
+    try {
+      const lastLayerId = selectedLayerIds[0];
 
-    const feats = mapl.queryRenderedFeatures(e.point, {
-      layers: [lastLayerId],
-    });
-
-    if (feats.length) {
-      const fId = feats[0]?.id || feats[0]?.properties?.[PROPERTY_ID];
-
-      // If same feature as earlier don't recompute properties
-      if (fId === hoverFeatures?.id) return;
-
-      const layer = layers[getLayerIndexById(lastLayerId)];
-
-      const hoverProperties = layer?.data?.summaryColumn.map((sc) => [
-        layer.data?.propertyMap?.[sc] || sc,
-        feats[0].properties?.[sc],
-      ]);
-
-      setHoverFeatures({
-        id: fId,
-        title: layer.title,
-        data: hoverProperties,
+      const feats = mapl.queryRenderedFeatures(e.point, {
+        layers: [lastLayerId],
       });
-    } else {
-      setHoverFeatures(undefined);
-    }
+
+      if (feats.length) {
+        const fId = feats[0]?.id || feats[0]?.properties?.[PROPERTY_ID];
+
+        // If same feature as earlier don't recompute properties
+        if (fId === hoverFeatures?.id) return;
+
+        const layer = layers[getLayerIndexById(lastLayerId)];
+
+        const hoverProperties = layer?.data?.summaryColumn.map((sc) => [
+          layer.data?.propertyMap?.[sc] || sc,
+          feats[0].properties?.[sc],
+        ]);
+
+        setHoverFeatures({
+          id: fId,
+          title: layer.title,
+          data: hoverProperties,
+        });
+      } else {
+        setHoverFeatures(undefined);
+      }
+    } catch (e) {}
   };
 
   const toggleLayer = async ({

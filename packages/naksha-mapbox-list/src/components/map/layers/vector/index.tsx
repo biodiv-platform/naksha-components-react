@@ -27,12 +27,6 @@ export default function VectorLayer({ layer: data, beforeId }) {
 
   const highlightData = layer.selectedFeaturesId?.[data.id];
 
-  useEffect(() => {
-    if (!layerProps) {
-      layer.toggle({ layerId: data.id, add: true, focus: false });
-    }
-  }, [layerProps]);
-
   return (
     <Source {...data.source}>
       {layerProps && <Layer beforeId={beforeId} {...layerProps} />}
