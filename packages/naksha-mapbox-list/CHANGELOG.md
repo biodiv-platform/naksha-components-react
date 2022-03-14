@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.2.0](https://github.com/strandls/naksha-components-react/compare/v4.1.1...v4.2.0) (2022-03-14)
+
+
+### Features
+
+* :sparkles: added onSelectedLayersChange prop ([fc00197](https://github.com/strandls/naksha-components-react/commit/fc0019784b085fea020eadcda58c0e66c017da5c))
+
+
+
+
+
 ## [4.1.1](https://github.com/strandls/naksha-components-react/compare/v3.13.1...v4.1.1) (2022-03-14)
 
 
