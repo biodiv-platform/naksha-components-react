@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.4](https://github.com/strandls/naksha-components-react/compare/v4.2.3...v4.2.4) (2022-03-14)
+
+
+### Bug Fixes
+
+* :bug: pre-load styles ([c978570](https://github.com/strandls/naksha-components-react/commit/c978570ef76fe1cc5de2515fb2b2abc7b709bcf1))
+
+
+
+
+
 ## [4.2.3](https://github.com/strandls/naksha-components-react/compare/v4.2.2...v4.2.3) (2022-03-14)
 
 **Note:** Version bump only for package @ibp/naksha-mapbox-list
