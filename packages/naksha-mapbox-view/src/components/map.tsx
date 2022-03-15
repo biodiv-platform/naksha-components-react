@@ -34,7 +34,7 @@ export default function Map(props: NakshaMapboxViewProps) {
       mapStyle={mapStyle}
       onLoad={onDataChange}
     >
-      <NavControl position="top-right" showZoom={true} showCompass={true} />
+      <NavControl position="bottom-right" showZoom={true} showCompass={true} />
       {props.data && (
         <Source type="geojson" data={props.data}>
           <Layer {...pointStyle} />

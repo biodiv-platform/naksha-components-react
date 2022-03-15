@@ -13,7 +13,7 @@ export default function MoreLess({ children }) {
         onClick={() => setShowMore(!showMore)}
         className={tw`text-blue-600 focus:outline-none focus:outline focus:ring`}
       >
-        {showMore ? t("less") : t("more")}
+        {showMore ? t("less") : t("legend")}
       </button>
     </div>
   );

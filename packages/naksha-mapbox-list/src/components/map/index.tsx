@@ -53,7 +53,7 @@ export default function Map() {
         onClick={onMapClick}
         onMouseMove={handleOnMouseMove}
       >
-        <NavControl position="top-right" showZoom={true} showCompass={true} />
+        <NavControl position="bottom-right" showZoom={true} showCompass={true} />
         <MarkersList />
         {layer.selectedLayers.map((_l, index) => {
           const beforeId = index > 0 ? layer.selectedIds[index - 1] : undefined;

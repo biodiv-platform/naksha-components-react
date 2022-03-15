@@ -14,7 +14,7 @@ export function StyleLegend({ item }) {
   );
 
   return (
-    <ul>
+    <ul style={{ margin: 0, padding: 0 }}>
       {legendStyles.map(([title, color]) => (
         <li className={tw`flex gap-2 items-center mb-1`} key={color}>
           <svg viewBox="0 0 24 24" height="14" width="14" focusable="false">

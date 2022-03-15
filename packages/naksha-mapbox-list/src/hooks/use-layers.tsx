@@ -30,6 +30,7 @@ interface LayersContextProps {
     selectedIds: string[];
     setSelectedIds;
     selectedLayers: GeoserverLayer[];
+    clearAll;
     toggle;
     updateStyle;
     selectedFeatures;
@@ -39,6 +40,9 @@ interface LayersContextProps {
     delete;
     selectionStyle;
     setSelectionStyle;
+
+    gridLegends;
+    setGridLegends;
   };
   query: {
     term: string;
@@ -70,6 +74,7 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
     defaultMapStyles[mp?.mapStyle || 0].style
   );
   const [selectionStyle, setSelectionStyle] = useState(SELECTION_STYLE.TOP);
+  const [gridLegends, setGridLegends] = useState({});
 
   const [layers, setLayers] = useState<GeoserverLayer[]>(_mp.layers || []);
   const [selectedLayerIds, setSelectedLayerIds] = useState<string[]>(
@@ -182,6 +187,8 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
     styleIndex = 0,
     focus = true,
   }) => {
+    setSelectedFeatures([]);
+
     if (!add) {
       setSelectedLayerIds(
         selectedLayerIds.filter((_lyrId) => layerId !== _lyrId)
@@ -203,6 +210,8 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
       ..._slIds.filter((lid) => lid !== layerId),
     ]);
   };
+
+  const clearAllLayers = async () => setSelectedLayerIds([]);
 
   const updateMP = (key, value) => {
     setMP({ ...mp, [key]: value });
@@ -243,6 +252,7 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
           selectedIds: selectedLayerIds,
           setSelectedIds: setSelectedLayerIds,
           selectedLayers: selectedLayers,
+          clearAll: clearAllLayers,
           toggle: toggleLayer,
           updateStyle: updateLayerStyle,
           selectedFeatures,
@@ -252,6 +262,9 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
           delete: deleteLayer,
           selectionStyle: selectionStyle,
           setSelectionStyle: setSelectionStyle,
+
+          gridLegends,
+          setGridLegends,
         },
         query: {
           term: queryTermDebounced,

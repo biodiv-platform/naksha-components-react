@@ -47,7 +47,7 @@ export default function Map(props: NakshaMapboxViewProps) {
       mapStyle={mapStyle}
       onLoad={autoFocus}
     >
-      <NavControl position="top-right" showZoom={true} showCompass={true} />
+      <NavControl position="bottom-right" showZoom={true} showCompass={true} />
       <DrawControl
         features={features}
         setFeatures={setFeatures}

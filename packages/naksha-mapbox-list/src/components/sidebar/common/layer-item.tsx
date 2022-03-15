@@ -22,20 +22,31 @@ import {
   TagIcon,
 } from "../../core";
 import { Highlighted } from "../../core/highlighter";
+import GridLegend from "./grid-legend";
 import LayerItemStyle from "./layer-item-style";
 
 interface LayerInfoLineProps {
   icon;
   children;
+  name?;
   title?;
   link?;
 }
 
-const LayerInfoLine = ({ icon, title, link, children }: LayerInfoLineProps) => {
+const LayerInfoLine = ({
+  icon,
+  name,
+  title,
+  link,
+  children,
+}: LayerInfoLineProps) => {
   const content = <span style={overflowStyle}>{children || "-"}</span>;
 
   return (
-    <div className={tw`flex gap-3 text-sm text-gray-600`} title={title}>
+    <div
+      className={tw`flex gap-3 text-sm text-gray-600`}
+      title={name && title && `${name}: ${title}`}
+    >
       <div>{icon}</div>
       {link ? (
         <a
@@ -69,6 +80,10 @@ export default function LayerItem({ item, extended }: LayerItemProps) {
   const { layer, query, mp } = useLayers();
   const [isAdded, setIsAdded] = useState(layer.selectedIds.includes(item.id));
   const [isLoading, setIsLoading] = useState(false);
+  const license = item.license || "CC-BY";
+  const createdOn =
+    item?.createdDate && new Date(item.createdDate).toDateString();
+  const tags = item.tags?.join(", ");
 
   const onToggleLayer = async () => {
     setIsLoading(true);
@@ -114,46 +129,56 @@ export default function LayerItem({ item, extended }: LayerItemProps) {
         </div>
       </div>
       <div className={tw`flex flex-col gap-1`}>
-        <LayerInfoLine icon={<EyeIcon />} title={item.layerStatus}>
-          {item.layerStatus}
-          {item.layerStatus && mp.managePublishing && (
-            <>
-              <button
-                className={tw`text-blue-600 focus:outline-none ml-4`}
-                onClick={() => layer.togglePublish(item.id, item?.layerStatus)}
-              >
-                {t("toggle")}
-              </button>
-              <button
-                className={tw`text-red-600 focus:outline-none ml-4`}
-                onClick={() => layer.delete(item.id, t("are_you_sure"))}
-              >
-                {t("delete")}
-              </button>
-            </>
-          )}
-        </LayerInfoLine>
+        {mp.managePublishing && item.layerStatus && (
+          <LayerInfoLine
+            icon={<EyeIcon />}
+            name={t("visiblity")}
+            title={item.layerStatus}
+          >
+            {item.layerStatus}
+            <button
+              className={tw`text-blue-600 focus:outline-none ml-4`}
+              onClick={() => layer.togglePublish(item.id, item?.layerStatus)}
+            >
+              {t("toggle")}
+            </button>
+            <button
+              className={tw`text-red-600 focus:outline-none ml-4`}
+              onClick={() => layer.delete(item.id, t("are_you_sure"))}
+            >
+              {t("delete")}
+            </button>
+          </LayerInfoLine>
+        )}
 
         <LayerInfoLine
           icon={<AttributionIcon />}
           link={item.url}
+          name={t("created_by")}
           title={[item.createdBy, item.attribution].join("\n")}
         >
           {item.createdBy}, {item.attribution}
         </LayerInfoLine>
-        <LayerInfoLine icon={<ClockIcon />}>
-          {item?.createdDate && new Date(item.createdDate).toDateString()}
+        <LayerInfoLine
+          icon={<ClockIcon />}
+          name={t("created_on")}
+          title={createdOn}
+        >
+          {createdOn}
         </LayerInfoLine>
         <LayerInfoLine
           icon={<TagIcon />}
-          title={item.tags?.join(", ")}
-          children={item.tags?.join(", ")}
+          name={t("tags")}
+          title={tags}
+          children={tags}
         />
         <LayerInfoLine
-          link={item.license && LICENSES[item.license]}
+          name={t("license")}
+          title={license}
+          link={license && LICENSES[license]}
           icon={<LicenseIcon />}
         >
-          {item.license}
+          {license}
         </LayerInfoLine>
         <LayerInfoLine icon={<DownloadIcon />}>
           {item.isDownloadable ? (
@@ -169,6 +194,7 @@ export default function LayerItem({ item, extended }: LayerItemProps) {
         </LayerInfoLine>
       </div>
       {extended && <LayerItemStyle item={item} />}
+      {extended && item.source.type === "grid" && <GridLegend item={item} />}
     </div>
   );
 }

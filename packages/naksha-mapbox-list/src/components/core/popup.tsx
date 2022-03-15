@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { tw } from "twind";
-import { Button, IconButton } from ".";
+
+import { IconButton } from ".";
 
 export default function Popup({ title, children }) {
   const [isOpen, setIsOpen] = useState(false);

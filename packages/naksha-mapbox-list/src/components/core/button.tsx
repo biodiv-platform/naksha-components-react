@@ -1,13 +1,13 @@
 import React from "react";
 import { tw } from "twind";
 
-import { LayersIcon } from "./icons";
+import { InfoIcon, LayersIcon } from "./icons";
 
 export const Button = (props) => {
   return (
     <button
       type="button"
-      className={tw`px-4 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-200 transform bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80`}
+      className={tw`px-4 py-2 bg-red-100 rounded-md hover:bg-red-200 text-red-800 focus:outline-none focus:ring cursor-pointer text-md`}
       {...props}
     />
   );
@@ -25,7 +25,7 @@ export const IconButton = (props) => {
 
 export const CloseButton = (props?) => (
   <button
-    className={tw`absolute top-0 right-0 h-12 w-12 border-b-2 border-gray-300 bg-red-50 cursor-pointer hover:bg-red-100 text-red-800 text-lg`}
+    className={tw`absolute top-0 right-0 h-12 w-12 bg-red-100 cursor-pointer hover:bg-red-200 text-red-800 text-lg`}
     children="✕"
     {...props}
   />
@@ -33,9 +33,18 @@ export const CloseButton = (props?) => (
 
 export const LayersButton = (props?) => (
   <button
-    className={tw`absolute top-4 left-4 rounded-lg z-10 h-12 w-12 bg-blue-600 cursor-pointer hover:bg-blue-700 text-white text-lg flex items-center justify-center`}
+    className={tw`absolute top-4 left-4 rounded-lg z-10 h-12 w-12 bg-white cursor-pointer hover:bg-gray-100 text-gray-700 text-lg flex items-center justify-center`}
     {...props}
   >
     <LayersIcon />
+  </button>
+);
+
+export const InfobarButton = (props?) => (
+  <button
+    className={tw`absolute top-4 right-4 rounded-lg z-10 h-12 w-12 bg-white cursor-pointer hover:bg-gray-100 text-gray-700 text-lg flex items-center justify-center`}
+    {...props}
+  >
+    <InfoIcon />
   </button>
 );

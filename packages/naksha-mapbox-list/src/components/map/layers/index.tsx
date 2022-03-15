@@ -22,7 +22,7 @@ export function MapLayer({
       return <VectorLayer beforeId={beforeId} layer={layer} />;
 
     case "grid":
-      return <GridLayer beforeId={beforeId} layer={layer} />;
+      return <GridLayer beforeId={beforeId} data={layer} />;
 
     default:
       return null;
