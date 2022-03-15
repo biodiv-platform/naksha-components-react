@@ -12,8 +12,10 @@ export default function SettingsTabPanel() {
 
   const handleOnStyleChange = (e) => layer.setMapStyle(e.target.value);
 
-  const handleOnSelectionStyleChange = (e) =>
+  const handleOnSelectionStyleChange = (e) => {
     layer.setSelectionStyle(e.target.value);
+    layer.setSelectedFeatures([]);
+  };
 
   return (
     <div className={tw`w-full p-4 flex flex-col gap-4`}>
