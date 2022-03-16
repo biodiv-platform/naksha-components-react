@@ -24,7 +24,7 @@ export default function InfoBarContent({ onClose }) {
         </div>
         <CloseButton onClick={onClose} />
       </div>
-      <div className={tw`bg-gray-100 p-4 flex-shrink-0`}>
+      <div className={tw`bg-gray-100 p-4 flex-shrink-0 rt`}>
         <LayerSelection hideLabel={true} />
       </div>
       <div className={tw`flex flex-col flex-grow overflow-auto gap-3 p-4`}>
