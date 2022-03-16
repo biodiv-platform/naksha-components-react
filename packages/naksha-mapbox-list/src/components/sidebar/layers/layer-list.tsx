@@ -49,7 +49,7 @@ export function LayerList() {
                   className={tw`absolute top-0 left-0 w-full`}
                   style={{ transform: `translateY(${virtualRow.start}px)` }}
                 >
-                  <div style={{ height: 240 }}>
+                  <div style={{ height: 146 }}>
                     <LayerItem item={filteredLayers[virtualRow.index]} />
                   </div>
                 </div>

@@ -6,7 +6,7 @@ import useLayers from "../../hooks/use-layers";
 import { DownIcon, UpIcon } from "../core";
 
 export default function InfoBarPanel({ data }) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const [layerInfo, setLayerInfo] = useState({
     title: data.sourceLayer,
     properties: [] as any,

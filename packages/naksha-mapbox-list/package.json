@@ -43,6 +43,7 @@
     "highlight-search-result": "^1.0.4",
     "immer": "^9.0.12",
     "react-sortable-hoc": "^2.0.0",
+    "react-tiny-popover": "^7.0.1",
     "react-virtual": "^2.10.4",
     "react-virtualized-auto-sizer": "^1.0.6",
     "redaxios": "^0.4.1",

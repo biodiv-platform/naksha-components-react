@@ -41,6 +41,8 @@ interface LayersContextProps {
     selectionStyle;
     setSelectionStyle;
 
+    zoomToExtent;
+
     gridLegends;
     setGridLegends;
   };
@@ -239,6 +241,12 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
     }
   };
 
+  const zoomToExtent = (layerId) => {
+    const layerIndex = getLayerIndexById(layerId);
+    const layer = layers[layerIndex];
+    mapl.fitBounds(layer.bbox as any, { padding: 40, duration: 1000 });
+  };
+
   return (
     <LayersContext.Provider
       value={{
@@ -262,6 +270,8 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
           delete: deleteLayer,
           selectionStyle: selectionStyle,
           setSelectionStyle: setSelectionStyle,
+
+          zoomToExtent,
 
           gridLegends,
           setGridLegends,

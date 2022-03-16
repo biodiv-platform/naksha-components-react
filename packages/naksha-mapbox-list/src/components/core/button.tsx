@@ -3,15 +3,14 @@ import { tw } from "twind";
 
 import { InfoIcon, LayersIcon } from "./icons";
 
-export const Button = (props) => {
-  return (
-    <button
-      type="button"
-      className={tw`px-4 py-2 bg-red-100 rounded-md hover:bg-red-200 text-red-800 focus:outline-none focus:ring cursor-pointer text-md`}
-      {...props}
-    />
-  );
-};
+export const Button = React.forwardRef<HTMLDivElement, any>((props, ref) => (
+  <button
+    ref={ref}
+    type="button"
+    className={tw`px-3 py-2 rounded-md focus:outline-none focus:ring cursor-pointer text-md flex align-middle gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 disabled:cursor-not-allowed disabled:bg-gray-100! disabled:opacity-50`}
+    {...props}
+  />
+));
 
 export const IconButton = (props) => {
   return (
@@ -33,7 +32,7 @@ export const CloseButton = (props?) => (
 
 export const LayersButton = (props?) => (
   <button
-    className={tw`absolute top-4 left-4 rounded-lg z-10 h-12 w-12 bg-white cursor-pointer hover:bg-gray-100 text-gray-700 text-lg flex items-center justify-center`}
+    className={tw`absolute top-4 left-4 rounded-lg z-10 h-10 w-10 bg-white cursor-pointer hover:bg-gray-100 text-gray-700 text-lg flex items-center justify-center`}
     {...props}
   >
     <LayersIcon />
@@ -42,7 +41,7 @@ export const LayersButton = (props?) => (
 
 export const InfobarButton = (props?) => (
   <button
-    className={tw`absolute top-4 right-4 rounded-lg z-10 h-12 w-12 bg-white cursor-pointer hover:bg-gray-100 text-gray-700 text-lg flex items-center justify-center`}
+    className={tw`absolute top-4 right-4 rounded-lg z-10 h-10 w-10 bg-white cursor-pointer hover:bg-gray-100 text-gray-700 text-lg flex items-center justify-center`}
     {...props}
   >
     <InfoIcon />

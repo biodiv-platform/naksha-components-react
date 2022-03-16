@@ -46,6 +46,7 @@ export default function NakshaMapboxListPage() {
       <NakshaMapboxList
         loadToC={true}
         showToC={true}
+        managePublishing={true}
         mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
         nakshaApiEndpoint="http://localhost:8010/proxy/naksha-api/api"
         nakshaEndpointToken={process.env.NEXT_PUBLIC_NAKSHA_TOKEN}
