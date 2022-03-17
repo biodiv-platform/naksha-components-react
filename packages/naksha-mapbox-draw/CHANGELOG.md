@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.9](https://github.com/strandls/naksha-components-react/compare/v4.2.8...v4.2.9) (2022-03-17)
+
+**Note:** Version bump only for package @ibp/naksha-mapbox-draw
+
+
+
+
+
 ## [4.2.5](https://github.com/strandls/naksha-components-react/compare/v4.2.4...v4.2.5) (2022-03-15)
 
 **Note:** Version bump only for package @ibp/naksha-mapbox-draw

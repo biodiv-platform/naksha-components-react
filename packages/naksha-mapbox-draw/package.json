@@ -1,6 +1,6 @@
 {
   "name": "@ibp/naksha-mapbox-draw",
-  "version": "4.2.5",
+  "version": "4.2.9",
   "author": "harshzalavadiya",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

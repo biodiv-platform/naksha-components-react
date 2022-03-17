@@ -1,6 +1,6 @@
 {
   "name": "@ibp/naksha-gmaps-view",
-  "version": "4.1.1",
+  "version": "4.2.9",
   "author": "harshzalavadiya",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
