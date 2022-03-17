@@ -20,8 +20,8 @@ export default function GridLayer({
     const { success, geojson, paint, stops, squareSize } =
       await getGridLayerData(
         data.source.fetcher,
-        mapl.getBounds(),
-        mapl.getZoom()
+        mapl?.getBounds(),
+        mapl?.getZoom()
       );
 
     if (success) {
@@ -33,7 +33,7 @@ export default function GridLayer({
   };
 
   useEffect(() => {
-    mapl.on("idle", fetchGridData);
+    mapl?.on("idle", fetchGridData);
   }, []);
 
   return (

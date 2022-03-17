@@ -25,7 +25,7 @@ export default function Map() {
 
   const onMapClick = (e) => {
     layer.setSelectedFeatures(
-      mapl.queryRenderedFeatures(e.point, {
+      mapl?.queryRenderedFeatures(e.point, {
         layers:
           layer.selectionStyle === SELECTION_STYLE.TOP
             ? [layer.selectedIds[0]]
@@ -53,7 +53,11 @@ export default function Map() {
         onClick={onMapClick}
         onMouseMove={handleOnMouseMove}
       >
-        <NavControl position="bottom-right" showZoom={true} showCompass={true} />
+        <NavControl
+          position="bottom-right"
+          showZoom={true}
+          showCompass={true}
+        />
         <MarkersList />
         {layer.selectedLayers.map((_l, index) => {
           const beforeId = index > 0 ? layer.selectedIds[index - 1] : undefined;

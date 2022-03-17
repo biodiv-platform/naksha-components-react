@@ -141,7 +141,8 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
       mp.geoserver
     );
     updateLayerById(layer.id, { data: layerData });
-    focus && mapl.fitBounds(layer.bbox as any, { padding: 40, duration: 1000 });
+    focus &&
+      mapl?.fitBounds(layer.bbox as any, { padding: 40, duration: 1000 });
   };
 
   const updateLayerStyle = async (layerId, styleIndex) => {
@@ -150,7 +151,7 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
   };
 
   const onMapHover = async (e) => {
-    if (!selectedLayerIds.length) return; // if no layer is selected popup is unncessary
+    if (!selectedLayerIds.length || !mapl) return; // if no layer is selected popup is unncessary
 
     try {
       const lastLayerId = selectedLayerIds[0];
@@ -244,7 +245,7 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
   const zoomToExtent = (layerId) => {
     const layerIndex = getLayerIndexById(layerId);
     const layer = layers[layerIndex];
-    mapl.fitBounds(layer.bbox as any, { padding: 40, duration: 1000 });
+    mapl?.fitBounds(layer.bbox as any, { padding: 40, duration: 1000 });
   };
 
   return (
