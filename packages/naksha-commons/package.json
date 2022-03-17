@@ -1,6 +1,6 @@
 {
   "name": "@ibp/naksha-commons",
-  "version": "4.1.1",
+  "version": "4.3.1",
   "author": "harshzalavadiya",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -20,8 +20,8 @@
     "react": ">=17"
   },
   "devDependencies": {
-    "@ibp/eslint-preset": "4.1.1",
-    "@ibp/tsconfig": "4.1.1",
+    "@ibp/eslint-preset": "4.3.1",
+    "@ibp/tsconfig": "4.3.1",
     "@types/react": "^17.0.39",
     "@types/react-dom": "^17.0.11",
     "react": ">=17",
