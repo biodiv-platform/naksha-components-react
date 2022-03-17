@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.3.0](https://github.com/strandls/naksha-components-react/compare/v4.2.9...v4.3.0) (2022-03-17)
+
+
+### Features
+
+* :sparkles: share option ([19c17c9](https://github.com/strandls/naksha-components-react/commit/19c17c99e4392cbdcb0c3b89f1ad1c336774db75))
+
+
+
+
+
 ## [4.2.9](https://github.com/strandls/naksha-components-react/compare/v4.2.8...v4.2.9) (2022-03-17)
 
 **Note:** Version bump only for package naksha-turborepo
