@@ -33,6 +33,7 @@ export interface NakshaMapboxListProps {
   mapStyle?: MapStyles;
   layers?: GeoserverLayer[];
   onLayerDownload?;
+  onLayerShare?;
   lang?;
 
   markers?: ExtendedMarkerProps[];

@@ -7,7 +7,7 @@ export const Button = React.forwardRef<HTMLDivElement, any>((props, ref) => (
   <button
     ref={ref}
     type="button"
-    className={tw`h-8 px-3 py-2 rounded-md focus:outline-none focus:ring cursor-pointer text-md flex align-middle gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 disabled:cursor-not-allowed disabled:bg-gray-100! disabled:opacity-50`}
+    className={tw`h-8 px-3 py-2 rounded-md focus:outline-none focus:ring cursor-pointer text-md flex align-middle items-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 disabled:cursor-not-allowed disabled:bg-gray-100! disabled:opacity-50`}
     {...props}
   />
 ));
@@ -24,7 +24,7 @@ export const IconButton = (props) => {
 
 export const CloseButton = (props?) => (
   <button
-    className={tw`h-8 absolute top-0 right-0 h-12 w-12 bg-red-100 cursor-pointer hover:bg-red-200 text-red-800 text-lg`}
+    className={tw`absolute top-0 right-0 h-12 w-12 bg-red-100 cursor-pointer hover:bg-red-200 text-red-800 text-lg`}
     children="✕"
     {...props}
   />

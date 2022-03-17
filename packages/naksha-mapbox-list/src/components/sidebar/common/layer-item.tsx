@@ -16,6 +16,7 @@ import {
   DownloadIcon,
   GrabberIcon,
   InfoIcon,
+  ShareIcon,
   ZoomExtentIcon,
 } from "../../core";
 import { Highlighted } from "../../core/highlighter";
@@ -48,6 +49,8 @@ export default function LayerItem({ item, extended }: LayerItemProps) {
   };
 
   const handleOnZoom = () => layer.zoomToExtent(item.id);
+
+  const handleOnShare = () => mp.onLayerShare(item.id);
 
   return (
     <div
@@ -95,8 +98,19 @@ export default function LayerItem({ item, extended }: LayerItemProps) {
         </Button>
 
         <div className={tw`flex gap-3`}>
+          {mp.onLayerShare && (
+            <Button
+              onClick={handleOnShare}
+              title="Share"
+              children={<ShareIcon />}
+            />
+          )}
           {extended && (
-            <Button onClick={handleOnZoom} title="Zoom To Extent" children={<ZoomExtentIcon />} />
+            <Button
+              onClick={handleOnZoom}
+              title="Zoom To Extent"
+              children={<ZoomExtentIcon />}
+            />
           )}
 
           <PopoverWrapper item={item} />

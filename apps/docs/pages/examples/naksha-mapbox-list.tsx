@@ -56,6 +56,7 @@ export default function NakshaMapboxListPage() {
           workspace: "biodiv",
         }}
         onLayerDownload={console.log}
+        onLayerShare={console.log}
         // selectedLayers={[
         //   "global-observations",
         //   "lyr_3_agar_soil",
