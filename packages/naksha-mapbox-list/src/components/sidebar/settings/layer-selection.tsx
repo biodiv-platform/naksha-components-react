@@ -22,7 +22,7 @@ export default function LayerSelection({ hideLabel }: LayerSelectionProps) {
     <SelectInput
       name="layer_selection"
       label={hideLabel ? null : t("layer_selection")}
-      defaultValue={layer.mapStyle}
+      defaultValue={layer.selectionStyle}
       onChange={handleOnSelectionStyleChange}
     >
       {Object.values(SELECTION_STYLE).map((ss) => (
