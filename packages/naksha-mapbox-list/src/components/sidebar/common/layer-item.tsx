@@ -1,6 +1,7 @@
 import { useT } from "@ibp/naksha-commons";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { SortableHandle } from "react-sortable-hoc";
+import { RWebShare } from "react-web-share";
 import { tw } from "twind";
 
 import useLayers from "../../../hooks/use-layers";
@@ -15,7 +16,6 @@ import {
   CheckboxInput,
   DownloadIcon,
   GrabberIcon,
-  InfoIcon,
   ShareIcon,
   ZoomExtentIcon,
 } from "../../core";
@@ -35,11 +35,24 @@ interface LayerItemProps {
   extended?: boolean;
 }
 
+declare const window;
+
 export default function LayerItem({ item, extended }: LayerItemProps) {
   const { t } = useT();
   const { layer, query, mp } = useLayers();
   const [isAdded, setIsAdded] = useState(layer.selectedIds.includes(item.id));
   const [isLoading, setIsLoading] = useState(false);
+
+  const shareData = useMemo(
+    () =>
+      mp.canLayerShare
+        ? {
+            url: `${window.location.href.split("?")[0]}?layers=${item.id}`,
+            title: item.title,
+          }
+        : undefined,
+    [item.id]
+  );
 
   const onToggleLayer = async () => {
     setIsLoading(true);
@@ -49,8 +62,6 @@ export default function LayerItem({ item, extended }: LayerItemProps) {
   };
 
   const handleOnZoom = () => layer.zoomToExtent(item.id);
-
-  const handleOnShare = () => mp.onLayerShare(item.id);
 
   return (
     <div
@@ -98,12 +109,10 @@ export default function LayerItem({ item, extended }: LayerItemProps) {
         </Button>
 
         <div className={tw`flex gap-3`}>
-          {mp.onLayerShare && (
-            <Button
-              onClick={handleOnShare}
-              title="Share"
-              children={<ShareIcon />}
-            />
+          {shareData && (
+            <RWebShare data={shareData}>
+              <Button title="Share" children={<ShareIcon />} />
+            </RWebShare>
           )}
           {extended && (
             <Button
