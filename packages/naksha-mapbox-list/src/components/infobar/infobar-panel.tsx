@@ -44,8 +44,8 @@ export default function InfoBarPanel({ data }) {
       </button>
       {isOpen && (
         <div className={tw`px-4 py-3 flex flex-col gap-3`}>
-          {layerInfo.properties.map(([k, v]) => (
-            <div key={k + v}>
+          {layerInfo.properties.map(([k, v], index) => (
+            <div key={k + v + index}>
               <div className={tw`text-gray-600`}>{k}</div>
               <div>{v}</div>
             </div>

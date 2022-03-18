@@ -15,7 +15,6 @@ export default function LayerSelection({ hideLabel }: LayerSelectionProps) {
 
   const handleOnSelectionStyleChange = (e) => {
     layer.setSelectionStyle(e.target.value);
-    layer.setSelectedFeatures([]);
   };
 
   return (

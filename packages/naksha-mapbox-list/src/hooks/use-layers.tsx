@@ -49,6 +49,8 @@ interface LayersContextProps {
   query: {
     term: string;
     setTerm;
+    clickedLngLat;
+    setClickedLngLat;
   };
   hover: {
     onHover;
@@ -77,6 +79,7 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
   );
   const [selectionStyle, setSelectionStyle] = useState(SELECTION_STYLE.TOP);
   const [gridLegends, setGridLegends] = useState({});
+  const [clickedLngLat, setClickedLngLat] = useState<any>();
 
   const [layers, setLayers] = useState<GeoserverLayer[]>(_mp.layers || []);
   const [selectedLayerIds, setSelectedLayerIds] = useState<string[]>(
@@ -115,12 +118,6 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
 
     return sortedLayers;
   }, [layers, selectedLayerIds]);
-
-  useEffect(() => {
-    if (mp.onSelectedLayersChange) {
-      mp.onSelectedLayersChange(selectedLayerIds);
-    }
-  }, [selectedLayerIds]);
 
   const getLayerIndexById = (layerId) => {
     return layers.findIndex((layer) => layer.id === layerId);
@@ -190,8 +187,6 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
     styleIndex = 0,
     focus = true,
   }) => {
-    setSelectedFeatures([]);
-
     if (!add) {
       setSelectedLayerIds(
         selectedLayerIds.filter((_lyrId) => layerId !== _lyrId)
@@ -248,6 +243,38 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
     mapl?.fitBounds(layer.bbox as any, { padding: 40, duration: 1000 });
   };
 
+  const featuresAtLatLng = () => {
+    if (!clickedLngLat) return;
+
+    try {
+      const finalXY = mapl?.project([clickedLngLat.lng, clickedLngLat.lat]);
+
+      setSelectedFeatures(
+        mapl?.queryRenderedFeatures(finalXY, {
+          layers:
+            selectionStyle === SELECTION_STYLE.TOP
+              ? [selectedLayerIds[0]]
+              : selectedLayerIds,
+        })
+      );
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  useEffect(() => {
+    if (mp.onSelectedLayersChange) {
+      mp.onSelectedLayersChange(selectedLayerIds);
+    }
+  }, [selectedLayerIds]);
+
+  useEffect(() => {
+    // we have no sureway to know that all layers are loaded
+    // this will wait for 300ms for layer to be loaded
+    // if it takes more then 300 selection will be discarded
+    setTimeout(featuresAtLatLng, 300);
+  }, [clickedLngLat, selectionStyle, selectedLayerIds]);
+
   return (
     <LayersContext.Provider
       value={{
@@ -280,6 +307,8 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
         query: {
           term: queryTermDebounced,
           setTerm: setQueryTerm,
+          clickedLngLat,
+          setClickedLngLat,
         },
         hover: {
           onHover: onMapHover,

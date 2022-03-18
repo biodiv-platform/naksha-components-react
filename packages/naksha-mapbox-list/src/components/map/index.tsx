@@ -1,10 +1,9 @@
 import { defaultViewState } from "@ibp/naksha-commons";
 import React, { useMemo, useState } from "react";
-import MapGL, { NavigationControl, useMap } from "react-map-gl";
+import MapGL, { NavigationControl } from "react-map-gl";
 import { tw } from "twind";
 
 import useLayers from "../../hooks/use-layers";
-import { SELECTION_STYLE } from "../../static/constants";
 import InfoBar from "../infobar";
 import Sidebar from "../sidebar";
 import { MapLayer } from "./layers";
@@ -14,8 +13,7 @@ import HoverPopup from "./popup";
 const NavControl: any = NavigationControl;
 
 export default function Map() {
-  const { mp, layer, hover } = useLayers();
-  const { mapl } = useMap();
+  const { mp, layer, hover, query } = useLayers();
 
   const [coordinates, setCoordinates] = useState<any>();
   const viewState = useMemo(
@@ -23,16 +21,7 @@ export default function Map() {
     [mp.defaultViewState]
   );
 
-  const onMapClick = (e) => {
-    layer.setSelectedFeatures(
-      mapl?.queryRenderedFeatures(e.point, {
-        layers:
-          layer.selectionStyle === SELECTION_STYLE.TOP
-            ? [layer.selectedIds[0]]
-            : layer.selectedIds,
-      })
-    );
-  };
+  const onMapClick = (e) => query.setClickedLngLat(e.lngLat);
 
   const handleOnMouseMove = (event) => {
     setCoordinates(event.lngLat);
