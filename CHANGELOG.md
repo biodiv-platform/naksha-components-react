@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.1](https://github.com/strandls/naksha-components-react/compare/v4.4.0...v4.4.1) (2022-03-21)
+
+
+### Bug Fixes
+
+* :bug: layer download fix ([17e477c](https://github.com/strandls/naksha-components-react/commit/17e477cedd7a647cb0161a3ecfa7ce7b6c1f06da))
+
+
+
+
+
 # [4.4.0](https://github.com/strandls/naksha-components-react/compare/v4.3.2...v4.4.0) (2022-03-18)
 
 
