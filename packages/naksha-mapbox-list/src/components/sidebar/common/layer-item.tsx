@@ -6,6 +6,7 @@ import { tw } from "twind";
 
 import useLayers from "../../../hooks/use-layers";
 import { GeoserverLayer } from "../../../interfaces";
+import { axDownloadLayer } from "../../../services/naksha";
 import {
   FALLBACK_THUMB,
   overflowStyle,
@@ -61,6 +62,16 @@ export default function LayerItem({ item, extended }: LayerItemProps) {
     setIsLoading(false);
   };
 
+  const onDownloadLayer = async () => {
+    await axDownloadLayer(
+      mp.nakshaApiEndpoint,
+      mp.nakshaEndpointToken,
+      item.id,
+      item.title
+    );
+    mp?.onLayerDownload(item.id);
+  };
+
   const handleOnZoom = () => layer.zoomToExtent(item.id);
 
   return (
@@ -101,10 +112,7 @@ export default function LayerItem({ item, extended }: LayerItemProps) {
       </div>
 
       <div className={tw`flex justify-between`}>
-        <Button
-          onClick={() => mp?.onLayerDownload(item.id)}
-          disabled={!item.isDownloadable}
-        >
+        <Button onClick={onDownloadLayer} disabled={!item.isDownloadable}>
           <DownloadIcon /> {t("download")}
         </Button>
 
