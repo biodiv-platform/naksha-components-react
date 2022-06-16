@@ -1,6 +1,6 @@
 {
   "name": "@ibp/naksha-mapbox-list",
-  "version": "4.4.1",
+  "version": "4.4.2",
   "author": "harshzalavadiya",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "@bumaga/tabs": "^0.2.0",
-    "@ibp/naksha-commons": "4.3.1",
+    "@ibp/naksha-commons": "4.4.2",
     "boundingbox": "^1.4.0",
     "clsx": "^1.1.1",
     "colorbrewer": "^1.5.2",
