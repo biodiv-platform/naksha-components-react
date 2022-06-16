@@ -18,20 +18,20 @@
     "dev": "tsup src/index.tsx --legacy-output --format esm,cjs --watch --dts --external react"
   },
   "peerDependencies": {
-    "mapbox-gl": "^2.7.0",
-    "react": ">=17",
-    "react-map-gl": "^7.0.10"
+    "mapbox-gl": "^2.8.2",
+    "react": ">=18",
+    "react-map-gl": "^7.0.15"
   },
   "devDependencies": {
     "@ibp/eslint-preset": "4.3.1",
     "@ibp/tsconfig": "4.3.1",
-    "@types/react": "^17.0.39",
-    "@types/react-dom": "^17.0.11",
-    "mapbox-gl": "^2.7.0",
-    "react": ">=17",
-    "react-map-gl": "^7.0.10",
-    "tsup": "^5.11.13",
-    "typescript": "^4.5.5"
+    "@types/react": "^18.0.13",
+    "@types/react-dom": "^18.0.5",
+    "mapbox-gl": "^2.8.2",
+    "react": ">=18",
+    "react-map-gl": "^7.0.15",
+    "tsup": "^6.1.2",
+    "typescript": "^4.7.3"
   },
   "dependencies": {
     "@bumaga/tabs": "^0.2.0",
@@ -41,13 +41,13 @@
     "colorbrewer": "^1.5.2",
     "geohash": "^0.0.1",
     "highlight-search-result": "^1.0.4",
-    "immer": "^9.0.12",
+    "immer": "^9.0.15",
     "react-sortable-hoc": "^2.0.0",
     "react-tiny-popover": "^7.0.1",
     "react-virtual": "^2.10.4",
     "react-virtualized-auto-sizer": "^1.0.6",
-    "react-web-share": "^1.1.5",
-    "redaxios": "^0.4.1",
-    "twind": "^0.16.16"
+    "react-web-share": "^1.1.6",
+    "redaxios": "^0.5.0",
+    "twind": "^0.16.17"
   }
 }

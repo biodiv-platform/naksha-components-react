@@ -17,16 +17,16 @@
     "dev": "tsup src/index.tsx --legacy-output --format esm,cjs --watch --dts --external react"
   },
   "peerDependencies": {
-    "react": ">=17"
+    "react": ">=18"
   },
   "devDependencies": {
     "@ibp/eslint-preset": "4.3.1",
     "@ibp/tsconfig": "4.3.1",
-    "@types/react": "^17.0.39",
-    "@types/react-dom": "^17.0.11",
-    "react": ">=17",
-    "tsup": "^5.11.13",
-    "typescript": "^4.5.5"
+    "@types/react": "^18.0.13",
+    "@types/react-dom": "^18.0.5",
+    "react": ">=18",
+    "tsup": "^6.1.2",
+    "typescript": "^4.7.3"
   },
   "publishConfig": {
     "access": "public"
