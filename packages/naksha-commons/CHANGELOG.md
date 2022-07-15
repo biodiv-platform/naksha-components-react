@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.4](https://github.com/strandls/naksha-components-react/compare/v4.4.3...v4.4.4) (2022-07-15)
+
+
+### Bug Fixes
+
+* :bug: invalid module path ([f18be04](https://github.com/strandls/naksha-components-react/commit/f18be04ab961e9e4c629443de55154ee1c1852d4))
+
+
+
+
+
 ## [4.4.2](https://github.com/strandls/naksha-components-react/compare/v4.4.1...v4.4.2) (2022-06-16)
 
 **Note:** Version bump only for package @ibp/naksha-commons
