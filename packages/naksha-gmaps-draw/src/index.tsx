@@ -16,6 +16,7 @@ import {
 
 export interface NakshaGmapsDrawProps {
   defaultViewState?;
+  defaultDrawingMode?;
   data?;
   onDataChange?;
   gmapAccessToken?;
@@ -40,6 +41,7 @@ const NakshaGmapsDraw = React.forwardRef(
   (
     {
       defaultViewState,
+      defaultDrawingMode,
       data,
       onDataChange,
       gmapAccessToken,
@@ -113,10 +115,7 @@ const NakshaGmapsDraw = React.forwardRef(
      *  can simulate isControlled if `data` are going to be changed
      */
     useEffect(() => {
-      if (
-        isControlled &&
-        JSON.stringify(features) !== JSON.stringify(data)
-      ) {
+      if (isControlled && JSON.stringify(features) !== JSON.stringify(data)) {
         dispatch({
           action: ACTION_TYPES.REPLACE,
           data: data,
@@ -199,7 +198,8 @@ const NakshaGmapsDraw = React.forwardRef(
                       GMAP_FEATURE_TYPES.POLYGON,
                       GMAP_FEATURE_TYPES.LINESTRING,
                     ],
-                    drawingMode: GMAP_FEATURE_TYPES.POLYGON,
+                    drawingMode:
+                      defaultDrawingMode || GMAP_FEATURE_TYPES.POLYGON,
                     featureFactory: onFeatureAdded,
                     ...(options || {}),
                   } as any
@@ -213,4 +213,4 @@ const NakshaGmapsDraw = React.forwardRef(
   }
 );
 
-export { NakshaGmapsDraw };
+export { NakshaGmapsDraw, GMAP_FEATURE_TYPES };
