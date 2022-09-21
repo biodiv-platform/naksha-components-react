@@ -9,9 +9,9 @@
   "find_layer_by_name": "Find layer by name",
   "infobar": "Attributes at Clicked Location",
   "information": "Information",
+  "layer_selection": "Layer Selection",
   "layer_selection_all": "All Layers",
   "layer_selection_top": "Top Layer Only",
-  "layer_selection": "Layer Selection",
   "layers": "Layers",
   "legend": "Legend",
   "less": "Less",
@@ -26,6 +26,7 @@
   "tags": "Tags",
   "toggle": "Toggle Publishing",
   "uploaded": "Uploaded",
+  "uploader": "Uploader",
   "url": "URL",
   "visiblity": "Visiblity"
 }

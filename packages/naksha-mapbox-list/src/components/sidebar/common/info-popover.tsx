@@ -66,7 +66,7 @@ export function InfoPopover({ item, containerStyle }: InfoPopoverProps) {
 
   const license = item.license || "CC-BY";
   const createdOn =
-    item?.createdDate && new Date(item.createdDate).toDateString();
+    item?.createdDate && new Date(item.createdDate).toLocaleDateString();
   const tags = item.tags?.join(", ");
 
   return (
@@ -99,10 +99,19 @@ export function InfoPopover({ item, containerStyle }: InfoPopoverProps) {
       <LayerInfoLine
         icon={<AttributionIcon />}
         link={item.url}
-        name={t("created_by")}
-        title={[item.createdBy, item.attribution].join("\n")}
+        name={t("uploader")}
+        title={item.createdBy}
       >
-        {item.createdBy}, {item.attribution}
+        {item.createdBy}
+      </LayerInfoLine>
+
+      <LayerInfoLine
+        icon={<AttributionIcon />}
+        link={item.url}
+        name={t("created_by")}
+        title={item.attribution}
+      >
+        {item.attribution}
       </LayerInfoLine>
       <LayerInfoLine
         icon={<ClockIcon />}
