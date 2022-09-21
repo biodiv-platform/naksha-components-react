@@ -35,7 +35,7 @@ const LayerInfoLine = ({
 
   return (
     <div
-      className={tw`flex gap-3 text-sm text-gray-600`}
+      className={tw`flex gap-3 text-sm text-gray-600 break-all`}
       title={name && title && `${name}: ${title}`}
     >
       <div>{icon}</div>
