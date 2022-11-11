@@ -178,7 +178,7 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
       } else {
         setHoverFeatures(undefined);
       }
-    } catch (e) {}
+    } catch (e) { }
   };
 
   const toggleLayer = async ({
@@ -196,13 +196,7 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
 
     const layerIndex = getLayerIndexById(layerId);
     const sourceType = layers[layerIndex]?.source.type;
-
-    if (sourceType === "vector") {
-      await toggleVectorLayer(layerIndex, styleIndex, focus);
-    } else {
-      console.error(`unknown layer type: ${sourceType}`);
-    }
-
+    await toggleVectorLayer(layerIndex, styleIndex, focus);
     setSelectedLayerIds((_slIds) => [
       layerId,
       ..._slIds.filter((lid) => lid !== layerId),
@@ -243,20 +237,25 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
     mapl?.fitBounds(layer.bbox as any, { padding: 40, duration: 1000 });
   };
 
+  const getBBoxFromLngLat = () => {
+    return [clickedLngLat.lng, clickedLngLat.lat, clickedLngLat.lng + 0.1, clickedLngLat.lat + 0.1];
+  }
   const featuresAtLatLng = () => {
     if (!clickedLngLat) return;
 
     try {
       const finalXY = mapl?.project([clickedLngLat.lng, clickedLngLat.lat]);
 
-      setSelectedFeatures(
-        mapl?.queryRenderedFeatures(finalXY, {
-          layers:
-            selectionStyle === SELECTION_STYLE.TOP
-              ? [selectedLayerIds[0]]
-              : selectedLayerIds,
-        })
-      );
+      const queryFeat = mapl?.queryRenderedFeatures(finalXY, {
+        layers:
+          selectionStyle === SELECTION_STYLE.TOP
+            ? [selectedLayerIds[0]]
+            : selectedLayerIds,
+      });
+
+      setSelectedFeatures
+      (queryFeat && queryFeat?.length <= 0 ?
+         [{sourceLayer:selectedLayerIds[0],layerType:'raster',bbox:getBBoxFromLngLat()}] : queryFeat);
     } catch (e) {
       console.error(e);
     }
