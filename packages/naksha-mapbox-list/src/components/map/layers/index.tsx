@@ -3,7 +3,7 @@ import { useMap } from "react-map-gl";
 import { GeoserverLayer } from "../../../interfaces";
 import GridLayer from "./grid";
 import VectorLayer from "./vector";
-import RasterLayer from "./raster"
+import RasterLayer from "./raster";
 
 export function MapLayer({
   layer,

@@ -24,7 +24,7 @@ export const parseGeoserverLayersXml = async (
       id: l.name,
       thumbnail: nakshaApiEndpoint + l.thumbnail,
       source: {
-        type: l.layerType.toLowerCase() === "raster"? "raster":"vector",
+        type: l.layerType.toLowerCase() === "raster" ? "raster" : "vector",
         scheme: "tms",
         tiles: [
           `${geoserver.endpoint}/gwc/service/tms/1.0.0/${geoserver.workspace}:${l.name}@EPSG%3A900913@pbf/{z}/{x}/{y}.pbf`,
@@ -79,7 +79,7 @@ export const getLayerStyle = async (
     }
 
     // styles returns empty array for raster file
-    if (_draft.styles[styleIndex] &&!_draft.styles[styleIndex]?.colors) {
+    if (_draft.styles[styleIndex] && !_draft.styles[styleIndex]?.colors) {
       _draft.styles[styleIndex].colors = await axGetGeoserverLayerStyle(
         layer.id,
         geoserver?.workspace,

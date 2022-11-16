@@ -29,7 +29,10 @@ export default function HoverPopup({ coordinates }) {
             <tr
               key={k + v}
               className={tw(
-                clsx({ "bg-gray-50": idx % 2 === 0, "border-gray-100 border-t": 1 })
+                clsx({
+                  "bg-gray-50": idx % 2 === 0,
+                  "border-gray-100 border-t": 1,
+                })
               )}
             >
               <td className={tw`py-1 px-2`}>{k}</td>

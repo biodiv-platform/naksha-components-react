@@ -178,7 +178,7 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
       } else {
         setHoverFeatures(undefined);
       }
-    } catch (e) { }
+    } catch (e) {}
   };
 
   const toggleLayer = async ({
@@ -238,8 +238,13 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
   };
 
   const getBBoxFromLngLat = () => {
-    return [clickedLngLat.lng, clickedLngLat.lat, clickedLngLat.lng + 0.1, clickedLngLat.lat + 0.1];
-  }
+    return [
+      clickedLngLat.lng,
+      clickedLngLat.lat,
+      clickedLngLat.lng + 0.1,
+      clickedLngLat.lat + 0.1,
+    ];
+  };
   const featuresAtLatLng = () => {
     if (!clickedLngLat) return;
 
@@ -253,9 +258,17 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
             : selectedLayerIds,
       });
 
-      setSelectedFeatures
-      (queryFeat && queryFeat?.length <= 0 ?
-         [{sourceLayer:selectedLayerIds[0],layerType:'raster',bbox:getBBoxFromLngLat()}] : queryFeat);
+      setSelectedFeatures(
+        queryFeat && queryFeat?.length <= 0
+          ? [
+              {
+                sourceLayer: selectedLayerIds[0],
+                layerType: "raster",
+                bbox: getBBoxFromLngLat(),
+              },
+            ]
+          : queryFeat
+      );
     } catch (e) {
       console.error(e);
     }

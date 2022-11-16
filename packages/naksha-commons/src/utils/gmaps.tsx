@@ -7,7 +7,10 @@ import { defaultViewState } from "../static/naksha";
  * @param {number} [zoomOffset=1] auto adjest zoom level for google maps
  * @return {*}
  */
-export const mapboxToGmapsViewState = (vp = defaultViewState, zoomOffset = 1) => {
+export const mapboxToGmapsViewState = (
+  vp = defaultViewState,
+  zoomOffset = 1
+) => {
   return {
     center: {
       lat: vp.latitude,

@@ -20,11 +20,22 @@ export default function InfoBarPanel({ data: payload }) {
       (l) => l.id === (payload.sourceLayer || payload.source)
     );
 
-
     if (currentLayer.layerType.toLowerCase() === "raster") {
-      const { data } = await axGexGetRasterInfoWithLonLat(mp.geoserver?.endpoint, mp.geoserver?.workspace, { bbox: payload.bbox.toString(), query_layers: `${mp.geoserver?.workspace}:${currentLayer.id}`, layers: `${mp.geoserver?.workspace}:${currentLayer.id}` })
-      properties = data?.features[0] ? Object.entries(data.features[0]?.properties).map(([v, k]) => [v, k || "-"]) : []
-
+      const { data } = await axGexGetRasterInfoWithLonLat(
+        mp.geoserver?.endpoint,
+        mp.geoserver?.workspace,
+        {
+          bbox: payload.bbox.toString(),
+          query_layers: `${mp.geoserver?.workspace}:${currentLayer.id}`,
+          layers: `${mp.geoserver?.workspace}:${currentLayer.id}`,
+        }
+      );
+      properties = data?.features[0]
+        ? Object.entries(data.features[0]?.properties).map(([v, k]) => [
+            v,
+            k || "-",
+          ])
+        : [];
     } else {
       properties = Object.entries(currentLayer?.data?.propertyMap || {}).map(
         ([k, v]) => [v, payload?.properties?.[k]] || "-"

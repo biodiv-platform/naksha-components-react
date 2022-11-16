@@ -30,7 +30,11 @@ export default function InfoBarContent({ onClose }) {
       <div className={tw`flex flex-col flex-grow overflow-auto gap-3 p-4`}>
         {layer.selectedFeatures.map((data) => (
           <InfoBarPanel
-            key={data.sourceLayer + data?.properties ? 0 : data?.properties[PROPERTY_ID]}
+            key={
+              data.sourceLayer + data?.properties
+                ? 0
+                : data?.properties[PROPERTY_ID]
+            }
             data={data}
           />
         ))}
