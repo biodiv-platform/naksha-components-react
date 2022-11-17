@@ -1,6 +1,6 @@
 {
-  "name": "@ibp/dummy",
-  "version": "4.0.0",
+  "name": "@biodiv/dummy",
+  "version": "4.4.6",
   "author": "harshzalavadiya",
   "main": "./dist/index.js",
   "module": "./dist/esm/index.js",
