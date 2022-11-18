@@ -1,6 +1,6 @@
 {
-  "name": "@ibp/naksha-mapbox-view",
-  "version": "4.4.4",
+  "name": "@biodiv-platform/naksha-mapbox-view",
+  "version": "4.4.9",
   "author": "harshzalavadiya",
   "main": "./dist/index.js",
   "module": "./dist/esm/index.js",
@@ -23,8 +23,8 @@
     "react-map-gl": "^7.0.15"
   },
   "devDependencies": {
-    "@ibp/eslint-preset": "4.3.1",
-    "@ibp/tsconfig": "4.3.1",
+    "@biodiv-platform/eslint-preset": "*",
+    "@biodiv-platform/tsconfig": "*",
     "@types/react": "^18.0.13",
     "@types/react-dom": "^18.0.5",
     "mapbox-gl": "^2.8.2",
@@ -34,7 +34,7 @@
     "typescript": "^4.7.3"
   },
   "dependencies": {
-    "@ibp/naksha-commons": "4.4.4",
+    "@biodiv-platform/naksha-commons": "*",
     "@turf/bbox": "^6.5.0",
     "boundingbox": "^1.4.0"
   }

@@ -1,7 +1,7 @@
 import "mapbox-gl/dist/mapbox-gl.css";
 import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
 
-import { NakshaMapboxDraw } from "@ibp/naksha-mapbox-draw";
+import { NakshaMapboxDraw } from "@biodiv-platform/naksha-mapbox-draw";
 import React, { useState } from "react";
 import { tw } from "twind";
 

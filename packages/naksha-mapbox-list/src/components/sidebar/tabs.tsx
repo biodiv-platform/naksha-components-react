@@ -1,4 +1,4 @@
-import { useT } from "@ibp/naksha-commons";
+import { useT } from "@biodiv-platform/naksha-commons";
 import React, { useEffect } from "react";
 import { tw } from "twind";
 

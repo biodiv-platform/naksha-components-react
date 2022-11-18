@@ -1,4 +1,4 @@
-import { MapStyles, defaultViewState } from "@ibp/naksha-commons";
+import { MapStyles, defaultViewState } from "@biodiv-platform/naksha-commons";
 import { NakshaMapboxListProps } from "../interfaces";
 import { CSSProperties } from "react";
 

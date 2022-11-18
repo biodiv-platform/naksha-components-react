@@ -15,11 +15,11 @@ Map Components for Biodiversity Informatics Platform
 ## 🔌 Packages
 
 - [naksha-components-react](./packages/naksha-components-react/README.md)
-- [@ibp/naksha-commons](./packages/naksha-commons/README.md) ![@ibp/naksha-commons](https://img.shields.io/bundlephobia/minzip/@ibp/naksha-commons/latest)
-- [@ibp/naksha-gmaps-draw](./packages/naksha-gmaps-draw/README.md) ![@ibp/naksha-gmaps-draw](https://img.shields.io/bundlephobia/minzip/@ibp/naksha-gmaps-draw/latest)
-- [@ibp/naksha-mapbox-draw](./packages/naksha-mapbox-draw/README.md) ![@ibp/naksha-mapbox-draw](https://img.shields.io/bundlephobia/minzip/@ibp/naksha-mapbox-draw/latest?z)
-- [@ibp/naksha-mapbox-list](./packages/naksha-mapbox-list/README.md) ![@ibp/naksha-mapbox-list](https://img.shields.io/bundlephobia/minzip/@ibp/naksha-mapbox-list/latest)
-- [@ibp/naksha-mapbox-view](./packages/naksha-mapbox-view/README.md) ![@ibp/naksha-mapbox-view](https://img.shields.io/bundlephobia/minzip/@ibp/naksha-mapbox-view/latest)
+- [@biodiv-platform/naksha-commons](./packages/naksha-commons/README.md) ![@biodiv-platform/naksha-commons](https://img.shields.io/bundlephobia/minzip/@biodiv-platform/naksha-commons/latest)
+- [@biodiv-platform/naksha-gmaps-draw](./packages/naksha-gmaps-draw/README.md) ![@biodiv-platform/naksha-gmaps-draw](https://img.shields.io/bundlephobia/minzip/@biodiv-platform/naksha-gmaps-draw/latest)
+- [@biodiv-platform/naksha-mapbox-draw](./packages/naksha-mapbox-draw/README.md) ![@biodiv-platform/naksha-mapbox-draw](https://img.shields.io/bundlephobia/minzip/@biodiv-platform/naksha-mapbox-draw/latest?z)
+- [@biodiv-platform/naksha-mapbox-list](./packages/naksha-mapbox-list/README.md) ![@biodiv-platform/naksha-mapbox-list](https://img.shields.io/bundlephobia/minzip/@biodiv-platform/naksha-mapbox-list/latest)
+- [@biodiv-platform/naksha-mapbox-view](./packages/naksha-mapbox-view/README.md) ![@biodiv-platform/naksha-mapbox-view](https://img.shields.io/bundlephobia/minzip/@biodiv-platform/naksha-mapbox-view/latest)
 
 ## 📦 Development Setup
 

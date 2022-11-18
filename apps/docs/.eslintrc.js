@@ -1,1 +1,1 @@
-module.exports = require("@ibp/eslint-preset/eslint-preset");
+module.exports = require("@biodiv-platform/eslint-preset/eslint-preset");

@@ -1,6 +1,6 @@
 {
-  "name": "@ibp/naksha-commons",
-  "version": "4.4.4",
+  "name": "@biodiv-platform/naksha-commons",
+  "version": "4.4.9",
   "author": "harshzalavadiya",
   "main": "./dist/index.js",
   "module": "./dist/esm/index.js",
@@ -20,8 +20,8 @@
     "react": ">=18"
   },
   "devDependencies": {
-    "@ibp/eslint-preset": "4.3.1",
-    "@ibp/tsconfig": "4.3.1",
+    "@biodiv-platform/eslint-preset": "*",
+    "@biodiv-platform/tsconfig": "*",
     "@types/react": "^18.0.13",
     "@types/react-dom": "^18.0.5",
     "react": ">=18",

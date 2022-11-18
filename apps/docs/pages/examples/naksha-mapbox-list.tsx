@@ -1,6 +1,6 @@
 import "mapbox-gl/dist/mapbox-gl.css";
 
-import { NakshaMapboxList } from "@ibp/naksha-mapbox-list";
+import { NakshaMapboxList } from "@biodiv-platform/naksha-mapbox-list";
 import axios from "axios";
 import React from "react";
 import { tw } from "twind";

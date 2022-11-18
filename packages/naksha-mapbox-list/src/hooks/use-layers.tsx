@@ -1,4 +1,4 @@
-import { defaultMapStyles, useDebounce } from "@ibp/naksha-commons";
+import { defaultMapStyles, useDebounce } from "@biodiv-platform/naksha-commons";
 import React, {
   createContext,
   useContext,

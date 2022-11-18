@@ -1,4 +1,4 @@
-import { TranslationProvider } from "@ibp/naksha-commons";
+import { TranslationProvider } from "@biodiv-platform/naksha-commons";
 import React from "react";
 import { MapProvider } from "react-map-gl";
 import { setup } from "twind";

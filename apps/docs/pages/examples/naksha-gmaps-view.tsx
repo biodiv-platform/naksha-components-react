@@ -1,4 +1,4 @@
-import { NakshaGmapsView } from "@ibp/naksha-gmaps-view";
+import { NakshaGmapsView } from "@biodiv-platform/naksha-gmaps-view";
 import React from "react";
 
 const geojson = {

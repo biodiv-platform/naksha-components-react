@@ -1,5 +1,5 @@
 {
-  "extends": "@ibp/tsconfig/nextjs.json",
+  "extends": "@biodiv-platform/tsconfig/nextjs.json",
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
 }
