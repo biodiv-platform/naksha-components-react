@@ -1,5 +1,5 @@
 import { ViewState } from "react-map-gl";
-import { MapStyles } from "@ibp/naksha-commons";
+import { MapStyles } from "@biodiv-platform/naksha-commons";
 
 type LayerType = "grid" | "vector" | "raster";
 
@@ -79,8 +79,8 @@ export interface GeoserverLayer {
     endpoint?;
     fetcher?;
   };
-  onClick?: ({ bbox, feature, layerId: string }) => JSX.Element;
-  onHover?: ({ bbox, feature, layerId: string }) => JSX.Element;
+  onClick?: ({ bbox, feature, layerId}) => JSX.Element;
+  onHover?: ({ bbox, feature, layerId}) => JSX.Element;
   data?: {
     styles?: VectorStyleMeta[];
     styleIndex?;

@@ -1,4 +1,4 @@
-import { useT } from "@ibp/naksha-commons";
+import { useT } from "@biodiv-platform/naksha-commons";
 import React, { useMemo, useState } from "react";
 import { SortableHandle } from "react-sortable-hoc";
 import { RWebShare } from "react-web-share";

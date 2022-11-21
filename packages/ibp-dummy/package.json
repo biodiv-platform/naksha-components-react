@@ -1,6 +1,6 @@
 {
-  "name": "@ibp/dummy",
-  "version": "4.0.0",
+  "name": "@biodiv-platform/dummy",
+  "version": "4.4.9",
   "author": "harshzalavadiya",
   "main": "./dist/index.js",
   "module": "./dist/esm/index.js",
@@ -21,8 +21,8 @@
     "react": ">=17.0.0"
   },
   "devDependencies": {
-    "@ibp/eslint-preset": "*",
-    "@ibp/tsconfig": "*",
+    "@biodiv-platform/eslint-preset": "*",
+    "@biodiv-platform/tsconfig": "*",
     "@types/react-dom": "^17.0.11",
     "@types/react": "^17.0.39",
     "react": ">=17.0.0",

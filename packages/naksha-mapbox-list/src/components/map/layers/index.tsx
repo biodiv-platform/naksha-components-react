@@ -3,6 +3,7 @@ import { useMap } from "react-map-gl";
 import { GeoserverLayer } from "../../../interfaces";
 import GridLayer from "./grid";
 import VectorLayer from "./vector";
+import RasterLayer from "./raster";
 
 export function MapLayer({
   layer,
@@ -24,7 +25,10 @@ export function MapLayer({
     case "grid":
       return <GridLayer beforeId={beforeId} data={layer} />;
 
+    case "raster":
+      return <RasterLayer beforeId={beforeId} data={layer} />;
+
     default:
-      return null;
+      return <VectorLayer beforeId={beforeId} layer={layer} />;
   }
 }

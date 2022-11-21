@@ -1,6 +1,6 @@
 # naksha-components-react
 
-package bundle for `@ibp/naksha-*` packages
+package bundle for `@biodiv-platform/naksha-*` packages
 
 # Installing
 

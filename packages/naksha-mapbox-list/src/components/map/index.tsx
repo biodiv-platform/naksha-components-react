@@ -1,4 +1,4 @@
-import { defaultViewState } from "@ibp/naksha-commons";
+import { defaultViewState } from "@biodiv-platform/naksha-commons";
 import React, { useMemo, useState } from "react";
 import MapGL, { NavigationControl } from "react-map-gl";
 import { tw } from "twind";

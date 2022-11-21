@@ -1,9 +1,9 @@
-# @ibp/naksha-gmaps-draw
+# @biodiv-platform/naksha-gmaps-draw
 
 draw polygons over google-maps
 
 ## Install
 
 ```sh
-yarn add @ibp/naksha-gmaps-draw @react-google-maps/api
+yarn add @biodiv-platform/naksha-gmaps-draw @react-google-maps/api
 ```

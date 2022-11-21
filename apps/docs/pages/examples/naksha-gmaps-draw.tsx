@@ -1,4 +1,4 @@
-import { NakshaGmapsDraw } from "@ibp/naksha-gmaps-draw";
+import { NakshaGmapsDraw } from "@biodiv-platform/naksha-gmaps-draw";
 import React from "react";
 
 export default function NakshaGmapsDrawPage() {

@@ -1,4 +1,4 @@
-import { GMAPS_AUTOCOMPLETE_FIELDS } from "@ibp/naksha-commons";
+import { GMAPS_AUTOCOMPLETE_FIELDS } from "@biodiv-platform/naksha-commons";
 import { Autocomplete } from "@react-google-maps/api";
 import React, { useState } from "react";
 

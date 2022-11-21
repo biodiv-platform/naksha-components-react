@@ -1,6 +1,6 @@
 import "mapbox-gl/dist/mapbox-gl.css";
 
-import { NakshaMapboxView } from "@ibp/naksha-mapbox-view";
+import { NakshaMapboxView } from "@biodiv-platform/naksha-mapbox-view";
 import React from "react";
 import { tw } from "twind";
 

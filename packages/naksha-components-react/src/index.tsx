@@ -1,7 +1,6 @@
-export * from "@ibp/naksha-commons";
-export * from "@ibp/naksha-gmaps-draw";
-export * from "@ibp/naksha-gmaps-view";
-export * from "@ibp/naksha-mapbox-draw";
-export * from "@ibp/naksha-mapbox-list";
-export * from "@ibp/naksha-mapbox-view";
-
+export * from "@biodiv-platform/naksha-commons";
+export * from "@biodiv-platform/naksha-gmaps-draw";
+export * from "@biodiv-platform/naksha-gmaps-view";
+export * from "@biodiv-platform/naksha-mapbox-draw";
+export * from "@biodiv-platform/naksha-mapbox-list";
+export * from "@biodiv-platform/naksha-mapbox-view";

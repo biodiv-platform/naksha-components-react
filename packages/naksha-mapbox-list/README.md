@@ -1,9 +1,9 @@
-# @ibp/naksha-mapbox-list
+# @biodiv-platform/naksha-mapbox-list
 
 list and show GeoServer layers
 
 ## Installing
 
 ```sh
-yarn @ibp/naksha-mapbox-list react-map-gl
+yarn @biodiv-platform/naksha-mapbox-list react-map-gl
 ```

@@ -37,6 +37,34 @@ export const axGetGeoserverLayerStyleList = async (id, endpoint) => {
   }
 };
 
+export const axGexGetRasterInfoWithLonLat = async (
+  endpoint,
+  workspace,
+  params
+) => {
+  const RasterInfoParams = {
+    service: "WMS",
+    version: "1.1.1",
+    request: "GetFeatureInfo",
+    info_format: "application/json",
+    width: 100,
+    height: 100,
+    x: 50,
+    y: 50,
+    srs: "EPSG:4326",
+  };
+
+  try {
+    const res = await axios.get(`${endpoint}/${workspace}/wms`, {
+      params: { ...params, ...RasterInfoParams },
+    });
+    return { success: true, data: res.data };
+  } catch (e) {
+    console.error(e);
+    return { success: false, data: [] };
+  }
+};
+
 export const axToggleLayerPublishing = async (
   nakshaEndpointToken,
   nakshaApiEndpoint,

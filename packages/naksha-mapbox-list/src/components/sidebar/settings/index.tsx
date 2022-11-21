@@ -1,4 +1,4 @@
-import { defaultMapStyles, useT } from "@ibp/naksha-commons";
+import { defaultMapStyles, useT } from "@biodiv-platform/naksha-commons";
 import React from "react";
 import { tw } from "twind";
 

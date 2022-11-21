@@ -1,4 +1,4 @@
-import { LICENSES, useT } from "@ibp/naksha-commons";
+import { LICENSES, useT } from "@biodiv-platform/naksha-commons";
 import React, { useState } from "react";
 import { Popover, useArrowContainer } from "react-tiny-popover";
 import { tw } from "twind";

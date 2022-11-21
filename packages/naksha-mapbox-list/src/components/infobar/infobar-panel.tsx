@@ -3,24 +3,44 @@ import React, { useEffect, useState } from "react";
 import { tw } from "twind";
 
 import useLayers from "../../hooks/use-layers";
+import { axGexGetRasterInfoWithLonLat } from "../../services/naksha";
 import { DownIcon, UpIcon } from "../core";
 
-export default function InfoBarPanel({ data }) {
+export default function InfoBarPanel({ data: payload }) {
   const [isOpen, setIsOpen] = useState(true);
   const [layerInfo, setLayerInfo] = useState({
-    title: data.sourceLayer,
+    title: payload.sourceLayer,
     properties: [] as any,
   });
-  const { layer } = useLayers();
+  const { layer, mp } = useLayers();
 
   const getPropertyData = async () => {
+    let properties;
     const currentLayer: any = layer.selectedLayers.find(
-      (l) => l.id === (data.sourceLayer || data.source)
+      (l) => l.id === (payload.sourceLayer || payload.source)
     );
 
-    const properties = Object.entries(
-      currentLayer?.data?.propertyMap || {}
-    ).map(([k, v]) => [v, data?.properties?.[k]] || "-");
+    if (currentLayer.layerType.toLowerCase() === "raster") {
+      const { data } = await axGexGetRasterInfoWithLonLat(
+        mp.geoserver?.endpoint,
+        mp.geoserver?.workspace,
+        {
+          bbox: payload.bbox.toString(),
+          query_layers: `${mp.geoserver?.workspace}:${currentLayer.id}`,
+          layers: `${mp.geoserver?.workspace}:${currentLayer.id}`,
+        }
+      );
+      properties = data?.features[0]
+        ? Object.entries(data.features[0]?.properties).map(([v, k]) => [
+            v,
+            k || "-",
+          ])
+        : [];
+    } else {
+      properties = Object.entries(currentLayer?.data?.propertyMap || {}).map(
+        ([k, v]) => [v, payload?.properties?.[k]] || "-"
+      );
+    }
 
     setLayerInfo({ title: currentLayer.title, properties });
   };

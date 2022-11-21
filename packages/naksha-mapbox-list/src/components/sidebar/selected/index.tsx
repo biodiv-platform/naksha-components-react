@@ -4,7 +4,7 @@ import React from "react";
 import useLayers from "../../../hooks/use-layers";
 import { SelectedItemList } from "./selected-item-list";
 import { Button } from "../../core";
-import { useT } from "@ibp/naksha-commons";
+import { useT } from "@biodiv-platform/naksha-commons";
 import { tw } from "twind";
 
 export default function SelectedTabPanel() {
