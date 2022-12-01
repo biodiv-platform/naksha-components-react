@@ -22,14 +22,18 @@ declare const confirm;
 interface LayersContextProps {
   mp: NakshaMapboxListProps;
   updateMP;
+  isInfoBarOpen;
+  setIsInfoBarOpen;
   layer: {
     mapStyle?;
     setMapStyle;
+    featuresAtLatLng;
     all: GeoserverLayer[];
     setAll;
     selectedIds: string[];
     setSelectedIds;
     selectedLayers: GeoserverLayer[];
+
     clearAll;
     toggle;
     updateStyle;
@@ -38,6 +42,7 @@ interface LayersContextProps {
     setSelectedFeatures;
     togglePublish;
     delete;
+    handleSelectStyle;
     selectionStyle;
     setSelectionStyle;
 
@@ -77,8 +82,11 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
   const [mapStyle, setMapStyle] = useState(
     defaultMapStyles[mp?.mapStyle || 0].style
   );
-  const [selectionStyle, setSelectionStyle] = useState(SELECTION_STYLE.TOP);
+  const [selectionStyle, setSelectionStyle] = useState<string>(
+    SELECTION_STYLE.TOP
+  );
   const [gridLegends, setGridLegends] = useState({});
+  const [isInfoBarOpen, setIsInfoBarOpen] = useState(true);
   const [clickedLngLat, setClickedLngLat] = useState<any>();
 
   const [layers, setLayers] = useState<GeoserverLayer[]>(_mp.layers || []);
@@ -245,28 +253,53 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
       clickedLngLat.lat + 0.1,
     ];
   };
-  const featuresAtLatLng = () => {
+
+  const handleSelectStyle = (value: string) => {
+    setSelectionStyle(value);
+    if (value === SELECTION_STYLE.TOP) {
+      featuresAtLatLng(value);
+    }
+  };
+  const featuresAtLatLng = (value?) => {
     if (!clickedLngLat) return;
 
     try {
       const finalXY = mapl?.project([clickedLngLat.lng, clickedLngLat.lat]);
 
-      const queryFeat = mapl?.queryRenderedFeatures(finalXY, {
+      let queryFeat: any = mapl?.queryRenderedFeatures(finalXY, {
         layers:
           selectionStyle === SELECTION_STYLE.TOP
             ? [selectedLayerIds[0]]
             : selectedLayerIds,
       });
 
+      // Add all the raster layer feature to queryFeat when all info must be shown
+      // in the info box
+      if ((value || selectionStyle) === SELECTION_STYLE.ALL) {
+        const rasterLayerFeat = selectedLayers
+          .filter((item) => item.layerType == "RASTER")
+          .map((item) => ({
+            sourceLayer: item.id,
+            layerType: "raster",
+            bbox: getBBoxFromLngLat(),
+          }));
+        queryFeat = [...queryFeat, ...rasterLayerFeat];
+      }
+
       setSelectedFeatures(
-        queryFeat && queryFeat?.length <= 0
-          ? [
-              {
-                sourceLayer: selectedLayerIds[0],
-                layerType: "raster",
-                bbox: getBBoxFromLngLat(),
-              },
-            ]
+        // if fist layer is raster and select all in not set
+        // send a raster based feature object
+        selectedLayers?.[0].layerType === "RASTER" &&
+          selectionStyle !== SELECTION_STYLE.ALL
+          ? selectedLayerIds.length && queryFeat?.length
+            ? queryFeat
+            : [
+                {
+                  sourceLayer: selectedLayerIds[0],
+                  layerType: "raster",
+                  bbox: getBBoxFromLngLat(),
+                },
+              ]
           : queryFeat
       );
     } catch (e) {
@@ -294,10 +327,12 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
         updateMP,
         layer: {
           mapStyle,
+          featuresAtLatLng,
           setMapStyle,
           all: layers,
           setAll: setLayers,
           selectedIds: selectedLayerIds,
+          handleSelectStyle,
           setSelectedIds: setSelectedLayerIds,
           selectedLayers: selectedLayers,
           clearAll: clearAllLayers,
@@ -322,6 +357,8 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
           clickedLngLat,
           setClickedLngLat,
         },
+        isInfoBarOpen,
+        setIsInfoBarOpen,
         hover: {
           onHover: onMapHover,
           features: hoverFeatures,

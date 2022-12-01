@@ -5,23 +5,13 @@ import { InfobarButton } from "../core";
 import InfoBarContent from "./content";
 
 export default function InfoBar() {
-  const {
-    layer,
-    query: { clickedLngLat },
-  } = useLayers();
-  const [isOpen, setIsOpen] = useState(true);
+  const { layer, isInfoBarOpen, setIsInfoBarOpen } = useLayers();
 
   if (!layer.selectedFeatures?.length) return null;
 
-  const toggleOpen = () => setIsOpen(!isOpen);
+  const toggleOpen = () => setIsInfoBarOpen(!isInfoBarOpen);
 
-  useEffect(() => {
-    if (layer.selectedFeatures[0]?.layerType === "raster") {
-      toggleOpen();
-    }
-  }, [clickedLngLat]);
-
-  return isOpen ? (
+  return isInfoBarOpen ? (
     <InfoBarContent onClose={toggleOpen} />
   ) : (
     <InfobarButton onClick={toggleOpen} />

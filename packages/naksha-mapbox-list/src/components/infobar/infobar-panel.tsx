@@ -8,11 +8,11 @@ import { DownIcon, UpIcon } from "../core";
 
 export default function InfoBarPanel({ data: payload }) {
   const [isOpen, setIsOpen] = useState(true);
-  const [layerInfo, setLayerInfo] = useState({
+  const [layerInfo, setLayerInfo,] = useState({
     title: payload.sourceLayer,
     properties: [] as any,
   });
-  const { layer, mp } = useLayers();
+  const { layer, mp ,query:{clickedLngLat}} = useLayers();
 
   const getPropertyData = async () => {
     let properties;
@@ -32,7 +32,6 @@ export default function InfoBarPanel({ data: payload }) {
       );
       properties = data?.features[0]
         ? Object.entries(data.features[0]?.properties).map(([v, k]) => [
-            v,
             k || "-",
           ])
         : [];
@@ -47,7 +46,7 @@ export default function InfoBarPanel({ data: payload }) {
 
   useEffect(() => {
     getPropertyData();
-  }, []);
+  }, [clickedLngLat]);
 
   return (
     <div className={tw`bg-gray-100 rounded-lg`}>
