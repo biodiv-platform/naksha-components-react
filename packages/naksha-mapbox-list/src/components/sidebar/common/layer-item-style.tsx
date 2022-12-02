@@ -7,7 +7,7 @@ import { SelectInput } from "../../core";
 import MoreLess from "./moreless";
 import { StyleLegend } from "./style-legend";
 
-export default function LayerItemStyle({ item }: { item: GeoserverLayer }) {
+export default function LayerItemStyle({ item }: { item: any }) {
   if (!item.data?.styles) return null;
 
   const { layer } = useLayers();
@@ -18,13 +18,15 @@ export default function LayerItemStyle({ item }: { item: GeoserverLayer }) {
 
   return (
     <div className={tw`flex flex-col gap-4 pt-2`}>
-      <SelectInput onChange={onStyleChange}>
-        {item.data?.styles.map((opt, idx) => (
-          <option key={idx} value={idx}>
-            {opt.styleTitle}
-          </option>
-        ))}
-      </SelectInput>
+      {item.layerType !== "RASTER" && (
+        <SelectInput onChange={onStyleChange}>
+          {item.data?.styles.map((opt, idx) => (
+            <option key={idx} value={idx}>
+              {opt.styleTitle}
+            </option>
+          ))}
+        </SelectInput>
+      )}
 
       <MoreLess>
         <StyleLegend item={item} />

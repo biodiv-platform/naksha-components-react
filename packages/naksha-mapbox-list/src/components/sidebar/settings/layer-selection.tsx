@@ -10,18 +10,20 @@ interface LayerSelectionProps {
 }
 
 export default function LayerSelection({ hideLabel }: LayerSelectionProps) {
-  const { layer } = useLayers();
+  const {
+    layer: {selectionStyle, handleSelectStyle },
+  } = useLayers();
   const { t } = useT();
 
   const handleOnSelectionStyleChange = (e) => {
-    layer.setSelectionStyle(e.target.value);
+    handleSelectStyle(e.target.value);
   };
 
   return (
     <SelectInput
       name="layer_selection"
       label={hideLabel ? null : t("layer_selection")}
-      defaultValue={layer.selectionStyle}
+      defaultValue={selectionStyle}
       onChange={handleOnSelectionStyleChange}
     >
       {Object.values(SELECTION_STYLE).map((ss) => (

@@ -3,13 +3,15 @@ import React from "react";
 import { tw } from "twind";
 
 import useLayers from "../../hooks/use-layers";
-import { PROPERTY_ID } from "../../static/constants";
+import { PROPERTY_ID, SELECTION_STYLE } from "../../static/constants";
 import { CloseButton, CrossHairIcon } from "../core";
 import LayerSelection from "../sidebar/settings/layer-selection";
 import InfoBarPanel from "./infobar-panel";
 
 export default function InfoBarContent({ onClose }) {
-  const { layer } = useLayers();
+  const {
+    layer: { selectedFeatures, selectedLayers, selectionStyle },
+  } = useLayers();
   const { t } = useT();
 
   return (
@@ -28,12 +30,13 @@ export default function InfoBarContent({ onClose }) {
         <LayerSelection hideLabel={true} />
       </div>
       <div className={tw`flex flex-col flex-grow overflow-auto gap-3 p-4`}>
-        {layer.selectedFeatures.map((data) => (
+        {selectedFeatures.flat(1)?.map((data: any) => (
           <InfoBarPanel
             key={
-              data.sourceLayer + data?.properties
-                ? 0
-                : data?.properties[PROPERTY_ID]
+              selectedLayers?.[0]?.source.type === "raster" ||
+              selectionStyle === SELECTION_STYLE.ALL
+                ? data?.sourceLayer
+                : data?.sourceLayer + data?.properties[PROPERTY_ID]
             }
             data={data}
           />

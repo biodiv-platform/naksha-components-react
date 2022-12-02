@@ -19,6 +19,7 @@
   "list_layers": "List Layers",
   "pending": "Pending",
   "publish": "Publish",
+  "raster_style_not_found": "Style not available for the given layer",
   "remove": "Remove",
   "selected": "Selected",
   "settings": "Settings",
