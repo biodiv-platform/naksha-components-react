@@ -1,4 +1,7 @@
-import { GMAPS_LIBRARIES, mapboxToGmapsViewState } from "@biodiv-platform/naksha-commons";
+import {
+  GMAPS_LIBRARIES,
+  mapboxToGmapsViewState,
+} from "@biodiv-platform/naksha-commons";
 import { Data, GoogleMap, LoadScriptNext } from "@react-google-maps/api";
 import React, { useEffect, useMemo, useReducer, useRef, useState } from "react";
 
@@ -13,6 +16,7 @@ import {
   geometryToGeoJsonFeature,
   toFullGeoJson,
 } from "./utils/geojson";
+import GeojsonImport from "./geojson";
 
 export interface NakshaGmapsDrawProps {
   defaultViewState?;
@@ -163,6 +167,16 @@ const NakshaGmapsDraw = React.forwardRef(
             )}
             {isImport && (
               <NakshaImport
+                InputComponent={importInputComponent || <input />}
+                ButtonComponent={
+                  importButtonComponent || <button children="import" />
+                }
+                addFeature={addFeature}
+              />
+            )}
+
+            {isImport && (
+              <GeojsonImport
                 InputComponent={importInputComponent || <input />}
                 ButtonComponent={
                   importButtonComponent || <button children="import" />
