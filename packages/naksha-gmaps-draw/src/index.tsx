@@ -27,6 +27,7 @@ export interface NakshaGmapsDrawProps {
   isControlled?: boolean;
   isReadOnly?: boolean;
   isImport?: boolean;
+  geojsonImport?: boolean;
   isMultiple?: boolean;
   isAutocomplete?: boolean;
   gmapRegion?;
@@ -53,6 +54,7 @@ const NakshaGmapsDraw = React.forwardRef(
       isReadOnly,
       isMultiple,
       isImport,
+      geojsonImport,
       isAutocomplete,
       gmapRegion,
       autoCompleteRegion,
@@ -169,17 +171,19 @@ const NakshaGmapsDraw = React.forwardRef(
               <NakshaImport
                 InputComponent={importInputComponent || <input />}
                 ButtonComponent={
-                  importButtonComponent || <button children="import" />
+                  importButtonComponent || (
+                    <button children="import cordinates" />
+                  )
                 }
                 addFeature={addFeature}
               />
             )}
 
-            {isImport && (
+            {geojsonImport && (
               <GeojsonImport
                 InputComponent={importInputComponent || <input />}
                 ButtonComponent={
-                  importButtonComponent || <button children="import" />
+                  importButtonComponent || <button children="import geojson" />
                 }
                 addFeature={addFeature}
               />
