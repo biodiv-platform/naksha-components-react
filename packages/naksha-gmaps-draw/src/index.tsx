@@ -17,6 +17,7 @@ import {
   toFullGeoJson,
 } from "./utils/geojson";
 import GeojsonImport from "./geojson";
+import Modal from "react-modal";
 
 export interface NakshaGmapsDrawProps {
   defaultViewState?;
@@ -72,6 +73,26 @@ const NakshaGmapsDraw = React.forwardRef(
     const mapRef = useRef<any>(null);
     const [features, dispatch] = useReducer(featuresReducer, data);
     const [isLoaded, setIsLoaded] = useState<boolean>();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const modalStyles = {
+      content: {
+        maxWidth: "400px",
+        maxHeight: "300px", // Adjust the maximum height as needed
+        margin: "auto",
+        padding: "20px",
+        borderRadius: "8px",
+        boxShadow: "0 0 10px rgba(0, 0, 0, 0.2)",
+      },
+    };
+
+    const openModal = () => {
+      setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+      setIsModalOpen(false);
+    };
 
     const viewPort = useMemo(
       () => mapboxToGmapsViewState(defaultViewState),
@@ -167,27 +188,63 @@ const NakshaGmapsDraw = React.forwardRef(
                 gmapRegion={autoCompleteRegion ?? gmapRegion}
               />
             )}
-            {isImport && (
-              <NakshaImport
-                InputComponent={importInputComponent || <input />}
-                ButtonComponent={
-                  importButtonComponent || (
-                    <button children="import cordinates" />
-                  )
-                }
-                addFeature={addFeature}
-              />
-            )}
-
-            {geojsonImport && (
-              <GeojsonImport
-                InputComponent={importInputComponent || <input />}
-                ButtonComponent={
-                  importButtonComponent || <button children="import geojson" />
-                }
-                addFeature={addFeature}
-              />
-            )}
+            <div style={{ display: "flex", justifyContent: "flex-end" , paddingBottom: "15px"}}>
+              <button
+                onClick={openModal}
+                style={{
+                  padding: "8px 25px", // Adjusted padding
+                  backgroundColor: "#519895", 
+                  color: "white",
+                  border: "none",
+                  borderRadius: "4px",
+                  cursor: "pointer",
+                }}
+              >
+                Import
+              </button>
+            </div>
+            {/* Single Modal containing both NakshaImport and GeojsonImport */}
+            <Modal
+              isOpen={isModalOpen}
+              onRequestClose={closeModal}
+              contentLabel="Import Modal"
+              style={modalStyles}
+            >
+              <div style={{ marginBottom: "10px" }}>
+                <NakshaImport
+                  InputComponent={importInputComponent || <input />}
+                  ButtonComponent={
+                    importButtonComponent || <button>Import Coordinates</button>
+                  }
+                  addFeature={addFeature}
+                />
+              </div>
+              <div>
+                <GeojsonImport
+                  // InputComponent={geojsonInputComponent || <input />}
+                  // ButtonComponent={
+                  //   geojsonButtonComponent || <button>Import Geojson</button>
+                  // }
+                  addFeature={addFeature}
+                />
+              </div>
+              <div style={{ textAlign: "center" }}>
+                <button
+                  onClick={closeModal}
+                  style={{
+                    marginTop: "10px",
+                    padding: "10px",
+                    backgroundColor: "#f44336",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "4px",
+                    cursor: "pointer",
+                  }}
+                >
+                  Close
+                </button>
+              </div>
+            </Modal>
           </div>
           {showTrace && (
             <TraceLocation
