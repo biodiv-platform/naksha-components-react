@@ -12,12 +12,16 @@
     "dist/**"
   ],
   "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "clean": "rm -rf node_modules dist .turbo",
     "build": "tsup src/index.tsx --legacy-output --minify --format esm,cjs --dts --external react",
     "dev": "tsup src/index.tsx --legacy-output --format esm,cjs --watch --dts --external react"
   },
   "peerDependencies": {
     "@react-google-maps/api": "^2.12.0",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "react": ">=18.2.0",
     "react-map-gl": "^7.0.15"
   },
@@ -27,6 +31,10 @@
     "@react-google-maps/api": "^2.12.0",
     "@types/react": "^18.0.13",
     "@types/react-dom": "^18.0.5",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^8.56.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "react": ">=18.2.0",
     "react-map-gl": "^7.0.15",
     "tsup": "^6.1.2",
@@ -34,6 +42,8 @@
   },
   "dependencies": {
     "@biodiv-platform/naksha-commons": "*",
-    "@turf/bbox": "^6.5.0"
+    "@turf/bbox": "^6.5.0",
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "eslint-plugin-simple-import-sort": "^10.0.0"
   }
 }
