@@ -1,27 +1,45 @@
+import { CheckCircleIcon, CloseIcon } from "@chakra-ui/icons";
+import { Box, Flex, Heading, Icon, List, ListItem, Text } from "@chakra-ui/react";
 import React, { useRef, useState } from "react";
+import LocationIcon from "../icons/location"; 
 import { GMAP_FEATURE_TYPES } from "../static/constants";
 
-export default function NakshaImport({
+interface NakshaImportProps {
+  addFeature: (feature: any) => void; 
+  InputComponent: React.ReactElement;
+  ButtonComponent: React.ReactElement;
+}
+
+const NakshaImport: React.FC<NakshaImportProps> = ({
   addFeature,
   InputComponent,
   ButtonComponent,
-}) {
-  const importInputRef = useRef<any>();
+}) => {
+  const importInputRef = useRef<HTMLInputElement>(null);
   const [isPointsValid, setIsPointsValid] = useState(true);
-  const [pointsErrorMessage, setPointsErrorMessage] = useState("");
+  const [uploadStatus, setUploadStatus] = useState("");
+  const [importedPoints, setImportedPoints] = useState<any[]>([]); 
 
   const handleOnAddFeature = () => {
     try {
-      const txtLatLng = importInputRef?.current?.value;
+      const txtLatLng = importInputRef.current?.value ?? '';
+
+      // Check if txtLatLng is not an empty string
+      if (!txtLatLng.trim()) {
+        setIsPointsValid(false);
+        setUploadStatus("Invalid Format. Enter Latitude, Longitude.");
+        return;
+      }
+
       const numLatLng = txtLatLng.split(",").map(Number)?.reverse();
 
       if (!isValidLatLng(numLatLng)) {
         setIsPointsValid(false);
-        setPointsErrorMessage("Invalid point format. Please enter valid latitude and longitude.");
+        setUploadStatus("Invalid Format. Enter Latitude, Longitude.");
         return;
       }
 
-      addFeature({
+      const newFeature = {
         type: GMAP_FEATURE_TYPES.POINT,
         properties: {
           id: new Date().getTime(),
@@ -29,43 +47,78 @@ export default function NakshaImport({
           formatted_address: txtLatLng,
         },
         coordinates: numLatLng,
-      });
+      };
+
+      addFeature(newFeature);
+
+      // Update the list of imported points
+      setImportedPoints((prevPoints) => [...prevPoints, newFeature]);
+
+      // Reset input field
+      if (importInputRef.current) {
+        importInputRef.current.value = "";
+      }
 
       // Reset error state
       setIsPointsValid(true);
-      setPointsErrorMessage("");
+      setUploadStatus("Point added successfully");
     } catch (e) {
-      console.error(e);
-
-      // Set error state
       setIsPointsValid(false);
-      setPointsErrorMessage("Invalid point format. Please enter valid latitude and longitude.");
+    } finally {
+      // Clear messages after 3 seconds
+      setTimeout(() => {
+        setUploadStatus("");
+        setIsPointsValid(true);
+      }, 3000);
     }
   };
 
-  const isValidLatLng = (latLng) => {
-
+  const isValidLatLng = (latLng: number[]): boolean => {
     return (
       Array.isArray(latLng) &&
       latLng.length === 2 &&
       !isNaN(latLng[0]) &&
       !isNaN(latLng[1]) &&
-      typeof latLng[0] === 'number' &&
-      typeof latLng[1] === 'number'
+      typeof latLng[0] === "number" &&
+      typeof latLng[1] === "number"
     );
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
-      {React.cloneElement(InputComponent, { ref: importInputRef })}
-      {!isPointsValid && (
-        <p style={{ color: "red", marginLeft: "10px" }}>{pointsErrorMessage}</p>
+    <Box display="flex" flexDirection="column" alignItems="flex-start">
+      <Heading mb="10px" fontWeight="bold" size="lg">
+        Points
+      </Heading>
+      <Flex alignItems="center">
+        {React.cloneElement(InputComponent, { ref: importInputRef, width: "350px" })}
+        {React.cloneElement(ButtonComponent, { onClick: handleOnAddFeature, type: "button", marginLeft: "10px" })}
+      </Flex>
+
+      {uploadStatus && (
+        <Text fontWeight="bold" color={isPointsValid ? "green" : "red"} mt="10px" display="flex" alignItems="center">
+          {isPointsValid ? (
+            <CheckCircleIcon boxSize={20} mr={2} />
+          ) : (
+            <CloseIcon boxSize={15} color="red.500" mr={2} />
+          )}
+          {uploadStatus}
+        </Text>
       )}
-      {React.cloneElement(ButtonComponent, {
-        onClick: handleOnAddFeature,
-        type: "button",
-        marginLeft: "10px",
-      })}
-    </div>
+      {importedPoints.length > 0 && (
+        <Box mt="10px" pl="20px">
+          <Heading size="sm">Added Points:</Heading>
+          <List styleType="none" padding="0">
+            {importedPoints.map((point) => (
+              <ListItem key={point.properties.id} display="flex" alignItems="center">
+                <Icon as={LocationIcon} color="teal" mr="3px" />
+                {point.properties.name}
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+      )}
+    </Box>
   );
-}
+};
+
+export default NakshaImport;
