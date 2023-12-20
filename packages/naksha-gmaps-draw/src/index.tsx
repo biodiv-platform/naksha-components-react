@@ -2,11 +2,21 @@ import {
   GMAPS_LIBRARIES,
   mapboxToGmapsViewState,
 } from "@biodiv-platform/naksha-commons";
+import { CloseIcon } from "@chakra-ui/icons";
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+} from "@chakra-ui/react";
 import { Data, GoogleMap, LoadScriptNext } from "@react-google-maps/api";
 import React, { useEffect, useMemo, useReducer, useRef, useState } from "react";
 
 import NakshaAutocomplete from "./autocomplete";
 import ClearFeatures from "./features/clear-features";
+import GeojsonImport from "./geojson";
 import NakshaImport from "./import";
 import { ACTION_TYPES, featuresReducer } from "./reducers/features";
 import { GMAP_FEATURE_TYPES, GMAP_OPTIONS } from "./static/constants";
@@ -16,8 +26,6 @@ import {
   geometryToGeoJsonFeature,
   toFullGeoJson,
 } from "./utils/geojson";
-import GeojsonImport from "./geojson";
-import Modal from "react-modal";
 
 export interface NakshaGmapsDrawProps {
   defaultViewState?;
@@ -54,8 +62,6 @@ const NakshaGmapsDraw = React.forwardRef(
       isControlled,
       isReadOnly,
       isMultiple,
-      isImport,
-      geojsonImport,
       isAutocomplete,
       gmapRegion,
       autoCompleteRegion,
@@ -74,25 +80,7 @@ const NakshaGmapsDraw = React.forwardRef(
     const [features, dispatch] = useReducer(featuresReducer, data);
     const [isLoaded, setIsLoaded] = useState<boolean>();
     const [isModalOpen, setIsModalOpen] = useState(false);
-
-    const modalStyles = {
-      content: {
-        maxWidth: "400px",
-        maxHeight: "300px", // Adjust the maximum height as needed
-        margin: "auto",
-        padding: "20px",
-        borderRadius: "8px",
-        boxShadow: "0 0 10px rgba(0, 0, 0, 0.2)",
-      },
-    };
-
-    const openModal = () => {
-      setIsModalOpen(true);
-    };
-
-    const closeModal = () => {
-      setIsModalOpen(false);
-    };
+    const [modalHeight, setModalHeight] = useState("auto"); 
 
     const viewPort = useMemo(
       () => mapboxToGmapsViewState(defaultViewState),
@@ -100,18 +88,15 @@ const NakshaGmapsDraw = React.forwardRef(
     );
 
     const reloadFeatures = () => {
-      // Clear Map
       mapRef.current.state.map.data.forEach(function (feature) {
         mapRef.current.state.map.data.remove(feature);
       });
 
-      // Recalculate GeoJson from features list
       const fullGeoJson = toFullGeoJson(features);
 
       if (fullGeoJson) {
         fullGeoJson && mapRef.current.state.map.data.addGeoJson(fullGeoJson);
 
-        // Calculate bounds from GeoJson
         const bounds = calculateBounds(fullGeoJson);
         bounds && mapRef.current.state.map.fitBounds(bounds);
 
@@ -138,9 +123,6 @@ const NakshaGmapsDraw = React.forwardRef(
       }
     }, [isLoaded, features]);
 
-    /**
-     *  can simulate isControlled if `data` are going to be changed
-     */
     useEffect(() => {
       if (isControlled && JSON.stringify(features) !== JSON.stringify(data)) {
         dispatch({
@@ -169,6 +151,23 @@ const NakshaGmapsDraw = React.forwardRef(
 
     const onMapLoaded = () => setIsLoaded(true);
 
+    const openModal = () => {
+      setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+      setIsModalOpen(false);
+    };
+
+    useEffect(() => {
+      if (isModalOpen) {
+        // Update modal height when it is open
+        const contentHeight =
+          document.getElementById("modal-content")?.offsetHeight;
+        setModalHeight(contentHeight ? `${contentHeight}px` : "auto");
+      }
+    }, [isModalOpen]);
+
     return (
       <LoadScriptNext
         googleMapsApiKey={gmapAccessToken}
@@ -188,12 +187,18 @@ const NakshaGmapsDraw = React.forwardRef(
                 gmapRegion={autoCompleteRegion ?? gmapRegion}
               />
             )}
-            <div style={{ display: "flex", justifyContent: "flex-end" , paddingBottom: "15px"}}>
-              <button
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                paddingBottom: "15px",
+              }}
+            >
+              <Button
                 onClick={openModal}
                 style={{
-                  padding: "8px 25px", // Adjusted padding
-                  backgroundColor: "#519895", 
+                  padding: "8px 25px",
+                  backgroundColor: "#519895",
                   color: "white",
                   border: "none",
                   borderRadius: "4px",
@@ -201,51 +206,99 @@ const NakshaGmapsDraw = React.forwardRef(
                 }}
               >
                 Import
-              </button>
+              </Button>
             </div>
-            {/* Single Modal containing both NakshaImport and GeojsonImport */}
-            <Modal
-              isOpen={isModalOpen}
-              onRequestClose={closeModal}
-              contentLabel="Import Modal"
-              style={modalStyles}
+          </div>
+          <Modal
+            blockScrollOnMount={false}
+            isOpen={isModalOpen}
+            onClose={closeModal}
+            isCentered
+            size="auto"
+          >
+            <ModalOverlay />
+            <ModalContent
+              style={{
+                maxWidth: "550px",
+                height: modalHeight, // Set height to "auto" initially
+                margin: "auto",
+                borderRadius: "8px",
+                boxShadow: "0 0 10px rgba(0, 0, 0, 0.2)",
+                backgroundColor: "#fff",
+                display: "flex", // Use flex to control the layout
+                flexDirection: "column", // Arrange children in a column
+                padding: "30px 30px 30px 30px",
+                backdropFilter: "blur(5px)",
+                marginTop: "90px",
+              }}
             >
-              <div style={{ marginBottom: "10px" }}>
-                <NakshaImport
-                  InputComponent={importInputComponent || <input />}
-                  ButtonComponent={
-                    importButtonComponent || <button>Import Coordinates</button>
-                  }
-                  addFeature={addFeature}
-                />
-              </div>
-              <div>
-                <GeojsonImport
-                  // InputComponent={geojsonInputComponent || <input />}
-                  // ButtonComponent={
-                  //   geojsonButtonComponent || <button>Import Geojson</button>
-                  // }
-                  addFeature={addFeature}
-                />
-              </div>
-              <div style={{ textAlign: "center" }}>
-                <button
-                  onClick={closeModal}
+              <ModalHeader
+                style={{
+                  position: "relative",
+                  zIndex: 2, // Set a higher zIndex for the ModalHeader
+                  padding: "10px 0", // Add padding at the top
+                }}
+              >
+                <CloseIcon
                   style={{
-                    marginTop: "10px",
-                    padding: "10px",
-                    backgroundColor: "#f44336",
-                    color: "white",
-                    border: "none",
-                    borderRadius: "4px",
+                    position: "absolute",
+                    top: "-15px",
+                    right: "-17px",
                     cursor: "pointer",
+                    zIndex: 3,
+                  }}
+                  onClick={closeModal}
+                />
+              </ModalHeader>
+              <ModalBody style={{ display: "flex", flexDirection: "column" }}>
+                <table
+                  style={{
+                    width: "100%",
+                    borderCollapse: "collapse",
+                    marginBottom: "16px",
                   }}
                 >
-                  Close
-                </button>
-              </div>
-            </Modal>
-          </div>
+                  <tbody>
+                    <tr>
+                      <td
+                        style={{
+                          padding: "12px",
+                          border: "1px solid #ddd",
+                          backgroundColor: "#f9f9f9",
+                        }}
+                      >
+                        <NakshaImport
+                          InputComponent={importInputComponent || <input />}
+                          ButtonComponent={
+                            importButtonComponent || (
+                              <button>Import Coordinates</button>
+                            )
+                          }
+                          addFeature={addFeature}
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td
+                        style={{
+                          padding: "12px",
+                          border: "1px solid #ddd",
+                          backgroundColor: "#f9f9f9",
+                        }}
+                      >
+                        <GeojsonImport
+                          addFeature={addFeature}
+                          ButtonComponent={
+                            importButtonComponent || <button>Add</button>
+                          }
+                        />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </ModalBody>
+            </ModalContent>
+          </Modal>
           {showTrace && (
             <TraceLocation
               TraceButtonComponent={
@@ -288,4 +341,4 @@ const NakshaGmapsDraw = React.forwardRef(
   }
 );
 
-export { NakshaGmapsDraw, GMAP_FEATURE_TYPES };
+export { GMAP_FEATURE_TYPES, NakshaGmapsDraw };
