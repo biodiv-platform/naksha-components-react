@@ -78,7 +78,7 @@ const NakshaGmapsDraw = React.forwardRef(
     ref: any
   ) => {
     const mapRef = useRef<any>(null);
-    const modalContentRef = useRef<any>(null); /
+    const modalContentRef = useRef<any>(null);
     const [features, dispatch] = useReducer(featuresReducer, data);
     const [isLoaded, setIsLoaded] = useState<boolean>();
     const { isOpen, onOpen, onClose } = useDisclosure(); // Initialize useDisclosure
