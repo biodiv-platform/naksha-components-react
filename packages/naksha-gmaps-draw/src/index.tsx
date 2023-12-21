@@ -4,6 +4,7 @@ import {
 } from "@biodiv-platform/naksha-commons";
 import { CloseIcon } from "@chakra-ui/icons";
 import {
+  Box,
   Button,
   Modal,
   ModalBody,
@@ -14,6 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { Data, GoogleMap, LoadScriptNext } from "@react-google-maps/api";
 import React, { useEffect, useMemo, useReducer, useRef, useState } from "react";
+import { Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
 
 import NakshaAutocomplete from "./autocomplete";
 import ClearFeatures from "./features/clear-features";
@@ -254,51 +256,50 @@ const NakshaGmapsDraw = React.forwardRef(
                 />
               </ModalHeader>
               <ModalBody style={{ display: "flex", flexDirection: "column" }}>
-                <table
-                  style={{
-                    width: "100%",
-                    borderCollapse: "collapse",
-                    marginBottom: "16px",
-                  }}
-                >
-                  <tbody>
-                    <tr>
-                      <td
-                        style={{
-                          padding: "12px",
-                          border: "1px solid #ddd",
-                          backgroundColor: "#f9f9f9",
-                        }}
-                      >
-                        <NakshaImport
-                          InputComponent={importInputComponent || <input />}
-                          ButtonComponent={
-                            importButtonComponent || (
-                              <button>Import Coordinates</button>
-                            )
-                          }
-                          addFeature={addFeature}
-                        />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td
-                        style={{
-                          padding: "12px",
-                          border: "1px solid #ddd",
-                          backgroundColor: "#f9f9f9",
-                        }}
-                      >
-                        <GeojsonImport
-                          addFeature={addFeature}
-                          ButtonComponent={
-                            importButtonComponent || <button>Add</button>
-                          }
-                        />
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                <Table variant="striped" colorScheme="teal">
+                  <Tbody>
+                    <Tr>
+                      <Td>
+                        <Box
+                          borderWidth="1px"
+                          borderRadius="lg"
+                          p="4"
+                          mb="20"
+                          pb="20"
+                          pt="10"
+                        >
+                          <NakshaImport
+                            InputComponent={importInputComponent || <input />}
+                            ButtonComponent={
+                              importButtonComponent || (
+                                <Button>Import Coordinates</Button>
+                              )
+                            }
+                            addFeature={addFeature}
+                          />
+                        </Box>
+                      </Td>
+                    </Tr>
+                    <Tr>
+                      <Td>
+                        <Box
+                          borderWidth="1px"
+                          borderRadius="lg"
+                          p="4"
+                          mb="4" // Increased margin-bottom
+                          pb="20"
+                        >
+                          <GeojsonImport
+                            addFeature={addFeature}
+                            ButtonComponent={
+                              importButtonComponent || <Button>Add</Button>
+                            }
+                          />
+                        </Box>
+                      </Td>
+                    </Tr>
+                  </Tbody>
+                </Table>
               </ModalBody>
             </ModalContent>
           </Modal>
