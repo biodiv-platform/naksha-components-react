@@ -10,6 +10,7 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
+  useDisclosure, // Import useDisclosure hook
 } from "@chakra-ui/react";
 import { Data, GoogleMap, LoadScriptNext } from "@react-google-maps/api";
 import React, { useEffect, useMemo, useReducer, useRef, useState } from "react";
@@ -79,8 +80,9 @@ const NakshaGmapsDraw = React.forwardRef(
     const mapRef = useRef<any>(null);
     const [features, dispatch] = useReducer(featuresReducer, data);
     const [isLoaded, setIsLoaded] = useState<boolean>();
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const { isOpen, onOpen, onClose } = useDisclosure(); // Initialize useDisclosure
     const [modalHeight, setModalHeight] = useState("auto"); 
+
 
     const viewPort = useMemo(
       () => mapboxToGmapsViewState(defaultViewState),
@@ -88,6 +90,7 @@ const NakshaGmapsDraw = React.forwardRef(
     );
 
     const reloadFeatures = () => {
+       // Clear Map
       mapRef.current.state.map.data.forEach(function (feature) {
         mapRef.current.state.map.data.remove(feature);
       });
@@ -152,21 +155,21 @@ const NakshaGmapsDraw = React.forwardRef(
     const onMapLoaded = () => setIsLoaded(true);
 
     const openModal = () => {
-      setIsModalOpen(true);
+      onOpen();
     };
 
     const closeModal = () => {
-      setIsModalOpen(false);
+      onClose();
     };
 
     useEffect(() => {
-      if (isModalOpen) {
+      if (isOpen) {
         // Update modal height when it is open
         const contentHeight =
           document.getElementById("modal-content")?.offsetHeight;
         setModalHeight(contentHeight ? `${contentHeight}px` : "auto");
       }
-    }, [isModalOpen]);
+    }, [isOpen]);
 
     return (
       <LoadScriptNext
@@ -211,7 +214,7 @@ const NakshaGmapsDraw = React.forwardRef(
           </div>
           <Modal
             blockScrollOnMount={false}
-            isOpen={isModalOpen}
+            isOpen={isOpen}
             onClose={closeModal}
             isCentered
             size="auto"
@@ -235,7 +238,7 @@ const NakshaGmapsDraw = React.forwardRef(
               <ModalHeader
                 style={{
                   position: "relative",
-                  zIndex: 2, // Set a higher zIndex for the ModalHeader
+                  zIndex: 2,// Set a higher zIndex for the ModalHeader
                   padding: "10px 0", // Add padding at the top
                 }}
               >
