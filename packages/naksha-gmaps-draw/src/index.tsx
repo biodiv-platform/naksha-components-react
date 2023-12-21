@@ -183,7 +183,7 @@ const NakshaGmapsDraw = React.forwardRef(
         }
       >
         <>
-          <div className="map-toolbar" style={{ display: "flex" }}>
+          <Box className="map-toolbar" display="flex">
             {isAutocomplete && (
               <NakshaAutocomplete
                 InputComponent={autocompleteComponent || <input />}
@@ -191,28 +191,20 @@ const NakshaGmapsDraw = React.forwardRef(
                 gmapRegion={autoCompleteRegion ?? gmapRegion}
               />
             )}
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "flex-end",
-                paddingBottom: "15px",
-              }}
-            >
+            <Box display="flex" justifyContent="flex-end" paddingBottom="15px">
               <Button
                 onClick={openModal}
-                style={{
-                  padding: "8px 25px",
-                  backgroundColor: "#519895",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "4px",
-                  cursor: "pointer",
-                }}
+                padding="8px 25px"
+                backgroundColor="#519895"
+                color="white"
+                border="none"
+                borderRadius="4px"
+                cursor="pointer"
               >
                 Import
               </Button>
-            </div>
-          </div>
+            </Box>
+          </Box>
           <Modal
             blockScrollOnMount={false}
             isOpen={isOpen}
@@ -222,40 +214,30 @@ const NakshaGmapsDraw = React.forwardRef(
           >
             <ModalOverlay />
             <ModalContent
-              ref={modalContentRef} // Set ref for modal content
-              style={{
-                maxWidth: "550px",
-                height: modalHeight, // Set height to "auto" initially
-                margin: "auto",
-                borderRadius: "8px",
-                boxShadow: "0 0 10px rgba(0, 0, 0, 0.2)",
-                backgroundColor: "#fff",
-                display: "flex", // Use flex to control the layout
-                flexDirection: "column", // Arrange children in a column
-                padding: "30px 30px 30px 30px",
-                backdropFilter: "blur(5px)",
-                marginTop: "90px",
-              }}
+              ref={modalContentRef}
+              maxWidth="550px"
+              height={modalHeight}
+              margin="auto"
+              borderRadius="8px"
+              boxShadow="0 0 10px rgba(0, 0, 0, 0.2)"
+              backgroundColor="#fff"
+              display="flex"
+              flexDirection="column"
+              padding="30px"
+              backdropFilter="blur(5px)"
+              marginTop="90px"
             >
-              <ModalHeader
-                style={{
-                  position: "relative",
-                  zIndex: 2,// Set a higher zIndex for the ModalHeader
-                  padding: "10px 0", // Add padding at the top
-                }}
-              >
+              <ModalHeader position="relative" zIndex={2} padding="10px 0">
                 <CloseIcon
-                  style={{
-                    position: "absolute",
-                    top: "-15px",
-                    right: "-17px",
-                    cursor: "pointer",
-                    zIndex: 3,
-                  }}
+                  position="absolute"
+                  top="-15px"
+                  right="-17px"
+                  cursor="pointer"
+                  zIndex={3}
                   onClick={closeModal}
                 />
               </ModalHeader>
-              <ModalBody style={{ display: "flex", flexDirection: "column" }}>
+              <ModalBody display="flex" flexDirection="column">
                 <Table variant="striped" colorScheme="teal">
                   <Tbody>
                     <Tr>
@@ -286,7 +268,7 @@ const NakshaGmapsDraw = React.forwardRef(
                           borderWidth="1px"
                           borderRadius="lg"
                           p="4"
-                          mb="4" // Increased margin-bottom
+                          mb="4"
                           pb="20"
                         >
                           <GeojsonImport
