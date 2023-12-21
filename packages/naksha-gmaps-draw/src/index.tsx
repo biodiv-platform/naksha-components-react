@@ -10,7 +10,7 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
-  useDisclosure, // Import useDisclosure hook
+  useDisclosure,
 } from "@chakra-ui/react";
 import { Data, GoogleMap, LoadScriptNext } from "@react-google-maps/api";
 import React, { useEffect, useMemo, useReducer, useRef, useState } from "react";
@@ -78,11 +78,11 @@ const NakshaGmapsDraw = React.forwardRef(
     ref: any
   ) => {
     const mapRef = useRef<any>(null);
+    const modalContentRef = useRef<any>(null); /
     const [features, dispatch] = useReducer(featuresReducer, data);
     const [isLoaded, setIsLoaded] = useState<boolean>();
     const { isOpen, onOpen, onClose } = useDisclosure(); // Initialize useDisclosure
-    const [modalHeight, setModalHeight] = useState("auto"); 
-
+    const [modalHeight, setModalHeight] = useState("auto");
 
     const viewPort = useMemo(
       () => mapboxToGmapsViewState(defaultViewState),
@@ -90,7 +90,7 @@ const NakshaGmapsDraw = React.forwardRef(
     );
 
     const reloadFeatures = () => {
-       // Clear Map
+      // Clear Map
       mapRef.current.state.map.data.forEach(function (feature) {
         mapRef.current.state.map.data.remove(feature);
       });
@@ -164,9 +164,8 @@ const NakshaGmapsDraw = React.forwardRef(
 
     useEffect(() => {
       if (isOpen) {
-        // Update modal height when it is open
-        const contentHeight =
-          document.getElementById("modal-content")?.offsetHeight;
+        // Update modal height when it is open using useRef
+        const contentHeight = modalContentRef.current?.offsetHeight;
         setModalHeight(contentHeight ? `${contentHeight}px` : "auto");
       }
     }, [isOpen]);
@@ -221,6 +220,7 @@ const NakshaGmapsDraw = React.forwardRef(
           >
             <ModalOverlay />
             <ModalContent
+              ref={modalContentRef} // Set ref for modal content
               style={{
                 maxWidth: "550px",
                 height: modalHeight, // Set height to "auto" initially
