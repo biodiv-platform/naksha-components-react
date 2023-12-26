@@ -1,16 +1,28 @@
 import { CheckCircleIcon, CloseIcon } from "@chakra-ui/icons";
-import { Box, Flex, Heading, Icon, List, ListItem, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Heading,
+  Icon,
+  List,
+  ListItem,
+  Text,
+} from "@chakra-ui/react";
 import React, { useRef, useState } from "react";
-import LocationIcon from "../icons/location"; 
-import { GMAP_FEATURE_TYPES } from "../static/constants";
+import LocationIcon from "../icons/location";
+import {
+  GMAP_FEATURE_TYPES,
+  INVALID_FORMAT_MESSAGE,
+  POINT_ADDED_MESSAGE,
+} from "../static/constants";
 
 interface NakshaImportProps {
-  addFeature: (feature: any) => void; 
+  addFeature: (feature: any) => void;
   InputComponent: React.ReactElement;
   ButtonComponent: React.ReactElement;
 }
 
-const NakshaImport: React.FC<NakshaImportProps> = ({
+const NakshaImport = ({
   addFeature,
   InputComponent,
   ButtonComponent,
@@ -18,16 +30,15 @@ const NakshaImport: React.FC<NakshaImportProps> = ({
   const importInputRef = useRef<HTMLInputElement>(null);
   const [isPointsValid, setIsPointsValid] = useState(true);
   const [uploadStatus, setUploadStatus] = useState("");
-  const [importedPoints, setImportedPoints] = useState<any[]>([]); 
+  const [importedPoints, setImportedPoints] = useState<any[]>([]);
 
   const handleOnAddFeature = () => {
     try {
       const txtLatLng = importInputRef.current?.value ?? '';
 
-      // Check if txtLatLng is not an empty string
       if (!txtLatLng.trim()) {
         setIsPointsValid(false);
-        setUploadStatus("Invalid Format. Enter Latitude, Longitude.");
+        setUploadStatus(INVALID_FORMAT_MESSAGE);
         return;
       }
 
@@ -35,7 +46,7 @@ const NakshaImport: React.FC<NakshaImportProps> = ({
 
       if (!isValidLatLng(numLatLng)) {
         setIsPointsValid(false);
-        setUploadStatus("Invalid Format. Enter Latitude, Longitude.");
+        setUploadStatus(INVALID_FORMAT_MESSAGE);
         return;
       }
 
@@ -51,21 +62,17 @@ const NakshaImport: React.FC<NakshaImportProps> = ({
 
       addFeature(newFeature);
 
-      // Update the list of imported points
       setImportedPoints((prevPoints) => [...prevPoints, newFeature]);
 
-      // Reset input field
       if (importInputRef.current) {
         importInputRef.current.value = "";
       }
 
-      // Reset error state
       setIsPointsValid(true);
-      setUploadStatus("Point added successfully");
+      setUploadStatus(POINT_ADDED_MESSAGE);
     } catch (e) {
       setIsPointsValid(false);
     } finally {
-      // Clear messages after 3 seconds
       setTimeout(() => {
         setUploadStatus("");
         setIsPointsValid(true);
