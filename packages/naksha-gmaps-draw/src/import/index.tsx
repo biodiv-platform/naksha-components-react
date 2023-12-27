@@ -28,8 +28,7 @@ const NakshaImport = ({
   ButtonComponent,
 }) => {
   const importInputRef = useRef<HTMLInputElement>(null);
-  const [isPointsValid, setIsPointsValid] = useState(true);
-  const [uploadStatus, setUploadStatus] = useState("");
+  const [isValidPoints, setIsValidPoints] = useState<boolean | undefined>(undefined);
   const [importedPoints, setImportedPoints] = useState<any[]>([]);
 
   const handleOnAddFeature = () => {
@@ -37,16 +36,14 @@ const NakshaImport = ({
       const txtLatLng = importInputRef.current?.value ?? '';
 
       if (!txtLatLng.trim()) {
-        setIsPointsValid(false);
-        setUploadStatus(INVALID_FORMAT_MESSAGE);
+        setIsValidPoints(false);
         return;
       }
 
       const numLatLng = txtLatLng.split(",").map(Number)?.reverse();
 
       if (!isValidLatLng(numLatLng)) {
-        setIsPointsValid(false);
-        setUploadStatus(INVALID_FORMAT_MESSAGE);
+        setIsValidPoints(false);
         return;
       }
 
@@ -68,14 +65,12 @@ const NakshaImport = ({
         importInputRef.current.value = "";
       }
 
-      setIsPointsValid(true);
-      setUploadStatus(POINT_ADDED_MESSAGE);
+      setIsValidPoints(true);
     } catch (e) {
-      setIsPointsValid(false);
+      setIsValidPoints(false);
     } finally {
       setTimeout(() => {
-        setUploadStatus("");
-        setIsPointsValid(true);
+        setIsValidPoints(undefined);
       }, 3000);
     }
   };
@@ -101,14 +96,14 @@ const NakshaImport = ({
         {React.cloneElement(ButtonComponent, { onClick: handleOnAddFeature, type: "button", marginLeft: "10px" })}
       </Flex>
 
-      {uploadStatus && (
-        <Text fontWeight="bold" color={isPointsValid ? "green" : "red"} mt="10px" display="flex" alignItems="center">
-          {isPointsValid ? (
+      {isValidPoints !== undefined && (
+        <Text fontWeight="bold" color={isValidPoints ? "green" : "red"} mt="10px" display="flex" alignItems="center">
+          {isValidPoints ? (
             <CheckCircleIcon boxSize={20} mr={2} />
           ) : (
             <CloseIcon boxSize={15} color="red.500" mr={2} />
           )}
-          {uploadStatus}
+          {isValidPoints ? POINT_ADDED_MESSAGE : INVALID_FORMAT_MESSAGE}
         </Text>
       )}
       {importedPoints.length > 0 && (
