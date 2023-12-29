@@ -1,25 +1,9 @@
-import {
-  GMAPS_LIBRARIES,
-  mapboxToGmapsViewState,
-} from "@biodiv-platform/naksha-commons";
-import { CloseIcon } from "@chakra-ui/icons";
-import {
-  Box,
-  Button,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalHeader,
-  ModalOverlay,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { GMAPS_LIBRARIES, mapboxToGmapsViewState } from "@biodiv-platform/naksha-commons";
 import { Data, GoogleMap, LoadScriptNext } from "@react-google-maps/api";
 import React, { useEffect, useMemo, useReducer, useRef, useState } from "react";
-import { Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
 
 import NakshaAutocomplete from "./autocomplete";
 import ClearFeatures from "./features/clear-features";
-import GeojsonImport from "./geojson";
 import NakshaImport from "./import";
 import { ACTION_TYPES, featuresReducer } from "./reducers/features";
 import { GMAP_FEATURE_TYPES, GMAP_OPTIONS } from "./static/constants";
@@ -39,7 +23,6 @@ export interface NakshaGmapsDrawProps {
   isControlled?: boolean;
   isReadOnly?: boolean;
   isImport?: boolean;
-  geojsonImport?: boolean;
   isMultiple?: boolean;
   isAutocomplete?: boolean;
   gmapRegion?;
@@ -65,6 +48,7 @@ const NakshaGmapsDraw = React.forwardRef(
       isControlled,
       isReadOnly,
       isMultiple,
+      isImport,
       isAutocomplete,
       gmapRegion,
       autoCompleteRegion,
@@ -80,11 +64,8 @@ const NakshaGmapsDraw = React.forwardRef(
     ref: any
   ) => {
     const mapRef = useRef<any>(null);
-    const modalContentRef = useRef<any>(null);
     const [features, dispatch] = useReducer(featuresReducer, data);
     const [isLoaded, setIsLoaded] = useState<boolean>();
-    const { isOpen, onOpen, onClose } = useDisclosure(); // Initialize useDisclosure
-    const [modalHeight, setModalHeight] = useState("auto");
 
     const viewPort = useMemo(
       () => mapboxToGmapsViewState(defaultViewState),
@@ -97,11 +78,13 @@ const NakshaGmapsDraw = React.forwardRef(
         mapRef.current.state.map.data.remove(feature);
       });
 
+      // Recalculate GeoJson from features list
       const fullGeoJson = toFullGeoJson(features);
 
       if (fullGeoJson) {
         fullGeoJson && mapRef.current.state.map.data.addGeoJson(fullGeoJson);
 
+        // Calculate bounds from GeoJson
         const bounds = calculateBounds(fullGeoJson);
         bounds && mapRef.current.state.map.fitBounds(bounds);
 
@@ -128,6 +111,9 @@ const NakshaGmapsDraw = React.forwardRef(
       }
     }, [isLoaded, features]);
 
+    /**
+     *  can simulate isControlled if `data` are going to be changed
+     */
     useEffect(() => {
       if (isControlled && JSON.stringify(features) !== JSON.stringify(data)) {
         dispatch({
@@ -156,22 +142,6 @@ const NakshaGmapsDraw = React.forwardRef(
 
     const onMapLoaded = () => setIsLoaded(true);
 
-    const openModal = () => {
-      onOpen();
-    };
-
-    const closeModal = () => {
-      onClose();
-    };
-
-    useEffect(() => {
-      if (isOpen) {
-        // Update modal height when it is open using useRef
-        const contentHeight = modalContentRef.current?.offsetHeight;
-        setModalHeight(contentHeight ? `${contentHeight}px` : "auto");
-      }
-    }, [isOpen]);
-
     return (
       <LoadScriptNext
         googleMapsApiKey={gmapAccessToken}
@@ -183,7 +153,7 @@ const NakshaGmapsDraw = React.forwardRef(
         }
       >
         <>
-          <Box className="map-toolbar" display="flex">
+          <div className="map-toolbar" style={{ display: "flex" }}>
             {isAutocomplete && (
               <NakshaAutocomplete
                 InputComponent={autocompleteComponent || <input />}
@@ -191,100 +161,16 @@ const NakshaGmapsDraw = React.forwardRef(
                 gmapRegion={autoCompleteRegion ?? gmapRegion}
               />
             )}
-            <Box display="flex" justifyContent="flex-end" paddingBottom="15px">
-              <Button
-                onClick={openModal}
-                padding="8px 25px"
-                backgroundColor="#519895"
-                color="white"
-                border="none"
-                borderRadius="4px"
-                cursor="pointer"
-              >
-                Import
-              </Button>
-            </Box>
-          </Box>
-          <Modal
-            blockScrollOnMount={false}
-            isOpen={isOpen}
-            onClose={closeModal}
-            isCentered
-            size="auto"
-          >
-            <ModalOverlay />
-            <ModalContent
-              ref={modalContentRef}
-              maxWidth="550px"
-              height={modalHeight}
-              margin="auto"
-              borderRadius="8px"
-              boxShadow="0 0 10px rgba(0, 0, 0, 0.2)"
-              backgroundColor="#fff"
-              display="flex"
-              flexDirection="column"
-              padding="30px"
-              backdropFilter="blur(5px)"
-              marginTop="90px"
-            >
-              <ModalHeader position="relative" zIndex={2} padding="10px 0">
-                <CloseIcon
-                  position="absolute"
-                  top="-15px"
-                  right="-17px"
-                  cursor="pointer"
-                  zIndex={3}
-                  onClick={closeModal}
-                />
-              </ModalHeader>
-              <ModalBody display="flex" flexDirection="column">
-                <Table variant="striped" colorScheme="teal">
-                  <Tbody>
-                    <Tr>
-                      <Td>
-                        <Box
-                          borderWidth="1px"
-                          borderRadius="lg"
-                          p="4"
-                          mb="20"
-                          pb="20"
-                          pt="10"
-                        >
-                          <NakshaImport
-                            InputComponent={importInputComponent || <input />}
-                            ButtonComponent={
-                              importButtonComponent || (
-                                <Button>Import Coordinates</Button>
-                              )
-                            }
-                            addFeature={addFeature}
-                          />
-                        </Box>
-                      </Td>
-                    </Tr>
-                    <Tr>
-                      <Td>
-                        <Box
-                          borderWidth="1px"
-                          borderRadius="lg"
-                          p="4"
-                          mb="4"
-                          pb="20"
-                        >
-                          <GeojsonImport
-                            addFeature={addFeature}
-                            ButtonComponent={
-                              importButtonComponent || <Button>Add</Button>
-                            }
-                          />
-                        </Box>
-                      </Td>
-                    </Tr>
-                  </Tbody>
-                </Table>
-              </ModalBody>
-            </ModalContent>
-          </Modal>
+            {isImport && (
+              <NakshaImport
+                InputComponent={importInputComponent || <input />}
+                ButtonComponent={
+                  importButtonComponent || <button children="import" />
+                }
+                addFeature={addFeature}
+              />
+            )}
+          </div>
           {showTrace && (
             <TraceLocation
               TraceButtonComponent={
@@ -327,4 +213,4 @@ const NakshaGmapsDraw = React.forwardRef(
   }
 );
 
-export { GMAP_FEATURE_TYPES, NakshaGmapsDraw };
+export { NakshaGmapsDraw, GMAP_FEATURE_TYPES };
