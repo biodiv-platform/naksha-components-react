@@ -1,4 +1,7 @@
-import { GMAPS_LIBRARIES, mapboxToGmapsViewState } from "@biodiv-platform/naksha-commons";
+import {
+  GMAPS_LIBRARIES,
+  mapboxToGmapsViewState,
+} from "@biodiv-platform/naksha-commons";
 import { Data, GoogleMap, LoadScriptNext } from "@react-google-maps/api";
 import React, { useEffect, useMemo, useReducer, useRef, useState } from "react";
 
@@ -13,6 +16,7 @@ import {
   geometryToGeoJsonFeature,
   toFullGeoJson,
 } from "./utils/geojson";
+import TestingImport from "./test";
 
 export interface NakshaGmapsDrawProps {
   defaultViewState?;
@@ -35,6 +39,9 @@ export interface NakshaGmapsDrawProps {
   traceButtonComponent?;
   maxZoom?;
   options?;
+  importModalComponent?;
+  isOpen?;
+  onClose?;
 }
 
 const NakshaGmapsDraw = React.forwardRef(
@@ -60,6 +67,9 @@ const NakshaGmapsDraw = React.forwardRef(
       traceButtonComponent,
       maxZoom,
       options,
+      importModalComponent,
+      isOpen,
+      onClose,
     }: NakshaGmapsDrawProps,
     ref: any
   ) => {
@@ -154,14 +164,14 @@ const NakshaGmapsDraw = React.forwardRef(
       >
         <>
           <div className="map-toolbar" style={{ display: "flex" }}>
-            {isAutocomplete && (
+            {/* {isAutocomplete && (
               <NakshaAutocomplete
                 InputComponent={autocompleteComponent || <input />}
                 addFeature={addFeature}
                 gmapRegion={autoCompleteRegion ?? gmapRegion}
               />
-            )}
-            {isImport && (
+            )} */}
+            {/* {isImport && (
               <NakshaImport
                 InputComponent={importInputComponent || <input />}
                 ButtonComponent={
@@ -169,7 +179,22 @@ const NakshaGmapsDraw = React.forwardRef(
                 }
                 addFeature={addFeature}
               />
+            )} */}
+
+            {isImport && (
+                <TestingImport
+                ButtonComponent={
+                  importButtonComponent || <button children="import" />
+                }
+                ModalComponent={
+                  importModalComponent &&
+                  React.cloneElement(importModalComponent, { isOpen, onClose })
+                }
+                InputComponent={importInputComponent || <input />}
+                addFeature={addFeature}
+              />
             )}
+
           </div>
           {showTrace && (
             <TraceLocation
