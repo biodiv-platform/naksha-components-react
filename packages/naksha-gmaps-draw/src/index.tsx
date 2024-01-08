@@ -42,6 +42,8 @@ export interface NakshaGmapsDrawProps {
   importModalComponent?;
   isOpen?;
   onClose?;
+  importButtonComponentModal?;
+  importDeteteIcon?;
 }
 
 const NakshaGmapsDraw = React.forwardRef(
@@ -70,6 +72,8 @@ const NakshaGmapsDraw = React.forwardRef(
       importModalComponent,
       isOpen,
       onClose,
+      importButtonComponentModal,
+      importDeteteIcon,
     }: NakshaGmapsDrawProps,
     ref: any
   ) => {
@@ -163,39 +167,34 @@ const NakshaGmapsDraw = React.forwardRef(
         }
       >
         <>
-          <div className="map-toolbar" style={{ display: "flex" }}>
-            {/* {isAutocomplete && (
-              <NakshaAutocomplete
-                InputComponent={autocompleteComponent || <input />}
-                addFeature={addFeature}
-                gmapRegion={autoCompleteRegion ?? gmapRegion}
-              />
-            )} */}
-            {/* {isImport && (
-              <NakshaImport
-                InputComponent={importInputComponent || <input />}
-                ButtonComponent={
-                  importButtonComponent || <button children="import" />
-                }
-                addFeature={addFeature}
-              />
-            )} */}
+        <div style={{ display: "flex" }}>
+    {isAutocomplete && (
+      <div style={{ width: "500px" }}>
+      <NakshaAutocomplete
+        InputComponent={autocompleteComponent || <input />}
+        addFeature={addFeature}
+        gmapRegion={autoCompleteRegion ?? gmapRegion}
+      />
+    </div>
+    )}
 
-            {isImport && (
-                <TestingImport
-                ButtonComponent={
-                  importButtonComponent || <button children="import" />
-                }
-                ModalComponent={
-                  importModalComponent &&
-                  React.cloneElement(importModalComponent, { isOpen, onClose })
-                }
-                InputComponent={importInputComponent || <input />}
-                addFeature={addFeature}
-              />
-            )}
-
-          </div>
+    <div style={{ flex: "1" }}></div> {/* Use flex: "1" to push TestingImport to the right */}
+    <TestingImport
+      ButtonComponent={
+        importButtonComponent || <button children="add" />
+      }
+      ModalComponent={
+        importModalComponent &&
+        React.cloneElement(importModalComponent, { isOpen, onClose })
+      }
+      InputComponent={importInputComponent || <input />}
+      addFeature={addFeature}
+      ButtonComponentModal={
+        importButtonComponentModal || <button children="add" />
+      }
+      DeteteIcon={importDeteteIcon}
+    />
+  </div>
           {showTrace && (
             <TraceLocation
               TraceButtonComponent={
