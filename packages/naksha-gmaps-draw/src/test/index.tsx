@@ -9,7 +9,11 @@ export default function TestingImport({
   addFeature,
   InputComponent,
   ButtonComponentModal,
-  DeteteIcon,
+  DeleteIcon,
+  LocationIcon,
+  FileIcon,
+  SuccessIcon,
+  FailureIcon,
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -31,13 +35,19 @@ export default function TestingImport({
             addFeature={addFeature}
             InputComponent={InputComponent}
             ButtonComponent={ButtonComponent}
+            LocationIcon={LocationIcon}
+            SuccessIcon={SuccessIcon}
+            FailureIcon={FailureIcon}
           />
         ),
         geoJSONImport: (
           <GeojsonImport
             addFeature={addFeature}
             ButtonComponent={ButtonComponent}
-            DeleteIcon={DeteteIcon}
+            DeleteIcon={DeleteIcon}
+            FileIcon={FileIcon}
+            SuccessIcon={SuccessIcon}
+            FailureIcon={FailureIcon}
           />
         ),
       })}

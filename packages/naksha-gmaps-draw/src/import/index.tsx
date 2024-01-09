@@ -5,12 +5,18 @@ interface NakshaImportProps {
   addFeature: (feature: any) => void; // Adjust the type as per your feature structure
   InputComponent: React.ReactElement;
   ButtonComponent: React.ReactElement;
+  LocationIcon: React.ReactElement;
+  SuccessIcon: React.ReactElement;
+  FailureIcon: React.ReactElement;
 }
 
 const NakshaImport: React.FC<NakshaImportProps> = ({
   addFeature,
   InputComponent,
   ButtonComponent,
+  LocationIcon,
+  SuccessIcon,
+  FailureIcon,
 }) => {
   const importInputRef = useRef<HTMLInputElement>(null);
   const [isPointsValid, setIsPointsValid] = useState(true);
@@ -19,7 +25,7 @@ const NakshaImport: React.FC<NakshaImportProps> = ({
 
   const handleOnAddFeature = () => {
     try {
-      const txtLatLng = importInputRef.current?.value ?? '';
+      const txtLatLng = importInputRef.current?.value ?? "";
 
       // Check if txtLatLng is not an empty string
       if (!txtLatLng.trim()) {
@@ -82,37 +88,73 @@ const NakshaImport: React.FC<NakshaImportProps> = ({
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
-      <h2 style={{ marginBottom: "10px", fontWeight: "bold", fontSize: "1.25rem" }}>Points</h2>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "flex-start",
+      }}
+    >
+      <h1
+        style={{
+          marginBottom: "10px",
+          fontWeight: "bold",
+          fontSize: "1.25rem",
+        }}
+      >
+        Point
+      </h1>
       <div style={{ display: "flex", alignItems: "center" }}>
-        {React.cloneElement(InputComponent, { ref: importInputRef, width: "300px" })}
-        {React.cloneElement(ButtonComponent, { onClick: handleOnAddFeature, type: "button", marginLeft: "10px" })}
+        {React.cloneElement(InputComponent, {
+          ref: importInputRef,
+          width: "300px",
+        })}
+        {React.cloneElement(ButtonComponent, {
+          onClick: handleOnAddFeature,
+          type: "button",
+          marginLeft: "10px",
+        })}
       </div>
 
       {uploadStatus && (
-        <div style={{ fontWeight: "bold", color: isPointsValid ? "green" : "red", marginTop: "10px", display: "flex", alignItems: "center" }}>
+        <div
+          style={{
+            fontWeight: "bold",
+            color: isPointsValid ? "green" : "red",
+            marginTop: "10px",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
           {isPointsValid ? (
-            <span style={{ marginRight: "5px", fontSize: "1.25rem" }}>✓</span>
+            <span style={{ marginRight: "5px", fontSize: "1.25rem" }}>
+              {React.cloneElement(SuccessIcon, { boxSize: 6 })}
+            </span>
           ) : (
-            <span style={{ marginRight: "5px", fontSize: "1.25rem", color: "red" }}>✕</span>
+            <span
+              style={{ marginRight: "5px", fontSize: "1.25rem", color: "red" }}
+            >
+              {React.cloneElement(FailureIcon, { boxSize: 4 })}
+            </span>
           )}
           {uploadStatus}
         </div>
       )}
-      {importedPoints.length > 0 && (
-        <div style={{ marginTop: "10px", paddingLeft: "20px" }}>
-          <h3 style={{ fontSize: "1rem", fontWeight: "bold" }}>Added Points:</h3>
-          <ul style={{ listStyleType: "none", padding: "0" }}>
-            {importedPoints.map((point) => (
-              <li key={point.properties.id} style={{ display: "flex", alignItems: "center" }}>
-                <span style={{ marginTop: "10px", overflow: "hidden", whiteSpace: "pre-wrap", textOverflow: "ellipsis", maxWidth: "300px" }}>
-                  {point.properties.name}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+     {importedPoints.length > 0 && (
+  <div style={{ marginTop: "10px", paddingLeft: "15px" }}>
+    <div style={{ fontSize: "sm" }}>Added Points:</div>
+    <ul style={{ listStyleType: "none", padding: "0" }}>
+      {importedPoints.map((point) => (
+        <li key={point.properties.id} style={{ display: "flex", alignItems: "center", marginBottom: "5px" }}>
+          {React.cloneElement(LocationIcon, { boxSize: 6, marginRight: 2, color: 'teal' })}
+          <span style={{ overflow: "hidden", whiteSpace: "pre-wrap", textOverflow: "ellipsis", maxWidth: "300px" }}>
+            {point.properties.name}
+          </span>
+        </li>
+      ))}
+    </ul>
+  </div>
+)}
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { useDropzone } from "react-dropzone";
 
-const GeojsonImport = ({ addFeature, ButtonComponent,DeleteIcon}) => {
+const GeojsonImport = ({ addFeature, ButtonComponent,FileIcon,SuccessIcon,FailureIcon,DeleteIcon}) => {
   const [isGeoJSONValid, setIsGeoJSONValid] = useState(true);
   const [uploadStatus, setUploadStatus] = useState("");
   const [filesToUpload, setFilesToUpload] = useState([]);
@@ -95,7 +95,15 @@ const GeojsonImport = ({ addFeature, ButtonComponent,DeleteIcon}) => {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", marginTop: "10px" }}>
-      <div style={{ marginBottom: "10px", fontWeight: "bold", fontSize: "lg" }}>GeoJSON</div>
+      <h1
+        style={{
+          marginBottom: "10px",
+          fontWeight: "bold",
+          fontSize: "1.25rem",
+        }}
+      >
+        GeoJSON
+      </h1>
 
       <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
         <div
@@ -122,8 +130,8 @@ const GeojsonImport = ({ addFeature, ButtonComponent,DeleteIcon}) => {
                   {filesToUpload[0].name}
                 </div>
                 <div style={{ color: "red", marginLeft: "10px", marginTop: "10px", cursor: "pointer" }} onClick={removeFile}>
-                  <DeleteIcon/>
-                </div>
+                {React.cloneElement(DeleteIcon, { boxSize: 6 }) }
+                  </div>
               </div>
             </div>
           ) : (
@@ -145,9 +153,13 @@ const GeojsonImport = ({ addFeature, ButtonComponent,DeleteIcon}) => {
       {uploadStatus && (
         <div style={{ fontWeight: "bold", color: isGeoJSONValid ? "green" : "red", marginTop: "10px", display: "flex", alignItems: "center" }}>
           {isGeoJSONValid ? (
-            <span style={{ marginRight: "5px", fontSize: "1.25rem" }}>✓</span>
+            <span style={{ marginRight: "5px", fontSize: "1.25rem" }}>
+              {React.cloneElement(SuccessIcon, { boxSize: 6})}
+            </span>
           ) : (
-            <span style={{ marginRight: "5px", fontSize: "1.25rem", color: "red" }}>✕</span>
+            <span style={{ marginRight: "5px", fontSize: "1.25rem", color: "red" }}>
+              {React.cloneElement(FailureIcon, { boxSize: 4 })}
+            </span>
           )}
           {uploadStatus}
         </div>
@@ -156,10 +168,11 @@ const GeojsonImport = ({ addFeature, ButtonComponent,DeleteIcon}) => {
       {/* Display the list of successfully uploaded files */}
       {uploadedFiles.length > 0 && (
         <div style={{ marginTop: "10px", paddingLeft: "15px" }}>
-          <div style={{ fontSize: "sm", marginBottom: "5px" }}>Added GeoJSONs:</div>
+          <div style={{ fontSize: "sm" }}>Added GeoJSONs:</div>
           <ul style={{ listStyleType: "none", padding: "0" }}>
             {uploadedFiles.map((file, index) => (
               <li key={index} style={{ display: "flex", alignItems: "center" }}>
+              {React.cloneElement(FileIcon, { boxSize: 6, marginRight: 2 })}
                 <div style={{ marginTop: "10px", overflow: "hidden", whiteSpace: "pre-wrap", textOverflow: "ellipsis", maxWidth: "300px" }}>
                   {file.name}
                 </div>
