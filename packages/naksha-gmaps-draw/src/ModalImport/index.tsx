@@ -3,7 +3,7 @@ import { GMAP_FEATURE_TYPES } from "../static/constants";
 import NakshaImport from "../import";
 import GeojsonImport from "../geojson";
 
-export default function TestingImport({
+export default function ModalImport({
   ButtonComponent,
   ModalComponent,
   addFeature,

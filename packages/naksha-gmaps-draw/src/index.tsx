@@ -15,7 +15,7 @@ import {
   geometryToGeoJsonFeature,
   toFullGeoJson,
 } from "./utils/geojson";
-import TestingImport from "./test";
+import ModalImport from "./ModalImport";
 
 export interface NakshaGmapsDrawProps {
   defaultViewState?;
@@ -186,7 +186,7 @@ const NakshaGmapsDraw = React.forwardRef(
             )}
 
             <div style={{ flex: "1" }}></div> {/* Use flex: "1" to push TestingImport to the right */}
-            <TestingImport
+            <ModalImport
               ButtonComponent={
                 importButtonComponent || <button children="add" />
               }
