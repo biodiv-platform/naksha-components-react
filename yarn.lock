@@ -36,6 +36,14 @@
   dependencies:
     regenerator-runtime "^0.14.0"
 
+"@biodiv-platform/naksha-gmaps-draw@4.5.2":
+  version "4.5.2"
+  resolved "https://registry.yarnpkg.com/@biodiv-platform/naksha-gmaps-draw/-/naksha-gmaps-draw-4.5.2.tgz#36e619bc1eaddfda859c63f5ef36b6e1edb1bd94"
+  integrity sha512-4+LZZxMQCYbeAG75mhur8DmTPlXMGT4RvxDxVRrfCYZ+m9HFHcoya2yG6Ketp4MgNzePr6zl4hrlZmBgiLYyXg==
+  dependencies:
+    "@biodiv-platform/naksha-commons" "*"
+    "@turf/bbox" "^6.5.0"
+
 "@bumaga/tabs@^0.2.0":
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/@bumaga/tabs/-/tabs-0.2.0.tgz#da4933a668173a223bec34a00e71f4d0840c04f8"
@@ -5052,6 +5060,19 @@ mz@^2.7.0:
     any-promise "^1.0.0"
     object-assign "^4.0.1"
     thenify-all "^1.0.0"
+
+naksha-components-react@*:
+  version "4.5.5"
+  resolved "https://registry.yarnpkg.com/naksha-components-react/-/naksha-components-react-4.5.5.tgz#1a3fa2d1da3ba6974a4f81d1337088ee8ed0c9a0"
+  integrity sha512-gxe1sv9UNIoAjg8uToxAWIJOBdUig31+hPF5PmjQbI7ScZsO6uXFGBIPXxEej+0dNoxs94Hji6aD48SvYxB1kg==
+  dependencies:
+    "@biodiv-platform/eslint-preset" "4.4.9"
+    "@biodiv-platform/naksha-gmaps-draw" "4.5.2"
+    "@biodiv-platform/naksha-gmaps-view" "4.4.9"
+    "@biodiv-platform/naksha-mapbox-draw" "4.4.9"
+    "@biodiv-platform/naksha-mapbox-list" "4.5.0"
+    "@biodiv-platform/naksha-mapbox-view" "4.4.9"
+    "@biodiv-platform/tsconfig" "4.4.9"
 
 nanoid@^3.1.30:
   version "3.3.7"
