@@ -4,6 +4,7 @@ import React from "react";
 export default function NakshaGmapsDrawPage() {
   return (
     <div style={{ height: "100vh", width: "100vw" }}>
+      {/* @ts-expect-error Server Component */}
       <NakshaGmapsDraw
         isAutocomplete={true}
         isMultiple={true}
