@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@biodiv-platform/eslint-preset": "4.4.9",
-    "@biodiv-platform/naksha-gmaps-draw": "4.5.2",
+    "@biodiv-platform/naksha-gmaps-draw": "4.5.3-beta.2",
     "@biodiv-platform/naksha-gmaps-view": "4.4.9",
     "@biodiv-platform/naksha-mapbox-draw": "4.4.9",
     "@biodiv-platform/naksha-mapbox-list": "4.5.0",
