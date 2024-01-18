@@ -94,14 +94,24 @@ export const toFullGeoJson = (features) => {
     return false;
   }
 
-  return {
+  const mergedGeoJson = {
     type: "FeatureCollection",
-    features: cleanFeaures.map((geometry) => ({
-      type: "Feature",
-      properties: {},
-      geometry,
-    })),
+    features: cleanFeaures.map((value) => {
+      if (Array.isArray(value) && value.length > 0 && value[0].isGeojson) {
+        const feature = value[0];
+        return {
+          type: "Feature",
+          properties: feature.properties || {},
+          geometry: feature.geometry || null,
+        };
+      } else {
+        return { type: "Feature", properties: {}, geometry: value };
+      }
+    }),
   };
+
+
+  return mergedGeoJson;
 };
 
 /**
