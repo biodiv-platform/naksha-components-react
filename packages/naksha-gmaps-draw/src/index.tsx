@@ -1,10 +1,12 @@
-import { GMAPS_LIBRARIES, mapboxToGmapsViewState } from "@biodiv-platform/naksha-commons";
+import {
+  GMAPS_LIBRARIES,
+  mapboxToGmapsViewState,
+} from "@biodiv-platform/naksha-commons";
 import { Data, GoogleMap, LoadScriptNext } from "@react-google-maps/api";
 import React, { useEffect, useMemo, useReducer, useRef, useState } from "react";
 
 import NakshaAutocomplete from "./autocomplete";
 import ClearFeatures from "./features/clear-features";
-import NakshaImport from "./import";
 import { ACTION_TYPES, featuresReducer } from "./reducers/features";
 import { GMAP_FEATURE_TYPES, GMAP_OPTIONS } from "./static/constants";
 import TraceLocation from "./trace-location";
@@ -13,6 +15,7 @@ import {
   geometryToGeoJsonFeature,
   toFullGeoJson,
 } from "./utils/geojson";
+import ModalImport from "./ModalImport";
 
 export interface NakshaGmapsDrawProps {
   defaultViewState?;
@@ -35,6 +38,15 @@ export interface NakshaGmapsDrawProps {
   traceButtonComponent?;
   maxZoom?;
   options?;
+  importModalComponent?;
+  isOpen?;
+  onClose?;
+  importButtonComponentModal?;
+  importDeleteIcon?;
+  importLocationIcon?;
+  importFileIcon?;
+  importSuccessIcon?;
+  importFailureIcon?;
 }
 
 const NakshaGmapsDraw = React.forwardRef(
@@ -60,6 +72,15 @@ const NakshaGmapsDraw = React.forwardRef(
       traceButtonComponent,
       maxZoom,
       options,
+      importModalComponent,
+      isOpen,
+      onClose,
+      importButtonComponentModal,
+      importDeleteIcon,
+      importLocationIcon,
+      importFileIcon,
+      importSuccessIcon,
+      importFailureIcon,
     }: NakshaGmapsDrawProps,
     ref: any
   ) => {
@@ -153,23 +174,37 @@ const NakshaGmapsDraw = React.forwardRef(
         }
       >
         <>
-          <div className="map-toolbar" style={{ display: "flex" }}>
+          <div style={{ display: "flex" }}>
             {isAutocomplete && (
-              <NakshaAutocomplete
-                InputComponent={autocompleteComponent || <input />}
-                addFeature={addFeature}
-                gmapRegion={autoCompleteRegion ?? gmapRegion}
-              />
+              <div style={{ width: "500px" }}>
+                <NakshaAutocomplete
+                  InputComponent={autocompleteComponent || <input />}
+                  addFeature={addFeature}
+                  gmapRegion={autoCompleteRegion ?? gmapRegion}
+                />
+              </div>
             )}
-            {isImport && (
-              <NakshaImport
-                InputComponent={importInputComponent || <input />}
-                ButtonComponent={
-                  importButtonComponent || <button children="import" />
-                }
-                addFeature={addFeature}
-              />
-            )}
+
+            <div style={{ flex: "1" }}></div>
+            <ModalImport
+              ButtonComponent={
+                importButtonComponent || <button children="add" />
+              }
+              ModalComponent={
+                importModalComponent &&
+                React.cloneElement(importModalComponent, { isOpen, onClose })
+              }
+              InputComponent={importInputComponent || <input />}
+              addFeature={addFeature}
+              ButtonComponentModal={
+                importButtonComponentModal || <button children="add" />
+              }
+              DeleteIcon={importDeleteIcon}
+              LocationIcon={importLocationIcon}
+              FileIcon={importFileIcon}
+              SuccessIcon={importSuccessIcon}
+              FailureIcon={importFailureIcon}
+            />
           </div>
           {showTrace && (
             <TraceLocation
