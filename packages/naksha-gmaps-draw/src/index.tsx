@@ -185,7 +185,7 @@ const NakshaGmapsDraw = React.forwardRef(
               </div>
             )}
 
-            <div style={{ flex: "1" }}></div> {/* Use flex: "1" to push TestingImport to the right */}
+            <div style={{ flex: "1" }}></div>
             <ModalImport
               ButtonComponent={
                 importButtonComponent || <button children="add" />
