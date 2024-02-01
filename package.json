@@ -12,6 +12,7 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
+    "lint:naksha-gmaps-draw": "cd packages/naksha-gmaps-draw && run lint",
     "lint": "turbo run lint",
     "clean": "turbo run clean && rm -rf node_modules dist",
     "prerelease": "yarn run build",
@@ -20,6 +21,8 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
+    "eslint": "^8.56.0",
+    "eslint-plugin-react": "^7.33.2",
     "prettier": "^2.7.1",
     "turbo": "latest"
   },
