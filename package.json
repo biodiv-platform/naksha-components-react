@@ -12,7 +12,11 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
-    "lint:naksha-gmaps-draw": "cd packages/naksha-gmaps-draw && run lint",
+    "lint:naksha-gmaps-draw": "cd packages/naksha-gmaps-draw && eslint .",
+    "lint:naksha-components-react": "cd packages/naksha-components-react && eslint .",
+    "lint:naksha-gmaps-view": "cd packages/naksha-gmaps-view && eslint .",
+    "lint:naksha-mapbox-draw": "cd packages/naksha-mapbox-draw && eslint .",
+    "lint:naksha-mapbox-list": "cd packages/naksha-mapbox-list && eslint .",
     "lint": "turbo run lint",
     "clean": "turbo run clean && rm -rf node_modules dist",
     "prerelease": "yarn run build",
@@ -32,6 +36,8 @@
   },
   "packageManager": "yarn@1.22.17",
   "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.20.0",
+    "eslint-plugin-simple-import-sort": "^10.0.0",
     "lerna": "^5.1.4"
   }
 }
