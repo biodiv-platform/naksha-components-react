@@ -29,18 +29,6 @@ const convertToGeoJSON = (data) => {
   };
 };
 
-const clusterStyles = {
-  width: `${20 + (properties.point_count / data.features.length) * 20}px`,
-  height: `${20 + (properties.point_count / data.features.length) * 20}px`,
-  backgroundColor: "rgba(0, 0, 255, 0.5)",
-  borderRadius: "50%",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  color: "white",
-  cursor: "pointer",
-};
-
 export default function Map() {
   const mapRef = useRef(null);
   const { mp, layer, hover, query } = useLayers();
@@ -106,17 +94,6 @@ export default function Map() {
     }
   };
 
-  const handleClusterOnClick = () => {
-    const expansionZoom = superCluster.getClusterExpansionZoom(
-      properties.cluster_id
-    );
-    mapRef.current.easeTo({
-      center: geometry.coordinates,
-      zoom: expansionZoom,
-      duration: 500,
-    });
-  };
-
   useEffect(() => {
     if (mapRef.current) {
       updateClusters();
@@ -158,7 +135,33 @@ export default function Map() {
                 latitude={latitude}
                 longitude={longitude}
               >
-                <div style={clusterStyles} onClick={handleClusterOnClick}>
+                <div
+                  style={{
+                    width: `${
+                      20 + (properties.point_count / data.features.length) * 20
+                    }px`,
+                    height: `${
+                      20 + (properties.point_count / data.features.length) * 20
+                    }px`,
+                    backgroundColor: "rgba(0, 0, 255, 0.5)",
+                    borderRadius: "50%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    color: "white",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => {
+                    const expansionZoom = superCluster.getClusterExpansionZoom(
+                      properties.cluster_id
+                    );
+                    mapRef.current.easeTo({
+                      center: geometry.coordinates,
+                      zoom: expansionZoom,
+                      duration: 500,
+                    });
+                  }}
+                >
                   {properties.point_count_abbreviated}
                 </div>
               </Marker>
@@ -176,7 +179,7 @@ export default function Map() {
                 alt="Marker"
                 onClick={() =>
                   global.window.open(
-                    `https://communityconservedareas.org/data/show/${properties.id}`, //TODO: Change this
+                    `https://communityconservedareas.org/data/show/${properties.id}`, //TODO: Fix this
                     "_blank"
                   )
                 }
