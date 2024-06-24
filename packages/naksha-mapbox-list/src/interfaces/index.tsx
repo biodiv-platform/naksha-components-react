@@ -37,6 +37,7 @@ export interface NakshaMapboxListProps {
   lang?;
 
   markers?: ExtendedMarkerProps[];
+  clusterMarkers?: any[]; // TODO: change type
 
   children?;
 }
@@ -79,8 +80,8 @@ export interface GeoserverLayer {
     endpoint?;
     fetcher?;
   };
-  onClick?: ({ bbox, feature, layerId}) => JSX.Element;
-  onHover?: ({ bbox, feature, layerId}) => JSX.Element;
+  onClick?: ({ bbox, feature, layerId }) => JSX.Element;
+  onHover?: ({ bbox, feature, layerId }) => JSX.Element;
   data?: {
     styles?: VectorStyleMeta[];
     styleIndex?;
