@@ -10,6 +10,7 @@ import { MapLayer } from "./layers";
 import MarkersList from "./markers-list";
 import HoverPopup from "./popup";
 import supercluster from "supercluster";
+import TestDataCard from "./cluster-marker-popup";
 
 const NavControl = NavigationControl;
 
@@ -27,6 +28,22 @@ const convertToGeoJSON = (data) => {
   };
 };
 
+// Function to get color based on cluster size
+const getClusterColor = (count) => {
+  if (count > 100) return "#ff0000";
+  if (count > 50) return "#ffbf00";
+  if (count > 25) return "#ffbf00";
+  return "#008cff";
+};
+
+// Function to get size based on cluster size
+const getClusterSize = (count) => {
+  if (count > 100) return 60;
+  if (count > 50) return 50;
+  if (count > 25) return 40;
+  return 30;
+};
+
 export default function Map() {
   const mapRef = useRef(null);
   const { mp, layer, hover, query } = useLayers();
@@ -36,6 +53,15 @@ export default function Map() {
   const [hoveredMarkerId, setHoveredMarkerId] = useState(null);
   const [hoveredClusterId, setHoveredClusterId] = useState(null);
   const [markerData, setMarkerData] = useState({});
+
+  const findCoordinatesById = (id) => {
+    const feature = data?.features?.find((item) => item.properties.id === id);
+    if (feature) {
+      const [longitude, latitude] = feature.geometry.coordinates;
+      return { lat: latitude, lng: longitude };
+    }
+    return null;
+  };
 
   const handleMouseEnterOnMarker = async (id, isCluster) => {
     setHoveredClusterId(null);
@@ -156,6 +182,9 @@ export default function Map() {
             const [longitude, latitude] = geometry.coordinates;
 
             if (properties.cluster) {
+              const size = getClusterSize(properties.point_count);
+              const color = getClusterColor(properties.point_count);
+
               return (
                 <Marker
                   key={`cluster-${properties.cluster_id}`}
@@ -166,21 +195,16 @@ export default function Map() {
                   <div
                     className="cluster-marker"
                     style={{
-                      width: `${
-                        20 +
-                        (properties.point_count / data.features.length) * 20
-                      }px`,
-                      height: `${
-                        20 +
-                        (properties.point_count / data.features.length) * 20
-                      }px`,
-                      backgroundColor: "rgba(0, 0, 255, 0.5)",
+                      width: `${size}px`,
+                      height: `${size}px`,
+                      backgroundColor: color,
                       borderRadius: "50%",
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "center",
-                      color: "white",
+                      color: "black",
                       cursor: "pointer",
+                      fontWeight: "bold",
                     }}
                     onMouseEnter={() =>
                       handleMouseEnterOnMarker(properties.cluster_id, true)
@@ -218,7 +242,6 @@ export default function Map() {
                     width: 30,
                     height: 30,
                     cursor: "pointer",
-                    // zIndex: hoveredMarkerId === properties.id ? 1000 : 1,
                   }}
                   onMouseEnter={() =>
                     handleMouseEnterOnMarker(properties.id, false)
@@ -244,21 +267,6 @@ export default function Map() {
                       r="20"
                     />
                   </svg>
-
-                  {hoveredMarkerId === properties.id &&
-                    markerData[properties.id] && (
-                      <div
-                        className="location-marker-hover"
-                        style={{
-                          position: "absolute",
-                          top: 30,
-                          left: 10,
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        <DataCard data={markerData[properties.id]} />
-                      </div>
-                    )}
                 </div>
               </Marker>
             );
@@ -270,7 +278,14 @@ export default function Map() {
           return <MapLayer key={_l.id} layer={_l} beforeId={beforeId} />;
         })}
 
-        <HoverPopup key="popup" coordinates={coordinates} />
+        {hoveredMarkerId && markerData[hoveredMarkerId] ? (
+          <TestDataCard
+            coordinates={findCoordinatesById(hoveredMarkerId)}
+            data={markerData[hoveredMarkerId]}
+          />
+        ) : (
+          <HoverPopup key="popup" coordinates={coordinates} />
+        )}
       </MapGL>
     </div>
   );
