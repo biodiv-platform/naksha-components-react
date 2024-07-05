@@ -46,13 +46,14 @@ const getClusterSize = (count) => {
 
 export default function Map() {
   const mapRef = useRef(null);
-  const { mp, layer, hover, query } = useLayers();
+  const { mp, layer, hover, query, setMarkerDetails } = useLayers();
   const [data, setData] = useState([]);
   const [clusters, setClusters] = useState([]);
   const [superCluster, setSuperCluster] = useState(null);
   const [hoveredMarkerId, setHoveredMarkerId] = useState(null);
   const [hoveredClusterId, setHoveredClusterId] = useState(null);
   const [markerData, setMarkerData] = useState({});
+  const [selectedMarker, setSelectedMarker] = useState(false);
 
   const findCoordinatesById = (id) => {
     const feature = data?.features?.find((item) => item.properties.id === id);
@@ -88,6 +89,16 @@ export default function Map() {
   const handleMouseLeaveOnMarker = () => {
     setHoveredMarkerId(null);
     setHoveredClusterId(null);
+  };
+
+  const handleClickOnMarker = async (id) => {
+    setSelectedMarker(true);
+    if (markerData[id]) {
+      setMarkerDetails(markerData[id]);
+    } else {
+      const data = await mp.hoverFunction(id);
+      setMarkerDetails(data);
+    }
   };
 
   const [coordinates, setCoordinates] = useState(null);
@@ -155,7 +166,7 @@ export default function Map() {
   return (
     <div className={tw`h-full w-full relative bg-gray-100`}>
       {mp.loadToC && <Sidebar />}
-      {layer.selectedFeatures?.length > 0 && <InfoBar />}
+      {(selectedMarker || layer?.selectedFeatures?.length > 0) && <InfoBar />}
       <MapGL
         id="mapl"
         cursor="default"
@@ -247,6 +258,10 @@ export default function Map() {
                     handleMouseEnterOnMarker(properties.id, false)
                   }
                   onMouseLeave={handleMouseLeaveOnMarker}
+                  onClick={(event) => {
+                    event.stopPropagation(); // Prevent event from bubbling up
+                    handleClickOnMarker(properties.id);
+                  }}
                 >
                   <svg width="24px" height="35px" viewBox="38 12 128 180">
                     <path

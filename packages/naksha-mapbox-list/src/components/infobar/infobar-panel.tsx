@@ -8,11 +8,23 @@ import { DownIcon, UpIcon } from "../core";
 
 export default function InfoBarPanel({ data: payload }) {
   const [isOpen, setIsOpen] = useState(true);
-  const [layerInfo, setLayerInfo,] = useState({
+  const [layerInfo, setLayerInfo] = useState({
     title: payload.sourceLayer,
     properties: [] as any,
   });
-  const { layer, mp ,query:{clickedLngLat}} = useLayers();
+  const {
+    layer,
+    mp,
+    query: { clickedLngLat },
+    markerDetails,
+  } = useLayers();
+
+  useEffect(() => {
+    setIsOpen(true);
+    if (markerDetails.values.length > 0) {
+      setIsOpen(false);
+    }
+  }, [markerDetails.values]);
 
   const getPropertyData = async () => {
     let properties;

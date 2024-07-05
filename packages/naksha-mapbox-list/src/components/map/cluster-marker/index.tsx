@@ -56,42 +56,16 @@ const ClusterMarker = ({ mapRef }) => {
 
   const updateClusters = () => {
     if (superCluster && mapRef.current) {
-      console.log(
-        "inside cluster function-------------------------------------"
-      );
       const zoom = Math.floor(mapRef.current.getZoom());
       const mapBounds = mapRef.current.getBounds().toArray().flat();
-      console.log("mapBounds", mapBounds);
-      console.log("zoom", zoom);
-      console.log("map ref", mapRef.current);
       setBounds(mapBounds);
       const clusters = superCluster.getClusters(mapBounds, zoom);
-      console.log("clusters size", clusters);
       setClusters(clusters);
     }
   };
 
   useEffect(() => {
-    console.log("cluster", clusters);
-  }, [clusters]);
-
-  useEffect(() => {
-    console.log("data", data);
-  }, [data]);
-
-  useEffect(() => {
-    console.log("superCluster", superCluster);
-  }, [superCluster]);
-
-  useEffect(() => {
-    console.log("bounds", bounds);
-  }, [bounds]);
-
-  useEffect(() => {
     if (mapRef.current) {
-      console.log(
-        "calling cluster function --------------------------------------------"
-      );
       updateClusters();
     }
   }, [mapRef]);

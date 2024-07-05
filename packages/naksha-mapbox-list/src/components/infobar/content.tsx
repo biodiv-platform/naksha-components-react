@@ -1,18 +1,30 @@
 import { useT } from "@biodiv-platform/naksha-commons";
-import React from "react";
+import React, { useState } from "react";
 import { tw } from "twind";
 
 import useLayers from "../../hooks/use-layers";
 import { PROPERTY_ID, SELECTION_STYLE } from "../../static/constants";
-import { CloseButton, CrossHairIcon } from "../core";
+import {
+  CloseButton,
+  CrossHairIcon,
+  DownIcon,
+  ExternalLinkIcon,
+  UpIcon,
+} from "../core";
 import LayerSelection from "../sidebar/settings/layer-selection";
 import InfoBarPanel from "./infobar-panel";
+import clsx from "clsx";
 
 export default function InfoBarContent({ onClose }) {
   const {
     layer: { selectedFeatures, selectedLayers, selectionStyle },
+    markerDetails,
   } = useLayers();
   const { t } = useT();
+
+  const [isOpen, setIsOpen] = useState(true);
+
+  const values = markerDetails?.values || [];
 
   return (
     <div
@@ -30,17 +42,68 @@ export default function InfoBarContent({ onClose }) {
         <LayerSelection hideLabel={true} />
       </div>
       <div className={tw`flex flex-col flex-grow overflow-auto gap-3 p-4`}>
-        {selectedFeatures.flat(1)?.map((data: any) => (
-          <InfoBarPanel
-            key={
-              selectedLayers?.[0]?.source.type === "raster" ||
-              selectionStyle === SELECTION_STYLE.ALL
-                ? data?.sourceLayer
-                : data?.sourceLayer + data?.properties[PROPERTY_ID]
-            }
-            data={data}
-          />
-        ))}
+        {markerDetails.values.length > 0 && (
+          <div className={tw`bg-gray-100 rounded-lg`}>
+            <button
+              className={tw(
+                clsx([
+                  `px-4 h-10 flex items-center justify-between bg-gray-100 hover:bg-gray-200 transition-colors cursor-pointer w-full focus:outline-none focus:ring`,
+                  { "bg-gray-200 rounded-t-lg": isOpen, "rounded-lg": !isOpen },
+                ])
+              )}
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              Marker Details {isOpen ? <UpIcon /> : <DownIcon />}
+            </button>
+            {isOpen && (
+              <div>
+                {values.map((valueItem, index) => (
+                  <div key={index} className={tw`px-4 py-2 flex flex-col`}>
+                    <p className={tw` truncate text-gray-600`}>
+                      {valueItem.name}
+                    </p>
+                    <p className={tw`truncate`}>
+                      {Array.isArray(valueItem.value)
+                        ? valueItem.value.map((val, i) => (
+                            <span key={i}>
+                              {val.label}
+                              {i < valueItem.value.length - 1 ? ", " : ""}
+                            </span>
+                          ))
+                        : valueItem.value}
+                    </p>
+                  </div>
+                ))}
+                <p className={tw`text-blue-500 px-4 py-2`}>
+                  <a
+                    href={`/data/show/${markerDetails.id}`}
+                    target="_blank"
+                    className={tw`flex items-center gap-1`}
+                  >
+                    <span>Show CCA</span>
+                    <span className={tw`mt-1`}>
+                      <ExternalLinkIcon />
+                    </span>
+                  </a>
+                </p>
+              </div>
+            )}
+          </div>
+        )}
+        {selectedFeatures &&
+          selectedFeatures
+            .flat(1)
+            ?.map((data: any) => (
+              <InfoBarPanel
+                key={
+                  selectedLayers?.[0]?.source.type === "raster" ||
+                  selectionStyle === SELECTION_STYLE.ALL
+                    ? data?.sourceLayer
+                    : data?.sourceLayer + data?.properties[PROPERTY_ID]
+                }
+                data={data}
+              />
+            ))}
       </div>
     </div>
   );

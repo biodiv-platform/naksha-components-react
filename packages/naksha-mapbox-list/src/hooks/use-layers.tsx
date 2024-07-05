@@ -61,6 +61,8 @@ interface LayersContextProps {
     onHover;
     features;
   };
+  markerDetails;
+  setMarkerDetails;
 }
 
 interface LayersProviderProps {
@@ -95,6 +97,11 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
   );
 
   const [hoverFeatures, setHoverFeatures] = useState<any>();
+
+  const [markerDetails, setMarkerDetails] = useState<any>({
+    values: [],
+    titlesValues: [],
+  });
 
   const [selectedFeatures, setSelectedFeatures] = useState<any>();
   const selectedFeaturesId = useMemo(() => {
@@ -302,6 +309,11 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
               ]
           : queryFeat
       );
+
+      setMarkerDetails({
+        values: [],
+        titlesValues: [],
+      });
     } catch (e) {
       console.error(e);
     }
@@ -363,6 +375,8 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
           onHover: onMapHover,
           features: hoverFeatures,
         },
+        markerDetails,
+        setMarkerDetails,
       }}
     >
       {children}
