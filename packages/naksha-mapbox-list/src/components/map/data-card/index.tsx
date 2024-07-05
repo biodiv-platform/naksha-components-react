@@ -4,17 +4,17 @@ import { tw } from "twind";
 
 const Pop: any = Popup;
 
-export default function TestDataCard({ coordinates, data }) {
+export default function DataCard({ coordinates, data }) {
   const { titlesValues, values } = data;
   // Extract the title from titlesValues
   const title = titlesValues[0]
     ? titlesValues[0]["value"]
     : "Error loading Data";
 
-  return coordinates?.lat ? (
+  return coordinates ? (
     <Pop
-      latitude={coordinates.lat}
-      longitude={coordinates.lng}
+      longitude={coordinates[0]}
+      latitude={coordinates[1]}
       closeButton={false}
     >
       <div
