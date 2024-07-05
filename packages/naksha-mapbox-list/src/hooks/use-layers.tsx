@@ -320,6 +320,11 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
     setTimeout(featuresAtLatLng, 300);
   }, [clickedLngLat, selectionStyle, selectedLayerIds]);
 
+  // refresh map points
+  useEffect(() => {
+    setMP(_mp);
+  }, [_mp]);
+
   return (
     <LayersContext.Provider
       value={{

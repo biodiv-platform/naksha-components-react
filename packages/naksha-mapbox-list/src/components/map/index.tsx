@@ -1,16 +1,14 @@
 import { defaultViewState } from "@biodiv-platform/naksha-commons";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import MapGL, { Marker, NavigationControl } from "react-map-gl";
 import { tw } from "twind";
 import useLayers from "../../hooks/use-layers";
 import InfoBar from "../infobar";
 import Sidebar from "../sidebar";
-import DataCard from "./cluster-marker/dataCard";
 import { MapLayer } from "./layers";
-import MarkersList from "./markers-list";
 import HoverPopup from "./popup";
 import supercluster from "supercluster";
-import TestDataCard from "./cluster-marker-popup";
+import DataCard from "./cluster-marker";
 
 const NavControl = NavigationControl;
 
@@ -31,7 +29,6 @@ const convertToGeoJSON = (data) => {
 // Function to get color based on cluster size
 const getClusterColor = (count) => {
   if (count > 100) return "#ff0000";
-  if (count > 50) return "#ffbf00";
   if (count > 25) return "#ffbf00";
   return "#008cff";
 };
@@ -47,37 +44,27 @@ const getClusterSize = (count) => {
 export default function Map() {
   const mapRef = useRef(null);
   const { mp, layer, hover, query } = useLayers();
-  const [data, setData] = useState([]);
   const [clusters, setClusters] = useState([]);
   const [superCluster, setSuperCluster] = useState(null);
-  const [hoveredMarkerId, setHoveredMarkerId] = useState(null);
-  const [hoveredClusterId, setHoveredClusterId] = useState(null);
+  const [hoveredMarker, setHoveredMarker] = useState(null);
+  const [hoveredCluster, setHoveredCluster] = useState(null);
   const [markerData, setMarkerData] = useState({});
 
-  const findCoordinatesById = (id) => {
-    const feature = data?.features?.find((item) => item.properties.id === id);
-    if (feature) {
-      const [longitude, latitude] = feature.geometry.coordinates;
-      return { lat: latitude, lng: longitude };
-    }
-    return null;
-  };
-
-  const handleMouseEnterOnMarker = async (id, isCluster) => {
-    setHoveredClusterId(null);
+  const handleMouseEnterOnMarker = async (point, isCluster) => {
+    setHoveredCluster(null);
     if (isCluster) {
-      setHoveredClusterId(id);
+      setHoveredCluster(point);
     } else {
-      setHoveredMarkerId(id);
+      setHoveredMarker(point);
     }
 
-    if (!markerData[id] && !isCluster) {
+    if (!markerData[point.properties.id] && !isCluster) {
       try {
-        // Replace this with your actual API call
-        const data = await mp.hoverFunction(id);
+        // This is actual API call
+        const data = await mp.hoverFunction(point.properties.id);
         setMarkerData((prevData) => ({
           ...prevData,
-          [id]: data,
+          [point.properties.id]: data,
         }));
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -86,8 +73,8 @@ export default function Map() {
   };
 
   const handleMouseLeaveOnMarker = () => {
-    setHoveredMarkerId(null);
-    setHoveredClusterId(null);
+    setHoveredMarker(null);
+    setHoveredCluster(null);
   };
 
   const [coordinates, setCoordinates] = useState(null);
@@ -113,8 +100,6 @@ export default function Map() {
   useEffect(() => {
     if (clusterMarkers) {
       const geojson = convertToGeoJSON(clusterMarkers);
-      setData(geojson);
-
       const superclusterInstance = new supercluster({
         radius: 50,
         maxZoom: 16,
@@ -167,18 +152,19 @@ export default function Map() {
         onLoad={handleMapLoad}
         onMouseMove={handleOnMouseMove}
         ref={mapRef}
+        minZoom={4}
       >
         <NavControl
           position="bottom-right"
           showZoom={true}
           showCompass={true}
         />
-        <MarkersList />
 
         {/* Cluster logic */}
         {clusters &&
           clusters.map((cluster) => {
             const { geometry, properties } = cluster;
+
             const [longitude, latitude] = geometry.coordinates;
 
             if (properties.cluster) {
@@ -206,9 +192,7 @@ export default function Map() {
                       cursor: "pointer",
                       fontWeight: "bold",
                     }}
-                    onMouseEnter={() =>
-                      handleMouseEnterOnMarker(properties.cluster_id, true)
-                    }
+                    onMouseEnter={() => handleMouseEnterOnMarker(cluster, true)}
                     onMouseLeave={handleMouseLeaveOnMarker}
                     onClick={() => {
                       const expansionZoom =
@@ -243,9 +227,7 @@ export default function Map() {
                     height: 30,
                     cursor: "pointer",
                   }}
-                  onMouseEnter={() =>
-                    handleMouseEnterOnMarker(properties.id, false)
-                  }
+                  onMouseEnter={() => handleMouseEnterOnMarker(cluster, false)}
                   onMouseLeave={handleMouseLeaveOnMarker}
                 >
                   <svg width="24px" height="35px" viewBox="38 12 128 180">
@@ -278,10 +260,11 @@ export default function Map() {
           return <MapLayer key={_l.id} layer={_l} beforeId={beforeId} />;
         })}
 
-        {hoveredMarkerId && markerData[hoveredMarkerId] ? (
-          <TestDataCard
-            coordinates={findCoordinatesById(hoveredMarkerId)}
-            data={markerData[hoveredMarkerId]}
+        {hoveredMarker?.properties?.id &&
+        markerData[hoveredMarker?.properties?.id] ? (
+          <DataCard
+            coordinates={hoveredMarker?.geometry.coordinates}
+            data={markerData[hoveredMarker.properties.id]}
           />
         ) : (
           <HoverPopup key="popup" coordinates={coordinates} />
