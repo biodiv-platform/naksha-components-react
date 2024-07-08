@@ -127,7 +127,7 @@ const ClusterMarker = ({ mapRef }) => {
               alt="Marker"
               onClick={() =>
                 global.window.open(
-                  `https://communityconservedareas.org/data/show/${properties.id}`, //TODO: Fix this
+                  `https://communityconservedareas.org/data/show/${properties.id}`,
                   "_blank"
                 )
               }
