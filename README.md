@@ -33,6 +33,16 @@ yarn dev
 
 Code quality checks are done with `prettier`, `eslint`.
 
+## Local Link
+```
+cd packages/naksha-component-react
+yarn link (or `npm link` if yarn doesnt work)
+```
+Then go to the project you want to link the package into(example: cca-ui):
+```
+yarn link naksha-component-react
+```
+
 ## 🙏 Contributing
 
 Contributions/Suggestions are always welcome!
