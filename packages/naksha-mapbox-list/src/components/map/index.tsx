@@ -44,7 +44,8 @@ const getClusterSize = (count) => {
 
 export default function Map() {
   const mapRef = useRef(null);
-  const { mp, layer, hover, query, setMarkerDetails } = useLayers();
+  const { mp, layer, hover, query, setMarkerDetails, showLayerHoverPopup } =
+    useLayers();
   const [clusters, setClusters] = useState([]);
   const [superCluster, setSuperCluster] = useState(null);
   const [hoveredMarker, setHoveredMarker] = useState(null);
@@ -153,7 +154,7 @@ export default function Map() {
         id="mapl"
         cursor="default"
         initialViewState={viewState}
-        minZoom={4}
+        minZoom={3}
         mapboxAccessToken={mp.mapboxAccessToken}
         style={{ width: "100%", height: "100%" }}
         mapStyle={layer.mapStyle}
@@ -238,7 +239,6 @@ export default function Map() {
                   onMouseEnter={() => handleMouseEnterOnMarker(cluster, false)}
                   onMouseLeave={handleMouseLeaveOnMarker}
                   onClick={(event) => {
-                    event.stopPropagation(); // Prevent event from bubbling up
                     handleClickOnMarker(properties.id);
                   }}
                 >
@@ -279,7 +279,9 @@ export default function Map() {
             data={markerData[hoveredMarker.properties.id]}
           />
         ) : (
-          <HoverPopup key="popup" coordinates={coordinates} />
+          showLayerHoverPopup && (
+            <HoverPopup key="popup" coordinates={coordinates} />
+          )
         )}
       </MapGL>
     </div>

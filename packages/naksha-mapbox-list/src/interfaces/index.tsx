@@ -46,6 +46,8 @@ export interface NakshaMapboxListProps {
   clusterMarkers?: ExtendedClusterProps[];
   hoverFunction?: any;
 
+  showLayerHoverPopup?: boolean;
+
   children?;
 }
 

@@ -7,7 +7,7 @@ import { axGexGetRasterInfoWithLonLat } from "../../services/naksha";
 import { DownIcon, UpIcon } from "../core";
 
 export default function InfoBarPanel({ data: payload }) {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [layerInfo, setLayerInfo] = useState({
     title: payload.sourceLayer,
     properties: [] as any,
@@ -18,13 +18,6 @@ export default function InfoBarPanel({ data: payload }) {
     query: { clickedLngLat },
     markerDetails,
   } = useLayers();
-
-  useEffect(() => {
-    setIsOpen(true);
-    if (markerDetails.values.length > 0) {
-      setIsOpen(false);
-    }
-  }, [markerDetails.values]);
 
   const getPropertyData = async () => {
     let properties;
