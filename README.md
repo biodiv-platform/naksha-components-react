@@ -45,6 +45,8 @@ yarn link naksha-component-react
 
 ## 🔖📦Beta Publish on NPM
 Follow this tutorial : https://egghead.io/lessons/javascript-publishing-a-beta-version
+> [!TIP]
+> Note: Dependent packages must be published separately. For instance, if you make changes to naksha-mapbox-list, you need to publish both naksha-components-react and naksha-mapbox-list. Remember to update the package.json file in both repositories and then publish the changes to npm.
 
 ## 🙏 Contributing
 
