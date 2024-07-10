@@ -1,5 +1,5 @@
 import { useT } from "@biodiv-platform/naksha-commons";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { tw } from "twind";
 
 import useLayers from "../../hooks/use-layers";
@@ -23,8 +23,18 @@ export default function InfoBarContent({ onClose }) {
   const { t } = useT();
 
   const [isOpen, setIsOpen] = useState(true);
+  const [groupName, setGroupName] = useState(null);
 
   const values = markerDetails?.values || [];
+
+  useEffect(() => {
+    // Extract groupName from the path if it exists
+    const groupMatch = window.location.pathname.match(/group\/([^/]+)/);
+    console.warn("groupMatch", groupMatch);
+    if (groupMatch) {
+      setGroupName(groupMatch[1]);
+    }
+  }, []);
 
   return (
     <div
@@ -59,7 +69,7 @@ export default function InfoBarContent({ onClose }) {
               <div>
                 {values.map((valueItem, index) => (
                   <div key={index} className={tw`px-4 py-2 flex flex-col`}>
-                    <p className={tw` truncate text-gray-600`}>
+                    <p className={tw`truncate text-gray-600`}>
                       {valueItem.name}
                     </p>
                     <p className={tw`truncate`}>
@@ -76,7 +86,11 @@ export default function InfoBarContent({ onClose }) {
                 ))}
                 <p className={tw`text-blue-500 px-4 py-2`}>
                   <a
-                    href={`/data/show/${markerDetails.id}`}
+                    href={
+                      groupName
+                        ? `/group/${groupName}/data/show/${markerDetails.id}`
+                        : `/data/show/${markerDetails.id}`
+                    }
                     target="_blank"
                     className={tw`flex items-center gap-1`}
                   >
@@ -93,7 +107,7 @@ export default function InfoBarContent({ onClose }) {
         {selectedFeatures &&
           selectedFeatures
             .flat(1)
-            ?.map((data: any) => (
+            ?.map((data) => (
               <InfoBarPanel
                 key={
                   selectedLayers?.[0]?.source.type === "raster" ||
