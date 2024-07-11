@@ -13,6 +13,10 @@ export default function InfoBar() {
 
   const toggleOpen = () => setIsInfoBarOpen(!isInfoBarOpen);
 
+  useEffect(() => {
+    setIsInfoBarOpen(true);
+  }, [markerDetails.values, layer.selectedFeatures]);
+
   return isInfoBarOpen ? (
     <InfoBarContent onClose={toggleOpen} />
   ) : (
