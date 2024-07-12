@@ -43,7 +43,7 @@ const getClusterSize = (count) => {
 };
 
 export default function Map() {
-  const mapRef = useRef(null);
+  const mapRef = useRef<any>(null);
   const { mp, layer, hover, query, setMarkerDetails, showLayerHoverPopup } =
     useLayers();
   const [clusters, setClusters] = useState([]);
@@ -105,6 +105,15 @@ export default function Map() {
     }
   };
 
+  // Calculate bounds from clusterMarkers
+  const getBounds = (markers) => {
+    const lngs = markers.map((marker) => marker.lng);
+    const lats = markers.map((marker) => marker.lat);
+    const sw = [Math.min(...lngs), Math.min(...lats)];
+    const ne = [Math.max(...lngs), Math.max(...lats)];
+    return [sw, ne];
+  };
+
   // Load points data and initialize supercluster
   useEffect(() => {
     if (clusterMarkers) {
@@ -115,6 +124,17 @@ export default function Map() {
       });
       superclusterInstance.load(geojson.features);
       setSuperCluster(superclusterInstance);
+
+      // Set map bounds to fit clusterMarkers
+      if (mapRef.current && !layer.selectedLayers.length) {
+        const bounds = getBounds(clusterMarkers);
+        console.warn("#bounds", bounds);
+        mapRef.current.fitBounds(bounds, {
+          // padding: 10,
+          padding: { top: 200, bottom: 100, left: 20, right: 20 },
+          duration: 1000,
+        });
+      }
     }
   }, [clusterMarkers]);
 

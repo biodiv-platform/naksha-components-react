@@ -11,7 +11,6 @@ import {
   ExternalLinkIcon,
   UpIcon,
 } from "../core";
-import LayerSelection from "../sidebar/settings/layer-selection";
 import InfoBarPanel from "./infobar-panel";
 import clsx from "clsx";
 
@@ -30,7 +29,6 @@ export default function InfoBarContent({ onClose }) {
   useEffect(() => {
     // Extract groupName from the path if it exists
     const groupMatch = window.location.pathname.match(/group\/([^/]+)/);
-    console.warn("groupMatch", groupMatch);
     if (groupMatch) {
       setGroupName(groupMatch[1]);
     }
@@ -91,7 +89,7 @@ export default function InfoBarContent({ onClose }) {
                     target="_blank"
                     className={tw`flex items-center gap-1`}
                   >
-                    <span>Show CCA</span>
+                    <span>CCA Details</span>
                     <span className={tw`mt-1`}>
                       <ExternalLinkIcon />
                     </span>
