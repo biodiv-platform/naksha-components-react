@@ -48,9 +48,6 @@ export default function InfoBarContent({ onClose }) {
         </div>
         <CloseButton onClick={onClose} />
       </div>
-      <div className={tw`bg-gray-100 p-4 flex-shrink-0 rt`}>
-        <LayerSelection hideLabel={true} />
-      </div>
       <div className={tw`flex flex-col flex-grow overflow-auto gap-3 p-4`}>
         {markerDetails.values.length > 0 && (
           <div className={tw`bg-gray-100 rounded-lg`}>
@@ -110,7 +107,7 @@ export default function InfoBarContent({ onClose }) {
             ?.map((data) => (
               <InfoBarPanel
                 key={
-                  selectedLayers?.[0]?.source.type === "raster" ||
+                  selectedLayers?.[0]?.source.type === "raster" &&
                   selectionStyle === SELECTION_STYLE.ALL
                     ? data?.sourceLayer
                     : data?.sourceLayer + data?.properties[PROPERTY_ID]

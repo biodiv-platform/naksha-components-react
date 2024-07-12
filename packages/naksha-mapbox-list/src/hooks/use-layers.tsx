@@ -86,7 +86,7 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
     defaultMapStyles[mp?.mapStyle || 0].style
   );
   const [selectionStyle, setSelectionStyle] = useState<string>(
-    SELECTION_STYLE.TOP
+    SELECTION_STYLE.ALL
   );
   const [gridLegends, setGridLegends] = useState({});
   const [isInfoBarOpen, setIsInfoBarOpen] = useState(true);
