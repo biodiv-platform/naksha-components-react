@@ -44,13 +44,21 @@ const getClusterSize = (count) => {
 
 export default function Map() {
   const mapRef = useRef<any>(null);
-  const { mp, layer, hover, query, setMarkerDetails, showLayerHoverPopup } =
-    useLayers();
+  const {
+    mp,
+    layer,
+    hover,
+    query,
+    markerDetails,
+    setMarkerDetails,
+    showLayerHoverPopup,
+  } = useLayers();
   const [clusters, setClusters] = useState([]);
   const [superCluster, setSuperCluster] = useState(null);
   const [hoveredMarker, setHoveredMarker] = useState(null);
   const [markerData, setMarkerData] = useState({});
   const [selectedMarker, setSelectedMarker] = useState(false);
+  const [markerColor, setMarkerColor] = useState({});
 
   const handleMouseEnterOnMarker = async (point, isCluster) => {
     if (!isCluster) {
@@ -59,7 +67,6 @@ export default function Map() {
 
     if (!markerData[point.properties.id] && !isCluster) {
       try {
-        // Replace this with your actual API call
         const data = await mp.hoverFunction(point.properties.id);
         setMarkerData((prevData) => ({
           ...prevData,
@@ -77,6 +84,9 @@ export default function Map() {
 
   const handleClickOnMarker = async (id) => {
     setSelectedMarker(true);
+    setMarkerColor({
+      [id]: true,
+    });
     if (markerData[id]) {
       setMarkerDetails(markerData[id]);
     } else {
@@ -92,7 +102,14 @@ export default function Map() {
   );
   const clusterMarkers = useMemo(() => mp.clusterMarkers, [mp.clusterMarkers]);
 
-  const onMapClick = (e) => query.setClickedLngLat(e.lngLat);
+  const onMapClick = (e) => {
+    if (!selectedMarker) {
+      setMarkerDetails([]);
+      setMarkerColor({});
+    }
+    setSelectedMarker(false);
+    query.setClickedLngLat(e.lngLat);
+  };
 
   const handleOnMouseMove = (event) => {
     setCoordinates(event.lngLat);
@@ -169,7 +186,7 @@ export default function Map() {
   return (
     <div className={tw`h-full w-full relative bg-gray-100`}>
       {mp.loadToC && <Sidebar />}
-      {(selectedMarker || layer?.selectedFeatures?.length > 0) && <InfoBar />}
+      {(markerDetails.id || layer?.selectedFeatures?.length > 0) && <InfoBar />}
       <MapGL
         id="mapl"
         cursor="default"
@@ -262,17 +279,24 @@ export default function Map() {
                     handleClickOnMarker(properties.id);
                   }}
                 >
-                  <svg width="24px" height="35px" viewBox="38 12 128 180">
+                  <svg
+                    width={markerColor[properties.id] ? "26px" : "24px"}
+                    height={markerColor[properties.id] ? "37px" : "35px"}
+                    viewBox="38 12 128 180"
+                    className={
+                      markerColor[properties.id] ? "bounce-animation" : ""
+                    }
+                  >
                     <path
                       style={{
-                        fill: "red",
+                        fill: markerColor[properties.id] ? "#C53030" : "red",
                         stroke: "#fafafa",
-                        strokeWidth: 2,
+                        strokeWidth: markerColor[properties.id] ? 9 : 2,
                         strokeMiterlimit: 10,
                       }}
                       d="M158.5,73.8c0-32.3-26.2-58.4-58.4-58.4c-32.3,0-58.4,26.2-58.4,58.4c0,16.6,6.9,31.5,18,42.1
-      c7.2,7.2,16.7,17.2,20.1,22.5c7,10.9,20,47.9,20,47.9s13.3-37,20.4-47.9c3.3-5.1,12.2-14.4,19.3-21.6
-      C151.2,106.1,158.5,90.9,158.5,73.8z"
+                      c7.2,7.2,16.7,17.2,20.1,22.5c7,10.9,20,47.9,20,47.9s13.3-37,20.4-47.9c3.3-5.1,12.2-14.4,19.3-21.6
+                      C151.2,106.1,158.5,90.9,158.5,73.8z"
                     />
                     <circle
                       style={{ fill: "#fafafa", opacity: 0.8 }}
