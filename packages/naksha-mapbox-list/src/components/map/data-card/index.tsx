@@ -1,5 +1,4 @@
 import { Popup } from "react-map-gl";
-
 import { tw } from "twind";
 
 const Pop: any = Popup;
@@ -17,17 +16,12 @@ export default function DataCard({ coordinates, data }) {
       latitude={coordinates[1]}
       closeButton={false}
     >
-      <div
-        className={
-          tw`border border-gray-300 rounded-lg px-2 py-1 shadow-md bg-white max-w-xs z-[9999] ` +
-          `location-marker-hover-card`
-        }
-      >
-        <h1 className={tw`text-lg font-bold truncate`}>{title}</h1>
+      <div className={tw` bg-white `}>
+        <h1 className={tw`text-lg font-bold `}>{title}</h1>
         <div className={tw`flex flex-col w-full`}>
           {values.map((valueItem, index) => (
             <div key={index} className={tw`flex truncate`}>
-              <span className={tw`font-bold truncate`}>{valueItem.name}:</span>
+              <span className={tw`font-bold `}>{valueItem.name}: &nbsp;</span>
               <span className={tw`truncate`}>
                 {Array.isArray(valueItem.value)
                   ? valueItem.value.map((val, i) => (

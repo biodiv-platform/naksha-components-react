@@ -58,7 +58,7 @@ export default function InfoBarContent({ onClose }) {
               )}
               onClick={() => setIsOpen(!isOpen)}
             >
-              Marker Details {isOpen ? <UpIcon /> : <DownIcon />}
+              CCA Details {isOpen ? <UpIcon /> : <DownIcon />}
             </button>
             {isOpen && (
               <div>
@@ -89,7 +89,7 @@ export default function InfoBarContent({ onClose }) {
                     target="_blank"
                     className={tw`flex items-center gap-1`}
                   >
-                    <span>CCA Details</span>
+                    <span>Show CCA</span>
                     <span className={tw`mt-1`}>
                       <ExternalLinkIcon />
                     </span>
