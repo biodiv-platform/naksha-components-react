@@ -1,6 +1,6 @@
 {
   "name": "@biodiv-platform/naksha-mapbox-list",
-  "version": "4.5.3-beta.5",
+  "version": "4.5.3-beta.6",
   "author": "harshzalavadiya",
   "main": "./dist/index.js",
   "module": "./dist/esm/index.js",
@@ -42,7 +42,6 @@
     "geohash": "^0.0.1",
     "highlight-search-result": "^1.0.4",
     "immer": "^9.0.15",
-    "react-mapbox-gl-cluster": "^1.19.0",
     "react-sortable-hoc": "^2.0.0",
     "react-tiny-popover": "^7.0.1",
     "react-virtual": "^2.10.4",
