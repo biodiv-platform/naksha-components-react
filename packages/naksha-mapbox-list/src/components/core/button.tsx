@@ -32,10 +32,15 @@ export const CloseButton = (props?) => (
 
 export const LayersButton = (props?) => (
   <button
-    className={tw`absolute top-4 left-4 rounded-lg z-10 h-10 w-10 bg-white cursor-pointer hover:bg-gray-100 text-gray-700 text-lg flex items-center justify-center`}
+    className={tw`absolute top-4  rounded-r-md z-10 h-10 w-24 bg-white cursor-pointer hover:bg-gray-100 text-black-100 text-md flex items-center justify-left pl-2`}
     {...props}
   >
-    <LayersIcon />
+    <div className={tw`mr-2`}>
+      <LayersIcon />
+    </div>
+    <h2>
+      <strong>Layers</strong>
+    </h2>
   </button>
 );
 
