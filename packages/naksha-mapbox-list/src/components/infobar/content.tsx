@@ -13,7 +13,6 @@ import {
 } from "../core";
 import InfoBarPanel from "./infobar-panel";
 import clsx from "clsx";
-import { window } from "../sidebar/common/layer-item";
 
 export default function InfoBarContent({ onClose }) {
   const {

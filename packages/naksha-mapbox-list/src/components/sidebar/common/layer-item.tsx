@@ -36,7 +36,7 @@ interface LayerItemProps {
   extended?: boolean;
 }
 
-export declare const window;
+declare const window;
 
 export default function LayerItem({ item, extended }: LayerItemProps) {
   const { t } = useT();
