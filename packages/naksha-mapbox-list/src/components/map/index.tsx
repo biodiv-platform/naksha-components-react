@@ -1,60 +1,210 @@
-import { defaultViewState } from "@biodiv-platform/naksha-commons";
-import React, { useMemo, useState } from "react";
-import MapGL, { NavigationControl } from "react-map-gl";
-import { tw } from "twind";
-
+import React, {
+  useMemo,
+  useState,
+  useRef,
+  useCallback,
+  useEffect,
+} from "react";
+import MapGL, { NavigationControl, MapRef } from "react-map-gl";
 import useLayers from "../../hooks/use-layers";
-import InfoBar from "../infobar";
-import Sidebar from "../sidebar";
 import { MapLayer } from "./layers";
 import MarkersList from "./markers-list";
+import { tw } from "twind";
+import InfoBar from "../infobar";
+import Sidebar from "../sidebar";
 import HoverPopup from "./popup";
-
-const NavControl: any = NavigationControl;
+import ClusterLayer from "./cluster";
+import DataCard from "./cluster/dataCard";
+import { HoveredMarker, GeoJSON } from "../../interfaces";
 
 export default function Map() {
-  const { mp, layer, hover, query } = useLayers();
+  const mapRef = useRef<MapRef | null>(null);
 
-  const [coordinates, setCoordinates] = useState<any>();
+  const {
+    mp,
+    layer,
+    hover,
+    query,
+    markerDetails,
+    setMarkerDetails,
+    showLayerHoverPopup,
+  } = useLayers();
+  const [coordinates, setCoordinates] = useState<[number, number] | null>(null);
+  const [hoveredMarker, setHoveredMarker] = useState<HoveredMarker | null>(
+    null
+  );
+  const [markerData, setMarkerData] = useState<Record<string, any>>({});
+
+  const clusterMarkers: any[] = useMemo(
+    () => mp.clusterMarkers || [],
+    [mp.clusterMarkers]
+  );
+
+  const convertToGeoJSON = useCallback(
+    (data: any[]): GeoJSON => ({
+      type: "FeatureCollection",
+      features: data.map((point) => ({
+        type: "Feature",
+        properties: { id: point.id },
+        geometry: {
+          type: "Point",
+          coordinates: [point.lng, point.lat],
+        },
+      })),
+    }),
+    []
+  );
+
+  const geojson: GeoJSON = useMemo(
+    () => convertToGeoJSON(clusterMarkers),
+    [clusterMarkers, convertToGeoJSON]
+  );
+
   const viewState = useMemo(
-    () => mp.defaultViewState || defaultViewState,
+    () =>
+      mp.defaultViewState || {
+        longitude: -103.5917,
+        latitude: 40.6699,
+        zoom: 3,
+      },
     [mp.defaultViewState]
   );
 
-  const onMapClick = (e) => query.setClickedLngLat(e.lngLat);
+  const handleMapClick = useCallback(
+    async (event: any) => {
+      const { features, lngLat } = event;
 
-  const handleOnMouseMove = (event) => {
-    setCoordinates(event.lngLat);
-    hover.onHover(event);
-  };
+      query.setClickedLngLat(event.lngLat);
+
+      if (features && features.length) {
+        const feature = features[0];
+        if (feature.layer.id === "clusters") {
+          const clusterId = feature.properties.cluster_id;
+          const mapboxSource = mapRef.current?.getSource("points") as any;
+
+          if (
+            mapboxSource &&
+            typeof mapboxSource.getClusterExpansionZoom === "function"
+          ) {
+            mapboxSource.getClusterExpansionZoom(
+              clusterId,
+              (err: Error, zoom: number) => {
+                if (err) return;
+                mapRef.current?.easeTo({
+                  center: lngLat,
+                  zoom,
+                  duration: 500,
+                });
+              }
+            );
+          }
+        } else if (feature.layer.id === "unclustered-point") {
+          const data = await mp.hoverFunction(feature.properties.id);
+          setMarkerDetails(data);
+        } else {
+          setMarkerDetails([]);
+        }
+      } else {
+        setMarkerDetails([]);
+      }
+    },
+    [query, mp, setMarkerDetails]
+  );
+
+  const handleMapMouseMove = useCallback(
+    async (event: any) => {
+      const { features, lngLat } = event;
+      setCoordinates(lngLat);
+      hover.onHover(event);
+
+      if (features && features.length) {
+        const feature = features[0];
+        if (feature.layer.id === "unclustered-point") {
+          setHoveredMarker({
+            lngLat: feature.geometry.coordinates as [number, number],
+            properties: feature.properties,
+          });
+          const data = await mp.hoverFunction(feature.properties.id);
+          setMarkerData((prevData) => ({
+            ...prevData,
+            [feature.properties.id]: data,
+          }));
+        } else {
+          setHoveredMarker(null);
+        }
+      } else {
+        setHoveredMarker(null);
+      }
+    },
+    [hover, mp]
+  );
+
+  const selectedLayerIds: string[] = useMemo(
+    () => layer.selectedLayers.map((l) => l.id),
+    [layer.selectedLayers]
+  );
+
+  useEffect(() => {
+    if (mapRef.current) {
+      const moveClusterLayersToTop = () => {
+        mapRef.current?.moveLayer("clusters");
+        mapRef.current?.moveLayer("cluster-count");
+        mapRef.current?.moveLayer("unclustered-point");
+      };
+
+      mapRef.current.on("render", moveClusterLayersToTop);
+
+      return () => {
+        mapRef.current?.off("render", moveClusterLayersToTop);
+      };
+    }
+  }, [selectedLayerIds]);
 
   return (
     <div className={tw`h-full w-full relative bg-gray-100`}>
       {mp.loadToC && <Sidebar />}
-      {layer.selectedFeatures?.length > 0 && <InfoBar />}
+      {(markerDetails?.id || layer?.selectedFeatures?.length > 0) && (
+        <InfoBar />
+      )}
       <MapGL
         id="mapl"
         cursor="default"
         initialViewState={viewState}
+        minZoom={3}
         mapboxAccessToken={mp.mapboxAccessToken}
         style={{ width: "100%", height: "100%" }}
         mapStyle={layer.mapStyle}
-        onClick={onMapClick}
-        onMouseMove={handleOnMouseMove}
+        onClick={handleMapClick}
+        onMouseMove={handleMapMouseMove}
+        interactiveLayerIds={["clusters", "unclustered-point"]}
+        ref={mapRef}
       >
-        <NavControl
-          position="bottom-right"
+        <NavigationControl
+          position={"bottom-right"}
           showZoom={true}
           showCompass={true}
         />
         <MarkersList />
-        {layer.selectedLayers.map((_l, index) => {
-          const beforeId = index > 0 ? layer.selectedIds[index - 1] : undefined;
 
+        <ClusterLayer data={geojson} />
+
+        {layer.selectedLayers.map((_l, index) => {
+          const beforeId =
+            index > 0 ? layer.selectedLayers[index - 1].id : undefined;
           return <MapLayer key={_l.id} layer={_l} beforeId={beforeId} />;
         })}
 
-        <HoverPopup key="popup" coordinates={coordinates} />
+        {hoveredMarker?.properties?.id &&
+        markerData[hoveredMarker?.properties?.id] ? (
+          <DataCard
+            coordinates={hoveredMarker?.lngLat}
+            data={markerData[hoveredMarker.properties.id]}
+          />
+        ) : (
+          showLayerHoverPopup && (
+            <HoverPopup key="popup" coordinates={coordinates} />
+          )
+        )}
       </MapGL>
     </div>
   );

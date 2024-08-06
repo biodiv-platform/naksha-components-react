@@ -9,6 +9,12 @@ export interface ExtendedMarkerProps {
   colorHex: string;
 }
 
+export interface ExtendedClusterProps {
+  lat: number;
+  lng: number;
+  id: number;
+}
+
 export interface NakshaMapboxListProps {
   defaultViewState?: Partial<ViewState>;
 
@@ -37,6 +43,10 @@ export interface NakshaMapboxListProps {
   lang?;
 
   markers?: ExtendedMarkerProps[];
+  clusterMarkers?: ExtendedClusterProps[];
+  hoverFunction?: any;
+
+  showLayerHoverPopup?: boolean;
 
   children?;
 }
@@ -79,8 +89,8 @@ export interface GeoserverLayer {
     endpoint?;
     fetcher?;
   };
-  onClick?: ({ bbox, feature, layerId}) => JSX.Element;
-  onHover?: ({ bbox, feature, layerId}) => JSX.Element;
+  onClick?: ({ bbox, feature, layerId }) => JSX.Element;
+  onHover?: ({ bbox, feature, layerId }) => JSX.Element;
   data?: {
     styles?: VectorStyleMeta[];
     styleIndex?;
@@ -89,4 +99,28 @@ export interface GeoserverLayer {
     summaryColumn?;
     [key: string]: any;
   };
+}
+
+export interface FeatureProperties {
+  id: string;
+  [key: string]: any;
+}
+
+export interface GeoJSONFeature {
+  type: "Feature";
+  properties: { id: string };
+  geometry: {
+    type: "Point";
+    coordinates: [number, number];
+  };
+}
+
+export interface GeoJSON {
+  type: "FeatureCollection";
+  features: GeoJSONFeature[];
+}
+
+export interface HoveredMarker {
+  lngLat: [number, number];
+  properties: FeatureProperties;
 }

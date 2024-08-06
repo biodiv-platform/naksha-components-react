@@ -28,6 +28,14 @@ export function LayerList() {
 
   return (
     <div className={tw`flex-grow-1 relative`}>
+      {layer.all.length === 0 && (
+        <div className={tw`flex  justify-center h-full`}>
+          <div className={tw`text-center`}>
+            <p className={tw`text`}>Layers not available right now! </p>
+            <p className={tw`text`}>Please try again later :(</p>
+          </div>
+        </div>
+      )}
       <AutoSizer disableWidth={true}>
         {(p) => (
           <div

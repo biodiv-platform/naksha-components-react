@@ -61,6 +61,9 @@ interface LayersContextProps {
     onHover;
     features;
   };
+  markerDetails;
+  setMarkerDetails;
+  showLayerHoverPopup: boolean;
 }
 
 interface LayersProviderProps {
@@ -83,7 +86,7 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
     defaultMapStyles[mp?.mapStyle || 0].style
   );
   const [selectionStyle, setSelectionStyle] = useState<string>(
-    SELECTION_STYLE.TOP
+    SELECTION_STYLE.ALL
   );
   const [gridLegends, setGridLegends] = useState({});
   const [isInfoBarOpen, setIsInfoBarOpen] = useState(true);
@@ -95,6 +98,15 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
   );
 
   const [hoverFeatures, setHoverFeatures] = useState<any>();
+
+  const [markerDetails, setMarkerDetails] = useState<any>({
+    values: [],
+    titlesValues: [],
+  });
+
+  const [showLayerHoverPopup, setShowLayerHoverPopup] = useState<boolean>(
+    mp.showLayerHoverPopup ?? true
+  );
 
   const [selectedFeatures, setSelectedFeatures] = useState<any>();
   const selectedFeaturesId = useMemo(() => {
@@ -320,6 +332,11 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
     setTimeout(featuresAtLatLng, 300);
   }, [clickedLngLat, selectionStyle, selectedLayerIds]);
 
+  // refresh map points
+  useEffect(() => {
+    setMP(_mp);
+  }, [_mp]);
+
   return (
     <LayersContext.Provider
       value={{
@@ -363,6 +380,9 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
           onHover: onMapHover,
           features: hoverFeatures,
         },
+        markerDetails,
+        setMarkerDetails,
+        showLayerHoverPopup,
       }}
     >
       {children}

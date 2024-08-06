@@ -36,11 +36,17 @@ interface LayerItemProps {
   extended?: boolean;
 }
 
-declare const window;
+export declare const window;
 
 export default function LayerItem({ item, extended }: LayerItemProps) {
   const { t } = useT();
-  const { layer, query, mp, query: { setClickedLngLat }, setIsInfoBarOpen } = useLayers();
+  const {
+    layer,
+    query,
+    mp,
+    query: { setClickedLngLat },
+    setIsInfoBarOpen,
+  } = useLayers();
   const [isAdded, setIsAdded] = useState(layer.selectedIds.includes(item.id));
   const [isLoading, setIsLoading] = useState(false);
 
@@ -48,18 +54,19 @@ export default function LayerItem({ item, extended }: LayerItemProps) {
     () =>
       mp.canLayerShare
         ? {
-          url: `${window.location.href.split("?")[0]}?layers=${item.id}`,
-          title: item.title,
-        }
+            url: `${window.location.href.split("?")[0]}?layers=${item.id}`,
+            title: item.title,
+          }
         : undefined,
     [item.id]
   );
 
-  const onToggleLayer = async () => {
+  const onToggleLayer = async (event) => {
+    event.stopPropagation();
     setIsLoading(true);
-    setIsInfoBarOpen(true)
-    layer.setSelectedFeatures([])
-    setClickedLngLat(null)
+    setIsInfoBarOpen(true);
+    layer.setSelectedFeatures([]);
+    setClickedLngLat(null);
     await layer.toggle({ layerId: item.id, add: !isAdded });
     setIsAdded(!isAdded);
     setIsLoading(false);
