@@ -1,49 +1,48 @@
-import { defaultViewState } from "@biodiv-platform/naksha-commons";
-import { useEffect, useMemo, useRef, useState } from "react";
-import MapGL, { Marker, NavigationControl } from "react-map-gl";
-import { tw } from "twind";
+import React, {
+  useMemo,
+  useState,
+  useRef,
+  useCallback,
+  useEffect,
+} from "react";
+import MapGL, { NavigationControl, MapRef } from "react-map-gl";
 import useLayers from "../../hooks/use-layers";
-import InfoBar from "../infobar";
-import Sidebar from "../sidebar";
 import { MapLayer } from "./layers";
 import MarkersList from "./markers-list";
-import HoverPopup from "./popup";
-import supercluster from "supercluster";
+import { tw } from "twind";
+import InfoBar from "../infobar";
+import Sidebar from "../sidebar";
 import DataCard from "./data-card";
+import HoverPopup from "./popup";
+import ClusterLayer from "./cluster";
 
-const NavControl = NavigationControl;
+interface FeatureProperties {
+  id: string;
+  [key: string]: any;
+}
 
-const convertToGeoJSON = (data) => {
-  return {
-    type: "FeatureCollection",
-    features: data.map((point) => ({
-      type: "Feature",
-      properties: { id: point.id },
-      geometry: {
-        type: "Point",
-        coordinates: [point.lng, point.lat],
-      },
-    })),
+interface GeoJSONFeature {
+  type: "Feature";
+  properties: { id: string };
+  geometry: {
+    type: "Point";
+    coordinates: [number, number];
   };
-};
+}
 
-// Function to get color based on cluster size
-const getClusterColor = (count) => {
-  if (count > 100) return "#ff0000";
-  if (count > 25) return "#ffbf00";
-  return "#008cff";
-};
+interface GeoJSON {
+  type: "FeatureCollection";
+  features: GeoJSONFeature[];
+}
 
-// Function to get size based on cluster size
-const getClusterSize = (count) => {
-  if (count > 100) return 60;
-  if (count > 50) return 50;
-  if (count > 25) return 40;
-  return 30;
-};
+interface HoveredMarker {
+  lngLat: [number, number];
+  properties: FeatureProperties;
+}
 
-export default function Map() {
-  const mapRef = useRef<any>(null);
+const Map: React.FC = () => {
+  const mapRef = useRef<MapRef | null>(null);
+
   const {
     mp,
     layer,
@@ -53,135 +52,136 @@ export default function Map() {
     setMarkerDetails,
     showLayerHoverPopup,
   } = useLayers();
-  const [clusters, setClusters] = useState([]);
-  const [superCluster, setSuperCluster] = useState(null);
-  const [hoveredMarker, setHoveredMarker] = useState(null);
-  const [markerData, setMarkerData] = useState({});
-  const [selectedMarker, setSelectedMarker] = useState(false);
-  const [markerColor, setMarkerColor] = useState({});
+  const [coordinates, setCoordinates] = useState<[number, number] | null>(null);
+  const [hoveredMarker, setHoveredMarker] = useState<HoveredMarker | null>(
+    null
+  );
+  const [markerData, setMarkerData] = useState<Record<string, any>>({});
 
-  const handleMouseEnterOnMarker = async (point, isCluster) => {
-    if (!isCluster) {
-      setHoveredMarker(point);
-    }
+  const clusterMarkers: any[] = useMemo(
+    () => mp.clusterMarkers || [],
+    [mp.clusterMarkers]
+  );
 
-    if (!markerData[point.properties.id] && !isCluster) {
-      try {
-        const data = await mp.hoverFunction(point.properties.id);
-        setMarkerData((prevData) => ({
-          ...prevData,
-          [point.properties.id]: data,
-        }));
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    }
-  };
+  const convertToGeoJSON = useCallback(
+    (data: any[]): GeoJSON => ({
+      type: "FeatureCollection",
+      features: data.map((point) => ({
+        type: "Feature",
+        properties: { id: point.id },
+        geometry: {
+          type: "Point",
+          coordinates: [point.lng, point.lat],
+        },
+      })),
+    }),
+    []
+  );
 
-  const handleMouseLeaveOnMarker = () => {
-    setHoveredMarker(null);
-  };
+  const geojson: GeoJSON = useMemo(
+    () => convertToGeoJSON(clusterMarkers),
+    [clusterMarkers, convertToGeoJSON]
+  );
 
-  const handleClickOnMarker = async (id) => {
-    setSelectedMarker(true);
-    setMarkerColor({
-      [id]: true,
-    });
-    if (markerData[id]) {
-      setMarkerDetails(markerData[id]);
-    } else {
-      const data = await mp.hoverFunction(id);
-      setMarkerDetails(data);
-    }
-  };
-
-  const [coordinates, setCoordinates] = useState(null);
   const viewState = useMemo(
-    () => mp.defaultViewState || defaultViewState,
+    () =>
+      mp.defaultViewState || {
+        longitude: -103.5917,
+        latitude: 40.6699,
+        zoom: 3,
+      },
     [mp.defaultViewState]
   );
-  const clusterMarkers = useMemo(() => mp.clusterMarkers, [mp.clusterMarkers]);
 
-  const onMapClick = (e) => {
-    if (!selectedMarker) {
-      setMarkerDetails([]);
-      setMarkerColor({});
-    }
-    setSelectedMarker(false);
-    query.setClickedLngLat(e.lngLat);
-  };
+  const handleMapClick = useCallback(
+    async (event: any) => {
+      const { features, lngLat } = event;
 
-  const handleOnMouseMove = (event) => {
-    setCoordinates(event.lngLat);
-    hover.onHover(event);
-  };
-  const handleMapLoad = () => {
-    updateClusters();
-    if (mapRef.current) {
-      mapRef.current.on("moveend", updateClusters);
-    }
-  };
+      query.setClickedLngLat(event.lngLat);
 
-  // Calculate bounds from clusterMarkers
-  const getBounds = (markers) => {
-    const lngs = markers.map((marker) => marker.lng);
-    const lats = markers.map((marker) => marker.lat);
-    const sw = [Math.min(...lngs), Math.min(...lats)];
-    const ne = [Math.max(...lngs), Math.max(...lats)];
-    return [sw, ne];
-  };
+      if (features && features.length) {
+        const feature = features[0];
+        if (feature.layer.id === "clusters") {
+          const clusterId = feature.properties.cluster_id;
+          const mapboxSource = mapRef.current?.getSource("points") as any;
 
-  // Load points data and initialize supercluster
-  useEffect(() => {
-    if (clusterMarkers) {
-      const geojson = convertToGeoJSON(clusterMarkers);
-      const superclusterInstance = new supercluster({
-        radius: 50,
-        maxZoom: 16,
-      });
-      superclusterInstance.load(geojson.features);
-      setSuperCluster(superclusterInstance);
-
-      // Set map bounds to fit clusterMarkers
-      if (mapRef.current && !layer.selectedLayers.length) {
-        const bounds = getBounds(clusterMarkers);
-        console.warn("#bounds", bounds);
-        mapRef.current.fitBounds(bounds, {
-          // padding: 10,
-          padding: { top: 200, bottom: 100, left: 20, right: 20 },
-          duration: 1000,
-        });
+          if (
+            mapboxSource &&
+            typeof mapboxSource.getClusterExpansionZoom === "function"
+          ) {
+            mapboxSource.getClusterExpansionZoom(
+              clusterId,
+              (err: Error, zoom: number) => {
+                if (err) return;
+                mapRef.current?.easeTo({
+                  center: lngLat,
+                  zoom,
+                  duration: 500,
+                });
+              }
+            );
+          }
+        } else if (feature.layer.id === "unclustered-point") {
+          const data = await mp.hoverFunction(feature.properties.id);
+          setMarkerDetails(data);
+        } else {
+          setMarkerDetails([]);
+        }
+      } else {
+        setMarkerDetails([]);
       }
-    }
-  }, [clusterMarkers]);
+    },
+    [query, mp, setMarkerDetails]
+  );
 
-  useEffect(() => {
-    if (mapRef.current && superCluster) {
-      updateClusters();
-      mapRef.current.on("moveend", updateClusters); // Add event listener
-    }
+  const handleMapMouseMove = useCallback(
+    async (event: any) => {
+      const { features, lngLat } = event;
+      setCoordinates(lngLat);
+      hover.onHover(event);
 
-    return () => {
-      if (mapRef.current) {
-        mapRef.current.off("moveend", updateClusters); // Clean up event listener
+      if (features && features.length) {
+        const feature = features[0];
+        if (feature.layer.id === "unclustered-point") {
+          setHoveredMarker({
+            lngLat: feature.geometry.coordinates as [number, number],
+            properties: feature.properties,
+          });
+          const data = await mp.hoverFunction(feature.properties.id);
+          setMarkerData((prevData) => ({
+            ...prevData,
+            [feature.properties.id]: data,
+          }));
+        } else {
+          setHoveredMarker(null);
+        }
+      } else {
+        setHoveredMarker(null);
       }
-    };
-  }, [superCluster, mapRef.current]);
+    },
+    [hover, mp]
+  );
 
-  const updateClusters = () => {
-    if (superCluster && mapRef.current) {
-      const zoom = Math.floor(mapRef.current.getZoom());
-      const mapBounds = mapRef.current.getBounds().toArray().flat();
-      const clusters = superCluster.getClusters(mapBounds, zoom);
-      setClusters(clusters);
-    }
-  };
+  const selectedLayerIds: string[] = useMemo(
+    () => layer.selectedLayers.map((l) => l.id),
+    [layer.selectedLayers]
+  );
 
   useEffect(() => {
     if (mapRef.current) {
-      updateClusters();
+      const moveClusterLayersToTop = () => {
+        mapRef.current?.moveLayer("clusters");
+        mapRef.current?.moveLayer("cluster-count");
+        mapRef.current?.moveLayer("unclustered-point");
+      };
+
+      mapRef.current.on("render", moveClusterLayersToTop);
+
+      return () => {
+        mapRef.current?.off("render", moveClusterLayersToTop);
+      };
     }
-  }, [mapRef]);
+  }, [selectedLayerIds]);
 
   return (
     <div className={tw`h-full w-full relative bg-gray-100`}>
@@ -195,131 +195,30 @@ export default function Map() {
         mapboxAccessToken={mp.mapboxAccessToken}
         style={{ width: "100%", height: "100%" }}
         mapStyle={layer.mapStyle}
-        onClick={onMapClick}
-        onLoad={handleMapLoad}
-        onMouseMove={handleOnMouseMove}
+        onClick={handleMapClick}
+        onMouseMove={handleMapMouseMove}
+        interactiveLayerIds={["clusters", "unclustered-point"]}
         ref={mapRef}
       >
-        <NavControl
+        <NavigationControl
           position="bottom-right"
           showZoom={true}
           showCompass={true}
         />
         <MarkersList />
 
-        {/* Cluster logic */}
-        {clusters &&
-          clusters.map((cluster) => {
-            const { geometry, properties } = cluster;
-            const [longitude, latitude] = geometry.coordinates;
+        <ClusterLayer data={geojson} />
 
-            if (properties.cluster) {
-              const size = getClusterSize(properties.point_count);
-              const color = getClusterColor(properties.point_count);
-
-              return (
-                <Marker
-                  key={`cluster-${properties.cluster_id}`}
-                  latitude={latitude}
-                  longitude={longitude}
-                  className="cluster-marker-wrapper"
-                >
-                  <div
-                    className="cluster-marker"
-                    style={{
-                      width: `${size}px`,
-                      height: `${size}px`,
-                      backgroundColor: color,
-                      borderRadius: "50%",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      color: "black",
-                      cursor: "pointer",
-                      fontWeight: "bold",
-                    }}
-                    onMouseEnter={() => handleMouseEnterOnMarker(cluster, true)}
-                    onMouseLeave={handleMouseLeaveOnMarker}
-                    onClick={() => {
-                      const expansionZoom =
-                        superCluster.getClusterExpansionZoom(
-                          properties.cluster_id
-                        );
-                      mapRef.current.easeTo({
-                        center: geometry.coordinates,
-                        zoom: expansionZoom,
-                        duration: 500,
-                      });
-                    }}
-                  >
-                    {properties.point_count_abbreviated}
-                  </div>
-                </Marker>
-              );
-            }
-
-            return (
-              <Marker
-                key={`point-${properties.id}`}
-                latitude={latitude}
-                longitude={longitude}
-                className="location-marker-wrapper"
-              >
-                <div
-                  className="location-marker"
-                  style={{
-                    position: "relative",
-                    width: 30,
-                    height: 30,
-                    cursor: "pointer",
-                  }}
-                  onMouseEnter={() => handleMouseEnterOnMarker(cluster, false)}
-                  onMouseLeave={handleMouseLeaveOnMarker}
-                  onClick={(event) => {
-                    handleClickOnMarker(properties.id);
-                  }}
-                >
-                  <svg
-                    width={markerColor[properties.id] ? "26px" : "24px"}
-                    height={markerColor[properties.id] ? "37px" : "35px"}
-                    viewBox="38 12 128 180"
-                    className={
-                      markerColor[properties.id] ? "bounce-animation" : ""
-                    }
-                  >
-                    <path
-                      style={{
-                        fill: markerColor[properties.id] ? "#C53030" : "red",
-                        stroke: "#fafafa",
-                        strokeWidth: markerColor[properties.id] ? 9 : 2,
-                        strokeMiterlimit: 10,
-                      }}
-                      d="M158.5,73.8c0-32.3-26.2-58.4-58.4-58.4c-32.3,0-58.4,26.2-58.4,58.4c0,16.6,6.9,31.5,18,42.1
-                      c7.2,7.2,16.7,17.2,20.1,22.5c7,10.9,20,47.9,20,47.9s13.3-37,20.4-47.9c3.3-5.1,12.2-14.4,19.3-21.6
-                      C151.2,106.1,158.5,90.9,158.5,73.8z"
-                    />
-                    <circle
-                      style={{ fill: "#fafafa", opacity: 0.8 }}
-                      cx="100.1"
-                      cy="74.7"
-                      r="20"
-                    />
-                  </svg>
-                </div>
-              </Marker>
-            );
-          })}
-
-        {/* Layers logic */}
         {layer.selectedLayers.map((_l, index) => {
-          const beforeId = index > 0 ? layer.selectedIds[index - 1] : undefined;
+          const beforeId =
+            index > 0 ? layer.selectedLayers[index - 1].id : undefined;
           return <MapLayer key={_l.id} layer={_l} beforeId={beforeId} />;
         })}
 
         {hoveredMarker?.properties?.id &&
         markerData[hoveredMarker?.properties?.id] ? (
           <DataCard
-            coordinates={hoveredMarker?.geometry.coordinates}
+            coordinates={hoveredMarker?.lngLat}
             data={markerData[hoveredMarker.properties.id]}
           />
         ) : (
@@ -330,4 +229,6 @@ export default function Map() {
       </MapGL>
     </div>
   );
-}
+};
+
+export default Map;
