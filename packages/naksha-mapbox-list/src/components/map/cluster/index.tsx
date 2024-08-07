@@ -55,7 +55,7 @@ const ClusterLayer = ({ data }) => {
         filter={["!", ["has", "point_count"]]}
         paint={{
           "circle-color": "red",
-          "circle-radius": 10,
+          "circle-radius": 7,
           "circle-stroke-width": 1,
           "circle-stroke-color": "#fff",
         }}
