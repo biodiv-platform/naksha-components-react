@@ -14,6 +14,8 @@ import {
 import InfoBarPanel from "./infobar-panel";
 import clsx from "clsx";
 
+declare const window;
+
 export default function InfoBarContent({ onClose }) {
   const {
     layer: { selectedFeatures, selectedLayers, selectionStyle },

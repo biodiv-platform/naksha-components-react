@@ -35,31 +35,6 @@ export default function Map() {
   );
   const [markerData, setMarkerData] = useState<Record<string, any>>({});
 
-  const clusterMarkers: any[] = useMemo(
-    () => mp.clusterMarkers || [],
-    [mp.clusterMarkers]
-  );
-
-  const convertToGeoJSON = useCallback(
-    (data: any[]): GeoJSON => ({
-      type: "FeatureCollection",
-      features: data.map((point) => ({
-        type: "Feature",
-        properties: { id: point.id },
-        geometry: {
-          type: "Point",
-          coordinates: [point.lng, point.lat],
-        },
-      })),
-    }),
-    []
-  );
-
-  const geojson: GeoJSON = useMemo(
-    () => convertToGeoJSON(clusterMarkers),
-    [clusterMarkers, convertToGeoJSON]
-  );
-
   const viewState = useMemo(
     () =>
       mp.defaultViewState || {
@@ -186,7 +161,7 @@ export default function Map() {
         />
         <MarkersList />
 
-        <ClusterLayer data={geojson} />
+        <ClusterLayer data={mp.clusterMarkers} />
 
         {layer.selectedLayers.map((_l, index) => {
           const beforeId =
