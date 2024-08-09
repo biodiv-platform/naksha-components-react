@@ -12,6 +12,7 @@ export const defaultNakshaProps: NakshaMapboxListProps = {
   mapStyle: MapStyles.MAP_STREETS,
   layers: [],
   selectedLayers: [],
+  clusterMarkers: [],
 };
 
 export const FALLBACK_THUMB =
@@ -40,4 +41,10 @@ export const LAYER_STATUS = {
 export const SELECTION_STYLE = {
   TOP: "layer_selection_top",
   ALL: "layer_selection_all",
+};
+
+export const CLUSTER_LAYERS = {
+  CLUSTERS: "clusters",
+  CLUSTER_COUNT: "cluster-count",
+  UNCLUSTERED_POINTS: "unclustered-point",
 };

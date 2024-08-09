@@ -85,6 +85,7 @@ export default function NakshaMapboxListPage() {
             },
           },
         ]}
+        clusterMarkers={undefined}
       />
     </div>
   );

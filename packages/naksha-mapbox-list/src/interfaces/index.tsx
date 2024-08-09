@@ -9,12 +9,6 @@ export interface ExtendedMarkerProps {
   colorHex: string;
 }
 
-export interface ExtendedClusterProps {
-  lat: number;
-  lng: number;
-  id: number;
-}
-
 export interface NakshaMapboxListProps {
   defaultViewState?: Partial<ViewState>;
 
@@ -43,7 +37,7 @@ export interface NakshaMapboxListProps {
   lang?;
 
   markers?: ExtendedMarkerProps[];
-  clusterMarkers?: ExtendedClusterProps[];
+  clusterMarkers: any;
   hoverFunction?: any;
 
   showLayerHoverPopup?: boolean;

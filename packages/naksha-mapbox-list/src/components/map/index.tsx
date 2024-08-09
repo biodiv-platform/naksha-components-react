@@ -1,10 +1,4 @@
-import React, {
-  useMemo,
-  useState,
-  useRef,
-  useCallback,
-  useEffect,
-} from "react";
+import React, { useMemo, useState, useRef } from "react";
 import MapGL, { NavigationControl, MapRef } from "react-map-gl";
 import useLayers from "../../hooks/use-layers";
 import { MapLayer } from "./layers";
@@ -13,9 +7,9 @@ import { tw } from "twind";
 import InfoBar from "../infobar";
 import Sidebar from "../sidebar";
 import HoverPopup from "./popup";
-import ClusterLayer from "./cluster";
-import DataCard from "./cluster/dataCard";
-import { HoveredMarker, GeoJSON } from "../../interfaces";
+import { HoveredMarker } from "../../interfaces";
+import Cluster from "./cluster";
+import { CLUSTER_LAYERS } from "../../static/constants";
 
 export default function Map() {
   const mapRef = useRef<MapRef | null>(null);
@@ -29,11 +23,14 @@ export default function Map() {
     setMarkerDetails,
     showLayerHoverPopup,
   } = useLayers();
+
   const [coordinates, setCoordinates] = useState<[number, number] | null>(null);
   const [hoveredMarker, setHoveredMarker] = useState<HoveredMarker | null>(
     null
   );
-  const [markerData, setMarkerData] = useState<Record<string, any>>({});
+  const [hoveredMarkerData, setHoveredMarkerData] = useState<
+    Record<string, any>
+  >({});
 
   const viewState = useMemo(
     () =>
@@ -45,95 +42,78 @@ export default function Map() {
     [mp.defaultViewState]
   );
 
-  const handleMapClick = useCallback(
-    async (event: any) => {
-      const { features, lngLat } = event;
+  const handleMapClick = async (event: any) => {
+    const { features, lngLat } = event;
 
-      query.setClickedLngLat(event.lngLat);
+    query.setClickedLngLat(lngLat);
 
-      if (features && features.length) {
-        const feature = features[0];
-        if (feature.layer.id === "clusters") {
-          const clusterId = feature.properties.cluster_id;
-          const mapboxSource = mapRef.current?.getSource("points") as any;
+    if (features && features.length) {
+      const feature = features[0];
+      if (feature.layer.id === CLUSTER_LAYERS.CLUSTERS) {
+        const clusterId = feature.properties.cluster_id;
+        const mapboxSource = mapRef.current?.getSource("points") as any;
 
-          if (
-            mapboxSource &&
-            typeof mapboxSource.getClusterExpansionZoom === "function"
-          ) {
-            mapboxSource.getClusterExpansionZoom(
-              clusterId,
-              (err: Error, zoom: number) => {
-                if (err) return;
+        if (mapboxSource?.getClusterExpansionZoom) {
+          mapboxSource.getClusterExpansionZoom(
+            clusterId,
+            (err: Error, zoom: number) => {
+              if (!err) {
                 mapRef.current?.easeTo({
                   center: lngLat,
                   zoom,
                   duration: 500,
                 });
               }
-            );
-          }
-        } else if (feature.layer.id === "unclustered-point") {
+            }
+          );
+        }
+        setMarkerDetails([]);
+      } else if (feature.layer.id === CLUSTER_LAYERS.UNCLUSTERED_POINTS) {
+        try {
           const data = await mp.hoverFunction(feature.properties.id);
           setMarkerDetails(data);
-        } else {
+        } catch (error) {
+          console.error("Error fetching marker details:", error);
           setMarkerDetails([]);
         }
       } else {
         setMarkerDetails([]);
       }
-    },
-    [query, mp, setMarkerDetails]
-  );
+    } else {
+      setMarkerDetails([]);
+    }
+  };
 
-  const handleMapMouseMove = useCallback(
-    async (event: any) => {
-      const { features, lngLat } = event;
-      setCoordinates(lngLat);
-      hover.onHover(event);
+  const handleMapMouseMove = async (event: any) => {
+    const { features, lngLat } = event;
+    setCoordinates(lngLat);
+    hover.onHover(event);
 
-      if (features && features.length) {
-        const feature = features[0];
-        if (feature.layer.id === "unclustered-point") {
-          setHoveredMarker({
-            lngLat: feature.geometry.coordinates as [number, number],
-            properties: feature.properties,
-          });
-          const data = await mp.hoverFunction(feature.properties.id);
-          setMarkerData((prevData) => ({
-            ...prevData,
-            [feature.properties.id]: data,
-          }));
-        } else {
-          setHoveredMarker(null);
-        }
+    const canvas = mapRef.current?.getCanvas() as HTMLCanvasElement;
+    if (features && features.length) {
+      const feature = features[0];
+      if (feature.layer.id === CLUSTER_LAYERS.UNCLUSTERED_POINTS) {
+        canvas.style.cursor = "pointer";
+        setHoveredMarker({
+          lngLat: feature.geometry.coordinates as [number, number],
+          properties: feature.properties,
+        });
+        const data = await mp.hoverFunction(feature.properties.id);
+        setHoveredMarkerData((prevData) => ({
+          ...prevData,
+          [feature.properties.id]: data,
+        }));
+      } else if (feature.layer.id === CLUSTER_LAYERS.CLUSTERS) {
+        canvas.style.cursor = "pointer";
       } else {
+        canvas.style.cursor = "default";
         setHoveredMarker(null);
       }
-    },
-    [hover, mp]
-  );
-
-  const selectedLayerIds: string[] = useMemo(
-    () => layer.selectedLayers.map((l) => l.id),
-    [layer.selectedLayers]
-  );
-
-  useEffect(() => {
-    if (mapRef.current) {
-      const moveClusterLayersToTop = () => {
-        mapRef.current?.moveLayer("clusters");
-        mapRef.current?.moveLayer("cluster-count");
-        mapRef.current?.moveLayer("unclustered-point");
-      };
-
-      mapRef.current.on("render", moveClusterLayersToTop);
-
-      return () => {
-        mapRef.current?.off("render", moveClusterLayersToTop);
-      };
+    } else {
+      canvas.style.cursor = "default";
+      setHoveredMarker(null);
     }
-  }, [selectedLayerIds]);
+  };
 
   return (
     <div className={tw`h-full w-full relative bg-gray-100`}>
@@ -151,7 +131,10 @@ export default function Map() {
         mapStyle={layer.mapStyle}
         onClick={handleMapClick}
         onMouseMove={handleMapMouseMove}
-        interactiveLayerIds={["clusters", "unclustered-point"]}
+        interactiveLayerIds={[
+          CLUSTER_LAYERS.CLUSTERS,
+          CLUSTER_LAYERS.UNCLUSTERED_POINTS,
+        ]}
         ref={mapRef}
       >
         <NavigationControl
@@ -160,26 +143,17 @@ export default function Map() {
           showCompass={true}
         />
         <MarkersList />
-
-        <ClusterLayer data={mp.clusterMarkers} />
-
+        <Cluster
+          mapRef={mapRef}
+          hoveredMarker={hoveredMarker}
+          hoveredMarkerData={hoveredMarkerData}
+        />
         {layer.selectedLayers.map((_l, index) => {
           const beforeId =
             index > 0 ? layer.selectedLayers[index - 1].id : undefined;
           return <MapLayer key={_l.id} layer={_l} beforeId={beforeId} />;
         })}
-
-        {hoveredMarker?.properties?.id &&
-        markerData[hoveredMarker?.properties?.id] ? (
-          <DataCard
-            coordinates={hoveredMarker?.lngLat}
-            data={markerData[hoveredMarker.properties.id]}
-          />
-        ) : (
-          showLayerHoverPopup && (
-            <HoverPopup key="popup" coordinates={coordinates} />
-          )
-        )}
+        {showLayerHoverPopup && <HoverPopup coordinates={coordinates} />}
       </MapGL>
     </div>
   );

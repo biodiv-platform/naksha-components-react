@@ -3,7 +3,7 @@ import { tw } from "twind";
 
 const Pop: any = Popup;
 
-export default function DataCard({ coordinates, data }) {
+export default function InfoCard({ coordinates, data }) {
   const { titlesValues, values } = data;
   // Extract the title from titlesValues
   const title = titlesValues[0]
@@ -15,6 +15,7 @@ export default function DataCard({ coordinates, data }) {
       longitude={coordinates[0]}
       latitude={coordinates[1]}
       closeButton={false}
+      offset={{ bottom: [0, -25] }}
     >
       <div className={tw` bg-white `}>
         <h1 className={tw`text-lg font-bold `}>{title}</h1>
