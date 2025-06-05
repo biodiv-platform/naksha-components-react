@@ -1,16 +1,54 @@
 import React from "react";
-import { SortableContainer, SortableElement } from "react-sortable-hoc";
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 
 import LayerItem from "../common/layer-item";
 
-export const SelectedItem = SortableElement(({ item, extended }) => (
-  <LayerItem item={item} extended={extended} />
-));
+interface Props {
+  layerList: any[];
+  setLayerList: (layers: any[]) => void;
+}
 
-export const SelectedItemList = SortableContainer(({ layerList }) => (
-  <div>
-    {layerList.map((item, index) => (
-      <SelectedItem key={item.id} index={index} item={item} extended={true} />
-    ))}
-  </div>
-));
+export default function SelectedItemList({ layerList, setLayerList }: Props) {
+  const sensors = useSensors(useSensor(PointerSensor));
+
+  const handleDragEnd = (event: any) => {
+    const { active, over } = event;
+    if (active.id !== over?.id) {
+      const oldIndex = layerList.findIndex((i) => i.id === active.id);
+      const newIndex = layerList.findIndex((i) => i.id === over.id);
+      setLayerList(arrayMove(layerList, oldIndex, newIndex));
+    }
+  };
+
+  return (
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      modifiers={[restrictToVerticalAxis]}
+      onDragEnd={handleDragEnd}
+    >
+      <SortableContext
+        items={layerList.map((l) => l.id)}
+        strategy={verticalListSortingStrategy}
+      >
+        <div>
+          {layerList.map((item) => (
+            <LayerItem key={item.id} item={item} extended />
+          ))}
+        </div>
+      </SortableContext>
+    </DndContext>
+  );
+}

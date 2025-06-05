@@ -1,8 +1,9 @@
 import { useT } from "@biodiv-platform/naksha-commons";
 import React, { useMemo, useState } from "react";
-import { SortableHandle } from "react-sortable-hoc";
 import { RWebShare } from "react-web-share";
 import { tw } from "twind";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 import useLayers from "../../../hooks/use-layers";
 import { GeoserverLayer } from "../../../interfaces";
@@ -25,12 +26,6 @@ import GridLegend from "./grid-legend";
 import { PopoverWrapper } from "./info-popover";
 import LayerItemStyle from "./layer-item-style";
 
-const DragHandle = SortableHandle(() => (
-  <div className={tw`mt-1 w-6 text-center cursor-move`}>
-    <GrabberIcon />
-  </div>
-));
-
 interface LayerItemProps {
   item: GeoserverLayer;
   extended?: boolean;
@@ -38,7 +33,7 @@ interface LayerItemProps {
 
 declare const window;
 
-export default function LayerItem({ item, extended }: LayerItemProps) {
+export default function LayerItem({ item, extended = false }: LayerItemProps) {
   const { t } = useT();
   const {
     layer,
@@ -49,6 +44,14 @@ export default function LayerItem({ item, extended }: LayerItemProps) {
   } = useLayers();
   const [isAdded, setIsAdded] = useState(layer.selectedIds.includes(item.id));
   const [isLoading, setIsLoading] = useState(false);
+
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: item.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
 
   const shareData = useMemo(
     () =>
@@ -61,8 +64,7 @@ export default function LayerItem({ item, extended }: LayerItemProps) {
     [item.id]
   );
 
-  const onToggleLayer = async (event) => {
-    event.stopPropagation();
+  const onToggleLayer = async () => {
     setIsLoading(true);
     setIsInfoBarOpen(true);
     layer.setSelectedFeatures([]);
@@ -86,8 +88,11 @@ export default function LayerItem({ item, extended }: LayerItemProps) {
 
   return (
     <div
+      ref={setNodeRef}
+      {...attributes}
+      {...listeners}
       className={tw`z-20 p-3 bg-white`}
-      style={{ borderTop: "1px solid #e5e7eb" }}
+      style={{ borderTop: "1px solid #e5e7eb", ...style }}
     >
       <div className={tw`flex gap-3`}>
         <div className={tw`flex-shrink-0`}>
@@ -97,7 +102,11 @@ export default function LayerItem({ item, extended }: LayerItemProps) {
             onChange={onToggleLayer}
             isLoading={isLoading}
           />
-          {extended && <DragHandle />}
+          {extended && (
+            <div className={tw`mt-1 w-6 text-center cursor-move`}>
+              <GrabberIcon />
+            </div>
+          )}
         </div>
         <img
           className={tw`flex-shrink-0 overflow-hidden h-16 w-16 p-1 mb-2 object-cover border border-gray-200 rounded`}
@@ -139,7 +148,6 @@ export default function LayerItem({ item, extended }: LayerItemProps) {
               children={<ZoomExtentIcon />}
             />
           )}
-
           <PopoverWrapper item={item} />
         </div>
       </div>
