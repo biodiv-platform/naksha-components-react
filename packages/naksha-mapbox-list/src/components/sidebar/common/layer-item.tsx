@@ -1,6 +1,5 @@
 import { useT } from "@biodiv-platform/naksha-commons";
 import React, { useMemo, useState } from "react";
-import { SortableHandle } from "react-sortable-hoc";
 import { RWebShare } from "react-web-share";
 import { tw } from "twind";
 
@@ -25,20 +24,19 @@ import GridLegend from "./grid-legend";
 import { PopoverWrapper } from "./info-popover";
 import LayerItemStyle from "./layer-item-style";
 
-const DragHandle = SortableHandle(() => (
-  <div className={tw`mt-1 w-6 text-center cursor-move`}>
-    <GrabberIcon />
-  </div>
-));
-
 interface LayerItemProps {
   item: GeoserverLayer;
   extended?: boolean;
+  dragHandleProps?: any;
 }
 
 declare const window;
 
-export default function LayerItem({ item, extended }: LayerItemProps) {
+export default function LayerItem({
+  item,
+  extended,
+  dragHandleProps,
+}: LayerItemProps) {
   const { t } = useT();
   const {
     layer,
@@ -97,7 +95,14 @@ export default function LayerItem({ item, extended }: LayerItemProps) {
             onChange={onToggleLayer}
             isLoading={isLoading}
           />
-          {extended && <DragHandle />}
+          {extended && (
+            <div
+              className={tw`mt-1 w-6 text-center cursor-move`}
+              {...dragHandleProps}
+            >
+              <GrabberIcon />
+            </div>
+          )}
         </div>
         <img
           className={tw`flex-shrink-0 overflow-hidden h-16 w-16 p-1 mb-2 object-cover border border-gray-200 rounded`}

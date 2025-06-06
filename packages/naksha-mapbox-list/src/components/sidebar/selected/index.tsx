@@ -1,6 +1,5 @@
 import { arrayMoveImmutable } from "../../../utils/array-move";
 import React from "react";
-
 import useLayers from "../../../hooks/use-layers";
 import { SelectedItemList } from "./selected-item-list";
 import { Button } from "../../core";
@@ -11,7 +10,7 @@ export default function SelectedTabPanel() {
   const { layer } = useLayers();
   const { t } = useT();
 
-  const onSortEnd = ({ oldIndex, newIndex }) => {
+  const handleSortEnd = (oldIndex: number, newIndex: number) => {
     layer.setSelectedIds(
       arrayMoveImmutable(layer.selectedIds, oldIndex, newIndex)
     );
@@ -26,8 +25,7 @@ export default function SelectedTabPanel() {
       )}
       <SelectedItemList
         layerList={layer.selectedLayers}
-        useDragHandle={true}
-        onSortEnd={onSortEnd}
+        onSortEnd={handleSortEnd}
       />
     </div>
   );
