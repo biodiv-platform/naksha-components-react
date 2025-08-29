@@ -4,3 +4,6 @@ export * from "@biodiv-platform/naksha-gmaps-view";
 export * from "@biodiv-platform/naksha-mapbox-draw";
 export * from "@biodiv-platform/naksha-mapbox-list";
 export * from "@biodiv-platform/naksha-mapbox-view";
+export * from "@biodiv-platform/naksha-maplibre-draw";
+export * from "@biodiv-platform/naksha-maplibre-layers";
+export * from "@biodiv-platform/naksha-maplibre-view";

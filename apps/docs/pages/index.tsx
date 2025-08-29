@@ -2,11 +2,14 @@ import React from "react";
 import { tw } from "twind";
 
 const modules = [
-  "naksha-mapbox-list",
-  "naksha-mapbox-view",
+  "naksha-gmaps-draw",
+  "naksha-gmaps-view",
   "naksha-mapbox-draw",
   "naksha-gmaps-draw",
   "naksha-gmaps-view",
+  "naksha-maplibre-layers",
+  "naksha-maplibre-view",
+  "naksha-maplibre-draw",
 ];
 
 export default function IndexPage() {

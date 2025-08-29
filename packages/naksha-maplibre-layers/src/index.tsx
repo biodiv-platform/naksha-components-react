@@ -1,0 +1,29 @@
+import { TranslationProvider } from "@biodiv-platform/naksha-commons";
+import React from "react";
+import { MapProvider } from "react-map-gl/maplibre";
+import { setup } from "twind";
+
+import localeStrings from "../locales";
+import Map from "./components/map";
+import { LayersProvider } from "./hooks/use-layers";
+import { NakshaMaplibreLayersProps } from "./interfaces";
+import { defaultNakshaProps } from "./static/constants";
+
+setup({ preflight: false });
+
+export const NakshaMaplibreLayers = (props: NakshaMaplibreLayersProps) => {
+  const mp = React.useMemo(
+    () => ({ ...defaultNakshaProps, ...props }),
+    [props]
+  );
+
+  return (
+    <MapProvider>
+      <TranslationProvider localeStrings={localeStrings} lang={mp.lang}>
+        <LayersProvider mp={mp}>
+          <Map />
+        </LayersProvider>
+      </TranslationProvider>
+    </MapProvider>
+  );
+};
