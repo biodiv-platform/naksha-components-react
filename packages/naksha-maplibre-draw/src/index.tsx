@@ -5,7 +5,5 @@ import Map from "./components/map";
 import { NakshaMaplibreViewProps } from "./interfaces";
 
 export const NakshaMaplibreDraw = (props: NakshaMaplibreViewProps) => (
-  <MapProvider>
-    <Map {...props} />
-  </MapProvider>
+  <Map {...props} />
 );

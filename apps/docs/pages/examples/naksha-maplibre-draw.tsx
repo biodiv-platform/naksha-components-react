@@ -1,5 +1,4 @@
 import "maplibre-gl/dist/maplibre-gl.css";
-import "@watergis/maplibre-gl-terradraw/dist/maplibre-gl-terradraw.css";
 
 import { NakshaMaplibreDraw } from "@biodiv-platform/naksha-maplibre-draw";
 

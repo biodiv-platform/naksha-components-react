@@ -1,6 +1,6 @@
 {
   "name": "@biodiv-platform/naksha-maplibre-layers",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "author": "harshzalavadiya",
   "main": "./dist/index.js",
   "module": "./dist/esm/index.js",
@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "@bumaga/tabs": "^0.2.0",
-    "@biodiv-platform/naksha-commons": "*",
+    "@biodiv-platform/naksha-commons": "5.0.0-beta.1",
     "boundingbox": "^1.4.0",
     "clsx": "^1.1.1",
     "colorbrewer": "^1.5.2",

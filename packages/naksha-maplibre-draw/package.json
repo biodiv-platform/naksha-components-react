@@ -1,6 +1,6 @@
 {
   "name": "@biodiv-platform/naksha-maplibre-draw",
-  "version": "5.0.0",
+  "version": "5.0.2",
   "author": "harshzalavadiya",
   "main": "./dist/index.js",
   "module": "./dist/esm/index.js",
@@ -20,7 +20,8 @@
   "peerDependencies": {
     "maplibre-gl": "^5.7.0",
     "react": ">=18",
-    "react-map-gl": "^8.0.4"
+    "react-map-gl": "^8.0.4",
+    "react-icons": "^5.5.0"
   },
   "devDependencies": {
     "@biodiv-platform/eslint-preset": "*",
@@ -31,13 +32,15 @@
     "react": ">=18",
     "react-map-gl": "^8.0.4",
     "tsup": "^6.1.2",
-    "typescript": "^4.7.3"
+    "typescript": "^4.7.3",
+    "react-icons": "^5.5.0"
   },
   "dependencies": {
-    "@biodiv-platform/naksha-commons": "*",
+    "@biodiv-platform/naksha-commons": "5.0.0-beta.1",
     "@turf/bbox": "^6.5.0",
-    "@watergis/maplibre-gl-terradraw": "^1.7.2",
     "boundingbox": "^1.4.0",
-    "react-gbus": "^1.1.2"
+    "react-gbus": "^1.1.2",
+    "terra-draw": "^1.13.0",
+    "terra-draw-maplibre-gl-adapter": "^1.1.2"
   }
 }
