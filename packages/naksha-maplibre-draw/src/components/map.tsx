@@ -32,7 +32,6 @@ const ensureModeProperty = (features: any[]): GeoJSONStoreFeatures[] => {
 };
 
 const Map = (props: NakshaMaplibreViewProps) => {
-  console.log("Map props:", props);
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<maplibregl.Map>();
   const [mode, setMode] = useState("static");
@@ -106,6 +105,7 @@ const Map = (props: NakshaMaplibreViewProps) => {
           terraDraw.removeFeatures(featureIds);
         }
       }
+      props.onFeaturesChange?.(snapshot);
       autoFocus(filteredFeatures); // 👈 added here
     };
 
@@ -165,7 +165,10 @@ const Map = (props: NakshaMaplibreViewProps) => {
               boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
             }}
           >
-            <ClearButton draw={draw} />
+            <ClearButton
+              draw={draw}
+              onFeaturesChange={props.onFeaturesChange}
+            />
           </div>
         </>
       )}

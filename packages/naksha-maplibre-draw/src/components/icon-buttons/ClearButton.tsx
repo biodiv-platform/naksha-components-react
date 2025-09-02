@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { TerraDraw } from "terra-draw";
 import { DeleteIcon } from "./icons";
 
@@ -9,19 +9,39 @@ const ClearButton = ({
   draw: TerraDraw;
   onFeaturesChange?: (features: any[]) => void;
 }) => {
-  if (!draw) return null;
+  const [hasFeatures, setHasFeatures] = useState(false);
+
+  useEffect(() => {
+    if (!draw) return;
+
+    const updateHasFeatures = () => {
+      const snapshot = draw.getSnapshot();
+      setHasFeatures(snapshot.length > 0);
+    };
+
+    draw.on("finish", updateHasFeatures);
+    draw.on("change", updateHasFeatures);
+
+    updateHasFeatures();
+
+    return () => {
+      draw.off("finish", updateHasFeatures);
+      draw.off("change", updateHasFeatures);
+    };
+  }, [draw]);
 
   const handleClear = () => {
+    if (!draw) return;
     draw.clear();
-    if (onFeaturesChange) {
-      onFeaturesChange([]);
-    }
+    setHasFeatures(false);
+    if (onFeaturesChange) onFeaturesChange([]);
   };
 
   return (
     <button
       onClick={handleClear}
-      title="Delete"
+      title="Clear all features"
+      disabled={!hasFeatures}
       style={{
         display: "flex",
         justifyContent: "center",
@@ -30,8 +50,8 @@ const ClearButton = ({
         height: "30px",
         padding: "0",
         borderRadius: "4px",
-        backgroundColor: "#f0f0f0",
-        cursor: "pointer",
+        backgroundColor: hasFeatures ? "#f0f0f0" : "#e0e0e0",
+        cursor: hasFeatures ? "pointer" : "not-allowed",
       }}
     >
       <DeleteIcon />
