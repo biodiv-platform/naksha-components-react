@@ -39,6 +39,7 @@ const ClearButton = ({
 
   return (
     <button
+      type="button"
       onClick={handleClear}
       title="Clear all features"
       disabled={!hasFeatures}

@@ -15,6 +15,7 @@ const MapButton = ({
 }) => {
   return (
     <button
+      type="button"
       onClick={() => changeMode(mode)}
       title={tooltip}
       style={{
