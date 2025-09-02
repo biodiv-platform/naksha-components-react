@@ -20,6 +20,11 @@ export const defaultMapStyles = [
     style:
       "https://unpkg.com/maplibre-gl-styles@0.0.1/styles/osm-mapnik/v8/india.json",
   },
+  {
+    text: "Satellite",
+    key: MapStyles.MAP_SATELLITE,
+    style: "https://raw.githubusercontent.com/go2garret/maps/main/src/assets/json/arcgis_hybrid.json",
+  },
 ];
 
 export const adminBoundries = [

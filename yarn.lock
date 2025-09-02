@@ -48,6 +48,11 @@
   resolved "https://registry.yarnpkg.com/@biodiv-platform/naksha-commons/-/naksha-commons-4.4.9.tgz#27826fc261cdc2fa0553fef34ada701c0a52dabb"
   integrity sha512-Z1xRglP0u3Ld7nAd1EkI+uGiLYYX/U8dOZEBHoPUiSZ2GoYgENgwkniCUeF2FXARV5DHkXnEC0PjoAS527dcZA==
 
+"@biodiv-platform/naksha-commons@5.0.0-beta.1":
+  version "5.0.0-beta.1"
+  resolved "https://registry.yarnpkg.com/@biodiv-platform/naksha-commons/-/naksha-commons-5.0.0-beta.1.tgz#e5cda0e7b3c0f44c142aa32264031a9b2217caa9"
+  integrity sha512-Z/2EFREhXNqkCep7AedKAMMps0rVyzOsKE5ucf7rOxNz7/3arQlVqQUiPIlsZuB1Zz/UbGBvR8js1ETCT44Kkg==
+
 "@biodiv-platform/naksha-mapbox-list@4.5.2":
   version "4.5.2"
   resolved "https://registry.yarnpkg.com/@biodiv-platform/naksha-mapbox-list/-/naksha-mapbox-list-4.5.2.tgz#ca95b3ddc158c3eecf1840dbc88bfded09cbacee"
@@ -70,17 +75,6 @@
     redaxios "^0.5.0"
     supercluster "^8.0.1"
     twind "^0.16.17"
-
-"@biodiv-platform/naksha-maplibre-draw@5.0.1":
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/@biodiv-platform/naksha-maplibre-draw/-/naksha-maplibre-draw-5.0.1.tgz#cf08f32592a35dca56655a7398a68f41dc67c4a2"
-  integrity sha512-zqIxj0gJHSnp9ciPwRBsnPGsJLMf7q4DYS7PU/FRux1eCTOXYgX1rxF1gnOfzofiJfgZc3Iq1paSLHJ27sCkNA==
-  dependencies:
-    "@biodiv-platform/naksha-commons" "5.0.0-beta.1"
-    "@turf/bbox" "^6.5.0"
-    "@watergis/maplibre-gl-terradraw" "^1.7.2"
-    boundingbox "^1.4.0"
-    react-gbus "^1.1.2"
 
 "@bumaga/tabs@^0.2.0":
   version "0.2.0"
@@ -1629,11 +1623,6 @@
   integrity sha512-HwZyfLjEu+y1mUFvwDAkVxinGm8fEegaWN+O8np/WZ2Sqe5Lv6OXFpV6GWz9LOEvBYMbGuGk1FQdejo+4HCJ5w==
   dependencies:
     "@maplibre/maplibre-gl-style-spec" "^19.2.1"
-
-"@watergis/maplibre-gl-terradraw@^1.7.2":
-  version "1.7.2"
-  resolved "https://registry.yarnpkg.com/@watergis/maplibre-gl-terradraw/-/maplibre-gl-terradraw-1.7.2.tgz#5cf29eb49ef8a215270eae31382bd75c965d3372"
-  integrity sha512-rfJbxZLtS+SXVPZLzwAo+Lt2Xitq/MmG2xB/Ub7neO1tX6SWOhqw3m0K4m2OYfuaLRL79Qo++jHneDFPwCDStA==
 
 JSONStream@^1.0.4:
   version "1.3.5"

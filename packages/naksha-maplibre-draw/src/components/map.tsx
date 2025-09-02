@@ -8,6 +8,7 @@ import { NakshaMaplibreViewProps } from "../interfaces";
 import MapButtons from "./map-buttons/MapButtons";
 import ClearButton from "./icon-buttons/ClearButton";
 import { defaultMapStyles } from "@biodiv-platform/naksha-commons";
+import bbox from "@turf/bbox";
 
 const ensureModeProperty = (features: any[]): GeoJSONStoreFeatures[] => {
   return features.map((feature) => {
@@ -30,99 +31,15 @@ const ensureModeProperty = (features: any[]): GeoJSONStoreFeatures[] => {
   }) as GeoJSONStoreFeatures[];
 };
 
-// Helper function to calculate bounds from features
-const getFeaturesBounds = (
-  features: GeoJSONStoreFeatures[]
-): maplibregl.LngLatBounds | null => {
-  if (!features.length) return null;
-
-  const bounds = new maplibregl.LngLatBounds();
-
-  features.forEach((feature) => {
-    const coordinates = getCoordinatesFromFeature(feature);
-    coordinates.forEach((coord) => {
-      if (Array.isArray(coord[0])) {
-        coord.forEach((c) => bounds.extend(c as maplibregl.LngLatLike));
-      } else {
-        bounds.extend(coord as maplibregl.LngLatLike);
-      }
-    });
-  });
-
-  return bounds;
-};
-
-const getCoordinatesFromFeature = (feature: GeoJSONStoreFeatures): any[] => {
-  const geometry = feature.geometry;
-  switch (geometry.type) {
-    case "Point":
-      return [geometry.coordinates];
-    case "LineString":
-      return [geometry.coordinates];
-    case "Polygon":
-      return geometry.coordinates;
-    default:
-      return [];
-  }
-};
-
-interface TerraDrawControlProps {
-  features?: GeoJSONStoreFeatures[];
-  setFeatures?: (features: GeoJSONStoreFeatures[]) => void;
-  isControlled?: boolean;
-  isMultiple?: boolean;
-}
-
-const Map = (props: NakshaMaplibreViewProps & TerraDrawControlProps) => {
+const Map = (props: NakshaMaplibreViewProps) => {
+  console.log("Map props:", props);
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<maplibregl.Map>();
   const [mode, setMode] = useState("static");
-  const [selected, setSelected] = useState<GeoJSONStoreFeatures>();
-  const [features, setFeatures] = useState<GeoJSONStoreFeatures[]>([]);
   const [draw, setDraw] = useState<TerraDraw>();
 
   const mapStyle = defaultMapStyles[props?.mapStyle || 0].style;
-  const {
-    isMultiple = true,
-    isControlled = false,
-    setFeatures: setExternalFeatures,
-  } = props;
-
-  // Internal state for uncontrolled mode
-  const [internalFeatures, setInternalFeatures] = useState<
-    GeoJSONStoreFeatures[]
-  >([]);
-
-  const handleFeaturesChange = useCallback(
-    (newFeatures: GeoJSONStoreFeatures[]) => {
-      if (isControlled && setExternalFeatures) {
-        setExternalFeatures(newFeatures);
-      } else {
-        setInternalFeatures(newFeatures);
-      }
-    },
-    [isControlled, setExternalFeatures]
-  );
-
-  const currentFeatures = isControlled
-    ? props.features || []
-    : internalFeatures;
-
-  const zoomToFeaturesBounds = useCallback(
-    (featuresToZoom: GeoJSONStoreFeatures[]) => {
-      if (!map || featuresToZoom.length === 0) return;
-
-      const bounds = getFeaturesBounds(featuresToZoom);
-      if (bounds && !bounds.isEmpty()) {
-        map.fitBounds(bounds, {
-          padding: 50,
-          duration: 1000,
-          maxZoom: 5,
-        });
-      }
-    },
-    [map]
-  );
+  const { isMultiple = true } = props; // 👈 added
 
   useEffect(() => {
     const maplibreMap = setupMaplibreMap({
@@ -151,6 +68,20 @@ const Map = (props: NakshaMaplibreViewProps & TerraDrawControlProps) => {
     };
   }, []);
 
+  const autoFocus = useCallback(
+    (features: GeoJSONStoreFeatures[]) => {
+      if (!features?.length || !map) return;
+
+      const _bbox = bbox({
+        type: "FeatureCollection",
+        features: features as any,
+      });
+
+      map.fitBounds(_bbox as any, { padding: 40, duration: 1000 });
+    },
+    [map]
+  );
+
   useEffect(() => {
     if (!map) return;
 
@@ -158,17 +89,14 @@ const Map = (props: NakshaMaplibreViewProps & TerraDrawControlProps) => {
     terraDraw.start();
     setDraw(terraDraw);
 
-    const onChange = () => {
+    const handleChange = () => {
       const snapshot = terraDraw.getSnapshot();
 
-      // Apply isMultiple logic
       let filteredFeatures = snapshot;
       if (!isMultiple && snapshot.length > 1) {
-        // Keep only the most recent feature and remove others
         const latestFeature = snapshot[snapshot.length - 1];
         filteredFeatures = [latestFeature];
 
-        // Remove older features from TerraDraw
         const featuresToRemove = snapshot.slice(0, -1);
         const featureIds = featuresToRemove
           .map((f) => f.id)
@@ -178,44 +106,32 @@ const Map = (props: NakshaMaplibreViewProps & TerraDrawControlProps) => {
           terraDraw.removeFeatures(featureIds);
         }
       }
-
-      setFeatures(filteredFeatures);
-      handleFeaturesChange(filteredFeatures);
-      setSelected(filteredFeatures.find((f) => f.properties.selected));
-
-      // Automatically zoom to features
-      if (filteredFeatures.length > 0) {
-        zoomToFeaturesBounds(filteredFeatures);
-      }
+      autoFocus(filteredFeatures); // 👈 added here
     };
 
-    terraDraw.on("change", onChange);
+    terraDraw.on("finish", handleChange);
 
-    // Load initial features
     if (props.features?.length) {
       setTimeout(() => {
         if (terraDraw.getSnapshot().length === 0) {
           const featuresWithMode = ensureModeProperty(props.features);
 
-          // Apply isMultiple to initial features too
           let initialFeatures = featuresWithMode;
           if (!isMultiple && featuresWithMode.length > 1) {
             initialFeatures = [featuresWithMode[featuresWithMode.length - 1]];
           }
 
           terraDraw.addFeatures(initialFeatures);
-          setFeatures(initialFeatures);
-          handleFeaturesChange(initialFeatures);
-          zoomToFeaturesBounds(initialFeatures);
+          autoFocus(initialFeatures); // 👈 added here
         }
-      }, 300);
+      });
     }
 
     return () => {
-      terraDraw.off("change", onChange);
+      terraDraw.off("finish", handleChange);
       terraDraw.stop();
     };
-  }, [map, isMultiple, handleFeaturesChange, zoomToFeaturesBounds]);
+  }, [map, isMultiple, autoFocus]);
 
   const changeMode = useCallback(
     (newMode: string) => {
@@ -226,17 +142,31 @@ const Map = (props: NakshaMaplibreViewProps & TerraDrawControlProps) => {
   );
 
   return (
-    <div>
-      <div
-        ref={mapRef}
-        id="maplibre-map"
-        style={{ width: "100%", height: "100vh" }}
-      />
-
+    <div
+      ref={mapRef}
+      id="maplibre-map"
+      style={{ width: "100%", height: "100%" }}
+    >
       {draw && (
         <>
-          <MapButtons mode={mode} changeMode={changeMode} draw={draw} />
-          {/* <ClearButton draw={draw} /> */}
+          <MapButtons mode={mode} changeMode={changeMode} />
+          <div
+            style={{
+              position: "absolute",
+              top: "180px",
+              left: "10px",
+              display: "flex",
+              flexDirection: "column",
+              gap: "6px",
+              zIndex: 1000,
+              backgroundColor: "rgba(255, 255, 255, 0.9)",
+              padding: "8px",
+              borderRadius: "6px",
+              boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+            }}
+          >
+            <ClearButton draw={draw} />
+          </div>
         </>
       )}
     </div>

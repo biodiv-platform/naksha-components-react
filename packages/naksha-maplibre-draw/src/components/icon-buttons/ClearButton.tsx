@@ -2,12 +2,25 @@ import React from "react";
 import { TerraDraw } from "terra-draw";
 import { DeleteIcon } from "./icons";
 
-const ClearButton = ({ draw }: { draw: TerraDraw }) => {
+const ClearButton = ({
+  draw,
+  onFeaturesChange,
+}: {
+  draw: TerraDraw;
+  onFeaturesChange?: (features: any[]) => void;
+}) => {
   if (!draw) return null;
+
+  const handleClear = () => {
+    draw.clear();
+    if (onFeaturesChange) {
+      onFeaturesChange([]);
+    }
+  };
 
   return (
     <button
-      onClick={() => draw.clear()}
+      onClick={handleClear}
       title="Delete"
       style={{
         display: "flex",
@@ -21,7 +34,7 @@ const ClearButton = ({ draw }: { draw: TerraDraw }) => {
         cursor: "pointer",
       }}
     >
-      <DeleteIcon  />
+      <DeleteIcon />
     </button>
   );
 };

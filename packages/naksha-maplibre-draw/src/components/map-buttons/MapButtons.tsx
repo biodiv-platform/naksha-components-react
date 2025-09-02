@@ -4,19 +4,15 @@ import {
   PointIcon,
   LineIcon,
   PolygonIcon,
-  DeleteIcon,
 } from "../icon-buttons/icons";
 import MapButton from "../map-button/MapButton";
-import { TerraDraw } from "terra-draw";
 
 const MapButtons = ({
   mode,
   changeMode,
-  draw,
 }: {
   mode: string;
   changeMode: (mode: string) => void;
-  draw?: TerraDraw;
 }) => {
   return (
     <div
@@ -62,7 +58,6 @@ const MapButtons = ({
         changeMode={changeMode}
         tooltip="Polygon"
       />
-      {draw && <ClearButton draw={draw} />}
     </div>
   );
 };

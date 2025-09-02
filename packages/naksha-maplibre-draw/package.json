@@ -1,6 +1,6 @@
 {
   "name": "@biodiv-platform/naksha-maplibre-draw",
-  "version": "5.0.2",
+  "version": "5.0.4",
   "author": "harshzalavadiya",
   "main": "./dist/index.js",
   "module": "./dist/esm/index.js",
@@ -36,7 +36,7 @@
     "react-icons": "^5.5.0"
   },
   "dependencies": {
-    "@biodiv-platform/naksha-commons": "5.0.0-beta.1",
+    "@biodiv-platform/naksha-commons": "5.0.0-beta.2",
     "@turf/bbox": "^6.5.0",
     "boundingbox": "^1.4.0",
     "react-gbus": "^1.1.2",
