@@ -1,0 +1,50 @@
+import React from "react";
+
+type MapButtonProps = {
+  mode?: string;
+  currentMode: string;
+  onClick: (mode: string) => void;
+  icon: React.ReactNode;
+  tooltip?: string;
+  disabled?: boolean;
+};
+
+const BUTTON_STYLE: React.CSSProperties = {
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  width: 30,
+  height: 30,
+  padding: 0,
+  borderRadius: 4,
+};
+
+const MapButton = ({
+  mode,
+  currentMode,
+  onClick,
+  icon,
+  tooltip,
+  disabled,
+}: MapButtonProps) => (
+  <button
+    type="button"
+    title={tooltip}
+    disabled={disabled}
+    onClick={() => !disabled && onClick(mode ?? "")}
+    style={{
+      ...BUTTON_STYLE,
+      backgroundColor: disabled
+        ? "#d3d3d3"
+        : currentMode === mode
+        ? "#02cf87"
+        : "#f0f0f0",
+      cursor: disabled ? "not-allowed" : "pointer",
+      opacity: disabled ? 0.6 : 1,
+    }}
+  >
+    {icon}
+  </button>
+);
+
+export default MapButton;

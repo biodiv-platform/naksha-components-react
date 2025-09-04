@@ -8,6 +8,7 @@ import {
   TerraDrawFreehandMode,
   ValidateNotSelfIntersecting,
   TerraDrawRectangleMode,
+  GeoJSONStoreFeatures,
 } from "terra-draw";
 
 import { TerraDrawMapLibreGLAdapter } from "terra-draw-maplibre-gl-adapter";
@@ -60,9 +61,9 @@ export function setupDraw(map: maplibregl.Map) {
             feature: {
               draggable: true,
               coordinates: {
-                resizable: 'opposite'
-              }
-            }
+                resizable: "opposite",
+              },
+            },
           },
           freehand: {
             feature: {
@@ -78,9 +79,9 @@ export function setupDraw(map: maplibregl.Map) {
             return ValidateNotSelfIntersecting(feature);
           }
           return {
-            valid: true
-          }
-        }
+            valid: true,
+          };
+        },
       }),
       new TerraDrawRectangleMode(),
       new TerraDrawPolygonMode({
@@ -90,17 +91,36 @@ export function setupDraw(map: maplibregl.Map) {
             return ValidateNotSelfIntersecting(feature);
           }
           return {
-            valid: true
-          }
-        }
+            valid: true,
+          };
+        },
       }),
       new TerraDrawCircleMode(),
       new TerraDrawFreehandMode({
         pointerDistance: 5,
         validation: (feature) => {
           return ValidateNotSelfIntersecting(feature);
-        }
+        },
       }),
     ],
   });
 }
+
+export const ensureModeProperty = (features: any[]): GeoJSONStoreFeatures[] => {
+  return features.map((feature) => {
+    if (feature.properties?.mode) return feature;
+    const type = feature.geometry?.type;
+    const mode =
+      type === "Point"
+        ? "point"
+        : type === "Polygon"
+        ? "polygon"
+        : type === "LineString"
+        ? "linestring"
+        : "unknown";
+    return {
+      ...feature,
+      properties: { ...feature.properties, mode },
+    };
+  }) as GeoJSONStoreFeatures[];
+};
