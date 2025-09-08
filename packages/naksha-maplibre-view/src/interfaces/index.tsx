@@ -5,4 +5,10 @@ export interface NakshaMaplibreViewProps {
   defaultViewState?: Partial<ViewState>;
   mapStyle?: MapStyles;
   data?: any;
+  mapStyles?: Array<{
+    text: string;
+    key: string;
+    style: string;
+    maxZoom?: number;
+  }>;
 }

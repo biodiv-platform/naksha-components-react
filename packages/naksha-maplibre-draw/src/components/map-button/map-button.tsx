@@ -1,4 +1,5 @@
 import React from "react";
+import { IconButton } from "../setup-draw";
 
 type MapButtonProps = {
   mode?: string;
@@ -27,7 +28,7 @@ const MapButton = ({
   tooltip,
   disabled,
 }: MapButtonProps) => (
-  <button
+  <IconButton
     type="button"
     title={tooltip}
     disabled={disabled}
@@ -44,7 +45,7 @@ const MapButton = ({
     }}
   >
     {icon}
-  </button>
+  </IconButton>
 );
 
 export default MapButton;

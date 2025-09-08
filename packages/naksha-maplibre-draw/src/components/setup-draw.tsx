@@ -14,6 +14,8 @@ import {
 import { TerraDrawMapLibreGLAdapter } from "terra-draw-maplibre-gl-adapter";
 
 import maplibregl from "maplibre-gl";
+import { tw } from "twind";
+import React from "react";
 
 export function setupDraw(map: maplibregl.Map) {
   return new TerraDraw({
@@ -124,3 +126,51 @@ export const ensureModeProperty = (features: any[]): GeoJSONStoreFeatures[] => {
     };
   }) as GeoJSONStoreFeatures[];
 };
+
+export const filterUserFeatures = (features: GeoJSONStoreFeatures[]) =>
+  features.filter(
+    (f) =>
+      f.geometry.type !== "Point" ||
+      (f.properties.mode !== "static" && f.properties.mode !== "select")
+  );
+export const IconButton = React.forwardRef<HTMLDivElement, any>(
+  (props, ref) => (
+    <button
+      ref={ref}
+      type="button"
+      className={tw`h-8 px-3 py-2 rounded-md focus:outline-none  cursor-pointer text-md flex align-middle items-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 disabled:cursor-not-allowed disabled:bg-gray-100! disabled:opacity-50`}
+      {...props}
+    />
+  )
+);
+
+export const MapStyleSwitcher = ({
+  currentStyleIdx,
+  onStyleChange,
+  mapStyles,
+}) => (
+  <div
+    style={{
+      position: "absolute",
+      left: 12,
+      bottom: 12,
+      background: "rgba(255,255,255,0.95)",
+      padding: "8px",
+      borderRadius: "6px",
+      zIndex: 1000,
+      boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
+    }}
+  >
+    <select
+      value={currentStyleIdx}
+      onChange={(e) => onStyleChange(Number(e.target.value))}
+      style={{ fontSize: 14, padding: "4px" }}
+    >
+      {mapStyles.map((style, idx) => (
+        <option key={style.key || idx} value={idx}>
+          {style.text || `Style ${idx + 1}`}
+        </option>
+      ))}
+    </select>
+  </div>
+);

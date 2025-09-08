@@ -45,10 +45,25 @@ const geojson = {
   ],
 };
 
+const mapStyles = [
+  {
+    text: "OSM_custom",
+    key: "0",
+    style:
+      "https://unpkg.com/maplibre-gl-styles@0.0.1/styles/osm-mapnik/v8/india.json",
+  },
+  {
+    text: "Satellite",
+    key: "1",
+    style:
+      "https://raw.githubusercontent.com/go2garret/maps/main/src/assets/json/arcgis_hybrid.json",
+    maxZoom: 15.9,
+  },
+];
 export default function NakshaMaplibreViewPage() {
   return (
     <div className={tw`h-[100vh] w-[100vw]`}>
-      <NakshaMaplibreView data={geojson} />
+      <NakshaMaplibreView data={geojson} mapStyles={mapStyles} />
     </div>
   );
 }

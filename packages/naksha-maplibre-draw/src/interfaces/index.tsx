@@ -8,4 +8,10 @@ export interface NakshaMaplibreViewProps {
   onFeaturesChange?;
   isControlled?: boolean;
   isMultiple?: boolean;
+  mapStyles?: Array<{
+    text: string;
+    key: string;
+    style: string;
+    maxZoom?: number;
+  }>;
 }

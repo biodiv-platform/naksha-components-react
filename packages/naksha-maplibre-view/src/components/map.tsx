@@ -1,17 +1,32 @@
-import { defaultMapStyles, defaultViewState } from "@biodiv-platform/naksha-commons";
+import {
+  defaultMapStyles,
+  defaultViewState,
+} from "@biodiv-platform/naksha-commons";
 import React, { useEffect, useState } from "react";
-import MapGL, { Layer, NavigationControl, Source, useMap } from "react-map-gl/maplibre";
+import MapGL, {
+  Layer,
+  NavigationControl,
+  Source,
+  useMap,
+} from "react-map-gl/maplibre";
 
 import { NakshaMaplibreViewProps } from "../interfaces";
 import { featureStyle, lineStyle, pointStyle } from "../static/constants";
 import bbox from "@turf/bbox";
+import { MapStyleSwitcher } from "./selector";
 
 const NavControl: any = NavigationControl;
 
 export default function Map(props: NakshaMaplibreViewProps) {
   const { mapv } = useMap();
-  const [mapStyle] = useState(defaultMapStyles[props?.mapStyle || 0].style);
   const [viewState] = useState(props.defaultViewState || defaultViewState);
+
+  const [selectedMapStyleIdx, setSelectedMapStyleIdx] = useState(
+    props?.mapStyle || 0
+  );
+
+  const mapTile = props.mapStyles ? props.mapStyles : defaultMapStyles;
+  const mapStyle = mapTile[selectedMapStyleIdx]?.style;
 
   const onDataChange = () => {
     if (!props.data || !mapv) return;
@@ -23,6 +38,10 @@ export default function Map(props: NakshaMaplibreViewProps) {
   useEffect(() => {
     onDataChange();
   }, [props.data]);
+
+  const handleStyleChange = (idx) => {
+    setSelectedMapStyleIdx(idx);
+  };
 
   return (
     <MapGL
@@ -41,6 +60,11 @@ export default function Map(props: NakshaMaplibreViewProps) {
           <Layer {...featureStyle} />
         </Source>
       )}
+      <MapStyleSwitcher
+        currentStyleIdx={selectedMapStyleIdx}
+        onStyleChange={handleStyleChange}
+        mapStyles={mapTile}
+      />
     </MapGL>
   );
 }

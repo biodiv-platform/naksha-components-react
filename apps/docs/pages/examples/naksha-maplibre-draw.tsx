@@ -73,6 +73,22 @@ export default function NakshaMapboxDrawPage() {
   const [multiple, setMultiple] = useState(false);
   const [data, setData] = useState(geojson.features);
 
+  const mapStyles = [
+    {
+      text: "OSM_custom",
+      key: "0",
+      style:
+        "https://unpkg.com/maplibre-gl-styles@0.0.1/styles/osm-mapnik/v8/india.json",
+    },
+    {
+      text: "Satellite",
+      key: "1",
+      style:
+        "https://raw.githubusercontent.com/go2garret/maps/main/src/assets/json/arcgis_hybrid.json",
+      maxZoom: 15.9,
+    },
+  ];
+
   return (
     <div className={tw`h-[100vh] w-[100vw]`}>
       <NakshaMaplibreDraw
@@ -80,6 +96,7 @@ export default function NakshaMapboxDrawPage() {
         onFeaturesChange={setData}
         isControlled={controlled}
         isMultiple={multiple}
+        mapStyles={mapStyles}
       />
       <div
         className={tw`absolute top-3 right-12 bg-white rounded p-4 shadow-md`}

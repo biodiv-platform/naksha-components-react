@@ -14,6 +14,7 @@ import {
 } from "../icon-buttons/icons";
 import { GeoJSONStoreFeatures, TerraDraw } from "terra-draw";
 import MapButton from "../map-button/map-button";
+import { IconButton } from "../setup-draw";
 
 type MapButtonsProps = {
   mode: string;
@@ -166,8 +167,7 @@ function MapButtons({
         boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
       }}
     >
-      <button
-        type="button"
+      <IconButton
         onClick={() => setExpanded((v) => !v)}
         style={{
           display: "flex",
@@ -182,7 +182,7 @@ function MapButtons({
         title="Expand or collapse tools"
       >
         {expanded ? <PencilCloseIcon /> : <PencilOpenIcon />}
-      </button>
+      </IconButton>
       {expanded && (
         <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
           {buttons.map((btn, i) => (

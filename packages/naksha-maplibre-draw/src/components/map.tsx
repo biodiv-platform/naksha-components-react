@@ -1,21 +1,28 @@
 import maplibregl from "maplibre-gl";
 import { useRef, useState, useEffect, useCallback } from "react";
 import { GeoJSONStoreFeatures } from "terra-draw/dist/store/store";
-import { ensureModeProperty, setupDraw } from "./setup-draw";
+import { ensureModeProperty, MapStyleSwitcher, setupDraw } from "./setup-draw";
 import { TerraDraw } from "terra-draw";
 import { setupMaplibreMap } from "./setup-maplibre";
 import { NakshaMaplibreViewProps } from "../interfaces";
 import MapButtons from "./map-buttons/map-buttons";
-import { defaultMapStyles } from "@biodiv-platform/naksha-commons";
 import bbox from "@turf/bbox";
+import { defaultMapStyles } from "@biodiv-platform/naksha-commons";
 
 const Map = (props: NakshaMaplibreViewProps) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<maplibregl.Map>();
   const [mode, setMode] = useState("static");
   const [draw, setDraw] = useState<TerraDraw>();
-  const mapStyle = defaultMapStyles[props?.mapStyle || 0].style;
   const { isMultiple = true, features = [], onFeaturesChange } = props;
+
+  const [selectedMapStyleIdx, setSelectedMapStyleIdx] = useState(
+    props?.mapStyle || 0
+  );
+
+  const mapTile = props.mapStyles ? props.mapStyles : defaultMapStyles;
+
+  const mapStyle = mapTile[selectedMapStyleIdx]?.style;
 
   // Autofocus utility
   const autoFocus = useCallback(
@@ -31,6 +38,8 @@ const Map = (props: NakshaMaplibreViewProps) => {
     [map]
   );
 
+  const mapStyleConfig = mapTile[selectedMapStyleIdx];
+
   useEffect(() => {
     const maplibreMap = setupMaplibreMap({
       containerId: "maplibre-map",
@@ -41,6 +50,10 @@ const Map = (props: NakshaMaplibreViewProps) => {
       bearing: props.defaultViewState?.bearing ?? 0,
       mapstyle: mapStyle,
     });
+
+    if ("maxZoom" in mapStyleConfig && mapStyleConfig.maxZoom) {
+      maplibreMap.setMaxZoom(mapStyleConfig.maxZoom);
+    }
 
     const navControl = new maplibregl.NavigationControl({
       showCompass: true,
@@ -57,6 +70,13 @@ const Map = (props: NakshaMaplibreViewProps) => {
     };
   }, [mapStyle, props.defaultViewState]);
 
+  const filterUserFeatures = (features: GeoJSONStoreFeatures[]) =>
+    features.filter(
+      (f) =>
+        f.geometry.type !== "Point" ||
+        (f.properties.mode !== "static" && f.properties.mode !== "select")
+    );
+
   useEffect(() => {
     if (!map) return;
     const terraDraw = setupDraw(map);
@@ -65,17 +85,29 @@ const Map = (props: NakshaMaplibreViewProps) => {
 
     const handleChange = () => {
       let snapshot = terraDraw.getSnapshot();
-      let filtered = snapshot;
-      if (!isMultiple && snapshot.length > 1) {
-        filtered = [snapshot[snapshot.length - 1]];
-        const toRemove = snapshot
+      let userFeatures = filterUserFeatures(snapshot);
+
+      if (!isMultiple && userFeatures.length > 1) {
+        const lastFeature = userFeatures.at(-1)!;
+
+        const toRemove = userFeatures
           .slice(0, -1)
           .map((f) => f.id)
-          .filter(Boolean);
-        if (toRemove.length > 0) terraDraw.removeFeatures(toRemove as string[]);
+          .filter((id): id is string => Boolean(id));
+
+        if (toRemove.length > 0) {
+          try {
+            terraDraw.removeFeatures(toRemove);
+          } catch (e) {
+            console.warn("removeFeatures failed", e);
+          }
+        }
+
+        userFeatures = [lastFeature];
       }
-      onFeaturesChange?.(snapshot);
-      autoFocus(filtered);
+      onFeaturesChange?.(userFeatures);
+      autoFocus(userFeatures);
+      setMode("static");
     };
     terraDraw.on("finish", handleChange);
 
@@ -106,12 +138,21 @@ const Map = (props: NakshaMaplibreViewProps) => {
     [draw]
   );
 
+  const handleStyleChange = (idx) => {
+    setSelectedMapStyleIdx(idx);
+  };
+
   return (
     <div
       ref={mapRef}
       id="maplibre-map"
-      style={{ width: "100%", height: "100%" }}
+      style={{ width: "100%", height: "100%", position: "relative" }}
     >
+      <MapStyleSwitcher
+        currentStyleIdx={selectedMapStyleIdx}
+        onStyleChange={handleStyleChange}
+        mapStyles={mapTile}
+      />
       {draw && (
         <MapButtons
           mode={mode}

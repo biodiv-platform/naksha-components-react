@@ -1,5 +1,8 @@
 {
   "extends": "@biodiv-platform/tsconfig/react-library.json",
   "include": ["."],
+  "compilerOptions": {
+    "lib": ["dom", "esnext"]
+  },
   "exclude": ["dist", "build", "node_modules"],
 }
