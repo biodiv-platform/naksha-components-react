@@ -42,6 +42,8 @@ const MapButton = ({
         : "#f0f0f0",
       cursor: disabled ? "not-allowed" : "pointer",
       opacity: disabled ? 0.6 : 1,
+      width: 40,
+      height: 40,
     }}
   >
     {icon}

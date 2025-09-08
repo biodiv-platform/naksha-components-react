@@ -14,17 +14,18 @@ const Map = (props: NakshaMaplibreViewProps) => {
   const [map, setMap] = useState<maplibregl.Map>();
   const [mode, setMode] = useState("static");
   const [draw, setDraw] = useState<TerraDraw>();
-  const { isMultiple = true, features = [], onFeaturesChange } = props;
+  const drawRef = useRef<TerraDraw>();
+  const { isMultiple, features = [], onFeaturesChange } = props;
 
   const [selectedMapStyleIdx, setSelectedMapStyleIdx] = useState(
     props?.mapStyle || 0
   );
-
-  const mapTile = props.mapStyles ? props.mapStyles : defaultMapStyles;
-
+  const mapTile = props.mapStyles ?? defaultMapStyles;
   const mapStyle = mapTile[selectedMapStyleIdx]?.style;
+  const mapStyleConfig = mapTile[selectedMapStyleIdx];
 
-  // Autofocus utility
+  const storedFeaturesRef = useRef<GeoJSONStoreFeatures[]>([]);
+
   const autoFocus = useCallback(
     (features: GeoJSONStoreFeatures[]) => {
       if (!features?.length || !map) return;
@@ -38,9 +39,11 @@ const Map = (props: NakshaMaplibreViewProps) => {
     [map]
   );
 
-  const mapStyleConfig = mapTile[selectedMapStyleIdx];
-
   useEffect(() => {
+    if (features.length > 0) {
+      storedFeaturesRef.current = ensureModeProperty(features);
+    }
+
     const maplibreMap = setupMaplibreMap({
       containerId: "maplibre-map",
       latitude: props.defaultViewState?.latitude ?? 0,
@@ -64,11 +67,30 @@ const Map = (props: NakshaMaplibreViewProps) => {
     maplibreMap.addControl(navControl, "bottom-right");
     maplibreMap.addControl(fullscreen, "bottom-right");
 
-    maplibreMap.once("style.load", () => setMap(maplibreMap));
+    maplibreMap.once("style.load", () => {
+      setMap(maplibreMap);
+    });
+
     return () => {
-      maplibreMap.removeControl(navControl);
+      if (drawRef.current) {
+        storedFeaturesRef.current = drawRef.current.getSnapshot();
+      }
+      if (drawRef.current) {
+        try {
+          drawRef.current.stop();
+        } catch {
+          // ignore stop errors
+        }
+        drawRef.current = undefined;
+        setDraw(undefined);
+      }
+      if (maplibreMap) {
+        maplibreMap.removeControl(navControl);
+        maplibreMap.removeControl(fullscreen);
+        maplibreMap.remove();
+      }
     };
-  }, [mapStyle, props.defaultViewState]);
+  }, [mapStyle]);
 
   const filterUserFeatures = (features: GeoJSONStoreFeatures[]) =>
     features.filter(
@@ -81,6 +103,7 @@ const Map = (props: NakshaMaplibreViewProps) => {
     if (!map) return;
     const terraDraw = setupDraw(map);
     terraDraw.start();
+    drawRef.current = terraDraw;
     setDraw(terraDraw);
 
     const handleChange = () => {
@@ -89,7 +112,6 @@ const Map = (props: NakshaMaplibreViewProps) => {
 
       if (!isMultiple && userFeatures.length > 1) {
         const lastFeature = userFeatures.at(-1)!;
-
         const toRemove = userFeatures
           .slice(0, -1)
           .map((f) => f.id)
@@ -98,37 +120,37 @@ const Map = (props: NakshaMaplibreViewProps) => {
         if (toRemove.length > 0) {
           try {
             terraDraw.removeFeatures(toRemove);
-          } catch (e) {
-            console.warn("removeFeatures failed", e);
-          }
+          } catch {}
         }
-
         userFeatures = [lastFeature];
       }
       onFeaturesChange?.(userFeatures);
       autoFocus(userFeatures);
-      setMode("static");
     };
     terraDraw.on("finish", handleChange);
 
-    // Add initial features
-    if (features.length) {
-      setTimeout(() => {
-        if (terraDraw.getSnapshot().length === 0) {
-          let withMode = ensureModeProperty(features);
-          let initial =
-            !isMultiple && withMode.length > 1 ? [withMode.at(-1)!] : withMode;
-          terraDraw.addFeatures(initial);
-          autoFocus(initial);
+    setTimeout(() => {
+      if (terraDraw.getSnapshot().length === 0) {
+        let featuresToAdd: GeoJSONStoreFeatures[] = [];
+        if (storedFeaturesRef.current.length > 0) {
+          featuresToAdd = storedFeaturesRef.current;
+        } else if (features.length > 0) {
+          featuresToAdd = ensureModeProperty(features);
         }
-      });
-    }
+        if (!isMultiple && featuresToAdd.length > 1) {
+          featuresToAdd = [featuresToAdd.at(-1)!];
+        }
+        if (featuresToAdd.length > 0) {
+          terraDraw.addFeatures(featuresToAdd);
+          autoFocus(featuresToAdd);
+        }
+      }
+    }, 100);
 
     return () => {
       terraDraw.off("finish", handleChange);
-      terraDraw.stop();
     };
-  }, [map, isMultiple, autoFocus, features, onFeaturesChange]);
+  }, [map]);
 
   const changeMode = useCallback(
     (newMode: string) => {
@@ -138,8 +160,12 @@ const Map = (props: NakshaMaplibreViewProps) => {
     [draw]
   );
 
-  const handleStyleChange = (idx) => {
+  const handleStyleChange = (idx: number) => {
+    if (drawRef.current) {
+      storedFeaturesRef.current = drawRef.current.getSnapshot();
+    }
     setSelectedMapStyleIdx(idx);
+    setMode("static");
   };
 
   return (
@@ -167,4 +193,5 @@ const Map = (props: NakshaMaplibreViewProps) => {
     </div>
   );
 };
+
 export default Map;

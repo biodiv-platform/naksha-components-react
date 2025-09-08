@@ -165,6 +165,7 @@ function MapButtons({
         padding: 8,
         borderRadius: 6,
         boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+        maxWidth: "90vw",
       }}
     >
       <IconButton
@@ -173,8 +174,8 @@ function MapButtons({
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          width: 30,
-          height: 30,
+          width: 40,
+          height: 40,
           padding: 0,
           borderRadius: 4,
           backgroundColor: "#d3d3d3",
@@ -184,7 +185,17 @@ function MapButtons({
         {expanded ? <PencilCloseIcon /> : <PencilOpenIcon />}
       </IconButton>
       {expanded && (
-        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(40px, 1fr))",
+            gap: 6,
+            maxHeight: "200px",
+            overflowY: "auto",
+            paddingRight: 1,
+          }}
+          className="custom-scrollbar"
+        >
           {buttons.map((btn, i) => (
             <MapButton
               key={i}
