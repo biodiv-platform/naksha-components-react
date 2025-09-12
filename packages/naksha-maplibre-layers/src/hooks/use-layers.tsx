@@ -26,6 +26,7 @@ interface LayersContextProps {
   setIsInfoBarOpen;
   layer: {
     mapStyle?;
+    mapStyles?;
     setMapStyle;
     featuresAtLatLng;
     all: GeoserverLayer[];
@@ -79,9 +80,10 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
   const [queryTerm, setQueryTerm] = useState("");
   const queryTermDebounced = useDebounce(queryTerm, 500);
 
-  const [mapStyle, setMapStyle] = useState(
-    defaultMapStyles[mp?.mapStyle || 0].style
-  );
+  const styles =
+    mp.mapStyles && mp.mapStyles.length > 0 ? mp.mapStyles : defaultMapStyles;
+
+  const [mapStyle, setMapStyle] = useState(styles[mp?.mapStyle || 0]?.style);
   const [selectionStyle, setSelectionStyle] = useState<string>(
     SELECTION_STYLE.TOP
   );
@@ -329,6 +331,7 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
           mapStyle,
           featuresAtLatLng,
           setMapStyle,
+          mapStyles: styles,
           all: layers,
           setAll: setLayers,
           selectedIds: selectedLayerIds,

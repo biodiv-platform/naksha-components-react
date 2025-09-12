@@ -30,6 +30,12 @@ export interface NakshaMaplibreLayersProps {
   onSelectedLayersChange?;
 
   mapStyle?: MapStyles;
+  mapStyles?: Array<{
+    text: string;
+    key: string;
+    style: string;
+    maxZoom?: number;
+  }>;
   layers?: GeoserverLayer[];
   onLayerDownload?;
   canLayerShare?;

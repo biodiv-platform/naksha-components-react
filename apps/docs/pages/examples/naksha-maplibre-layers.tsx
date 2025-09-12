@@ -41,6 +41,22 @@ const handleOnGeoserverLayerClick = (feat) => {
   console.debug("gs_clicked!", feat);
 };
 
+const mapStyles = [
+  {
+    text: "OSM",
+    key: "0",
+    style:
+      "https://unpkg.com/maplibre-gl-styles@0.0.1/styles/osm-mapnik/v8/india.json",
+  },
+  {
+    text: "Satellite",
+    key: "1",
+    style:
+      "https://raw.githubusercontent.com/go2garret/maps/main/src/assets/json/arcgis_hybrid.json",
+    maxZoom: 15.9,
+  },
+];
+
 export default function NakshaMaplibreListPage() {
   return (
     <div className={tw`h-[100vh] w-[100vw]`}>
@@ -55,6 +71,7 @@ export default function NakshaMaplibreListPage() {
           store: "naksha",
           workspace: "biodiv",
         }}
+        mapStyles={mapStyles}
         onLayerDownload={console.log}
         canLayerShare={true}
         // selectedLayers={[

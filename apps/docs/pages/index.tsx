@@ -4,7 +4,6 @@ import { tw } from "twind";
 const modules = [
   "naksha-gmaps-draw",
   "naksha-gmaps-view",
-  "naksha-mapbox-draw",
   "naksha-gmaps-draw",
   "naksha-gmaps-view",
   "naksha-maplibre-layers",

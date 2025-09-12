@@ -47,7 +47,7 @@ const geojson = {
 
 const mapStyles = [
   {
-    text: "OSM_custom",
+    text: "OSM",
     key: "0",
     style:
       "https://unpkg.com/maplibre-gl-styles@0.0.1/styles/osm-mapnik/v8/india.json",

@@ -1,4 +1,4 @@
-import { defaultMapStyles, useT } from "@biodiv-platform/naksha-commons";
+import { useT } from "@biodiv-platform/naksha-commons";
 import React from "react";
 import { tw } from "twind";
 
@@ -20,7 +20,7 @@ export default function SettingsTabPanel() {
         defaultValue={layer.mapStyle}
         onChange={handleOnStyleChange}
       >
-        {defaultMapStyles.map((ms) => (
+        {layer.mapStyles.map((ms) => (
           <option key={ms.key} value={ms.style}>
             {ms.text}
           </option>
