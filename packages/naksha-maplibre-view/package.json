@@ -1,6 +1,6 @@
 {
   "name": "@biodiv-platform/naksha-maplibre-view",
-  "version": "5.0.2",
+  "version": "5.0.3",
   "author": "arun",
   "main": "./dist/index.js",
   "module": "./dist/esm/index.js",

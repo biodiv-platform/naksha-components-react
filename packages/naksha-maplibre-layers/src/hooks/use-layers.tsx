@@ -26,8 +26,12 @@ interface LayersContextProps {
   setIsInfoBarOpen;
   layer: {
     mapStyle?;
-    mapStyles?;
     setMapStyle;
+
+    maxZoom?;
+    setMaxZoom?;
+
+    mapStyles?;
     featuresAtLatLng;
     all: GeoserverLayer[];
     setAll;
@@ -84,6 +88,7 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
     mp.mapStyles && mp.mapStyles.length > 0 ? mp.mapStyles : defaultMapStyles;
 
   const [mapStyle, setMapStyle] = useState(styles[mp?.mapStyle || 0]?.style);
+  const [maxZoom, setMaxZoom] = useState(styles[mp?.mapStyle || 0]?.maxZoom);
   const [selectionStyle, setSelectionStyle] = useState<string>(
     SELECTION_STYLE.TOP
   );
@@ -331,6 +336,8 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
           mapStyle,
           featuresAtLatLng,
           setMapStyle,
+          maxZoom,
+          setMaxZoom,
           mapStyles: styles,
           all: layers,
           setAll: setLayers,

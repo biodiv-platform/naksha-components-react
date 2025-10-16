@@ -26,7 +26,9 @@ export default function Map(props: NakshaMaplibreViewProps) {
   );
 
   const mapTile = props.mapStyles ? props.mapStyles : defaultMapStyles;
-  const mapStyle = mapTile[selectedMapStyleIdx]?.style;
+  const selectedMapTile = mapTile[selectedMapStyleIdx];
+  const mapStyle = selectedMapTile?.style;
+  const maxZoom = selectedMapTile?.maxZoom;
 
   const onDataChange = () => {
     if (!props.data || !mapv) return;
@@ -39,7 +41,7 @@ export default function Map(props: NakshaMaplibreViewProps) {
     onDataChange();
   }, [props.data]);
 
-  const handleStyleChange = (idx) => {
+  const handleStyleChange = (idx: number) => {
     setSelectedMapStyleIdx(idx);
   };
 
@@ -50,6 +52,7 @@ export default function Map(props: NakshaMaplibreViewProps) {
       initialViewState={viewState}
       style={{ width: "100%", height: "100%" }}
       mapStyle={mapStyle}
+      maxZoom={maxZoom}
       onLoad={onDataChange}
     >
       <NavControl position="bottom-right" showZoom={true} showCompass={true} />

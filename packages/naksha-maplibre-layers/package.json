@@ -1,6 +1,6 @@
 {
   "name": "@biodiv-platform/naksha-maplibre-layers",
-  "version": "5.0.1",
+  "version": "5.0.3",
   "author": "harshzalavadiya",
   "main": "./dist/index.js",
   "module": "./dist/esm/index.js",

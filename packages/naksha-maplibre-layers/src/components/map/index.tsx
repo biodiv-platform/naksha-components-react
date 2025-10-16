@@ -28,6 +28,8 @@ export default function Map() {
     hover.onHover(event);
   };
 
+  console.info("NakshaMaplibreLayers props");
+
   return (
     <div className={tw`h-full w-full relative bg-gray-100`}>
       {mp.loadToC && <Sidebar />}
@@ -38,6 +40,7 @@ export default function Map() {
         initialViewState={viewState}
         style={{ width: "100%", height: "100%" }}
         mapStyle={layer.mapStyle}
+        maxZoom={layer.maxZoom}
         onClick={onMapClick}
         onMouseMove={handleOnMouseMove}
       >
