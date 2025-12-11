@@ -87,8 +87,12 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
   const styles =
     mp.mapStyles && mp.mapStyles.length > 0 ? mp.mapStyles : defaultMapStyles;
 
-  const [mapStyle, setMapStyle] = useState(styles[mp?.mapStyle || 0]?.style);
-  const [maxZoom, setMaxZoom] = useState(styles[mp?.mapStyle || 0]?.maxZoom);
+  const [mapStyle, setMapStyle] = useState(
+    (styles[mp?.mapStyle || 0] as any)?.style
+  );
+  const [maxZoom, setMaxZoom] = useState<number | undefined>(
+    (styles[mp?.mapStyle || 0] as any)?.maxZoom
+  );
   const [selectionStyle, setSelectionStyle] = useState<string>(
     SELECTION_STYLE.TOP
   );
@@ -211,13 +215,33 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
 
     const layerIndex = getLayerIndexById(layerId);
     const sourceType = layers[layerIndex]?.source.type;
-    await toggleVectorLayer(layerIndex, styleIndex, focus);
-    setSelectedLayerIds((_slIds) => [
-      layerId,
-      ..._slIds.filter((lid) => lid !== layerId),
-    ]);
-  };
 
+    // Handle grid layers separately
+    if (sourceType === "grid") {
+      // Just update selection without calling toggleVectorLayer
+      setSelectedLayerIds((_slIds) => [
+        layerId,
+        ..._slIds.filter((lid) => lid !== layerId),
+      ]);
+
+      // If grid layer has bbox, zoom to it
+      if (focus && layers[layerIndex]?.bbox) {
+        setTimeout(() => {
+          mapl?.fitBounds(layers[layerIndex].bbox as any, {
+            padding: 40,
+            duration: 1000,
+          });
+        }, 100);
+      }
+    } else {
+      // For vector layers, use the original logic
+      await toggleVectorLayer(layerIndex, styleIndex, focus);
+      setSelectedLayerIds((_slIds) => [
+        layerId,
+        ..._slIds.filter((lid) => lid !== layerId),
+      ]);
+    }
+  };
   const clearAllLayers = async () => setSelectedLayerIds([]);
 
   const updateMP = (key, value) => {

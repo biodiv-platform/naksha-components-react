@@ -75,6 +75,7 @@ export interface GeoserverLayer {
   createdDate?: string;
   isDownloadable?: boolean;
   bbox?: any[];
+  zoomToFit?: boolean;
   isAdded?: boolean;
   ats?;
   source: {

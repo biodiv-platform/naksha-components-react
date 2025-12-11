@@ -21,11 +21,21 @@ const HoverPopup = ({ feature }) => (
   </div>
 );
 
+const mapCenter = {
+  latitude: 20.7,
+  longitude: 79.05,
+  bearing: 0,
+  pitch: 0,
+  zoom: 3.5,
+};
+
 const fetchGridData = async (geoProps) => {
   const params = {
     ...geoProps,
     view: "map",
     geoField: "location",
+    userGroupList: 14,
+
     // taxon: 5275,
   };
 
@@ -33,6 +43,10 @@ const fetchGridData = async (geoProps) => {
     `http://localhost:8010/proxy/observation-api/api/v1/observation/list/extended_observation/_doc`,
     {},
     { params }
+  );
+  console.info(
+    "Geohash Aggregation Response:",
+    response.data.geohashAggregation
   );
   return response.data.geohashAggregation;
 };
@@ -57,28 +71,29 @@ const mapStyles = [
   },
 ];
 
+const onObservationGridHover = ({ feature }) => (
+  <div>{feature?.properties?.count} Observations</div>
+);
+
 export default function NakshaMaplibreListPage() {
   return (
     <div className={tw`h-[100vh] w-[100vw]`}>
       <NakshaMaplibreLayers
+        defaultViewState={mapCenter}
         loadToC={true}
         showToC={true}
         managePublishing={true}
-        nakshaApiEndpoint="http://localhost:8010/proxy/naksha-api/api"
-        nakshaEndpointToken={process.env.NEXT_PUBLIC_NAKSHA_TOKEN}
+        nakshaApiEndpoint="http://localhost:8010/proxy/nakshaIntegrator-api/api"
+        // nakshaEndpointToken={process.env.NEXT_PUBLIC_NAKSHA_TOKEN}
         geoserver={{
           endpoint: "http://localhost:8010/proxy/geoserver",
-          store: "naksha",
+          store: "ibp",
           workspace: "biodiv",
         }}
         mapStyles={mapStyles}
         onLayerDownload={console.log}
         canLayerShare={true}
-        // selectedLayers={[
-        //   "global-observations",
-        //   "lyr_3_agar_soil",
-        //   "lyr_1_agar_geology",
-        // ]}
+        selectedLayers={["global-observations"]}
         markers={[
           {
             latitude: 23.241346,
@@ -89,10 +104,12 @@ export default function NakshaMaplibreListPage() {
         layers={[
           {
             id: "global-observations",
-            title: "Global Observations",
+            title: "Observations",
+            description: "All observations from this portal",
+            attribution: "Portal and Contributors",
+            tags: ["Global", "Observations"],
             source: { type: "grid", fetcher: fetchGridData },
-            onClick: Popup,
-            onHover: HoverPopup,
+            onHover: onObservationGridHover,
             data: {
               index: "extended_observation",
               type: "extended_records",
@@ -100,6 +117,7 @@ export default function NakshaMaplibreListPage() {
               summaryColumn: ["count"],
               propertyMap: { count: "Count" },
             },
+            zoomToFit: true,
           },
         ]}
       />
