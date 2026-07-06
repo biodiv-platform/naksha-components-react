@@ -1,6 +1,9 @@
 import { defaultViewState } from "@biodiv-platform/naksha-commons";
 import React, { useMemo, useState } from "react";
-import MapGL, { NavigationControl } from "react-map-gl/maplibre";
+import MapGL, {
+  FullscreenControl,
+  NavigationControl,
+} from "react-map-gl/maplibre";
 import { tw } from "twind";
 
 import useLayers from "../../hooks/use-layers";
@@ -28,8 +31,6 @@ export default function Map() {
     hover.onHover(event);
   };
 
-  console.info("NakshaMaplibreLayers props");
-
   return (
     <div className={tw`h-full w-full relative bg-gray-100`}>
       {mp.loadToC && <Sidebar />}
@@ -49,6 +50,10 @@ export default function Map() {
           showZoom={true}
           showCompass={true}
         />
+
+        {mp.showFullscreenControl && (
+          <FullscreenControl position="bottom-right" />
+        )}
         <MarkersList />
         {layer.selectedLayers.map((_l, index) => {
           const beforeId = index > 0 ? layer.selectedIds[index - 1] : undefined;

@@ -1,6 +1,5 @@
 import { useT } from "@biodiv-platform/naksha-commons";
 import React, { useMemo, useState } from "react";
-import { SortableHandle } from "react-sortable-hoc";
 import { RWebShare } from "react-web-share";
 import { tw } from "twind";
 
@@ -25,22 +24,44 @@ import GridLegend from "./grid-legend";
 import { PopoverWrapper } from "./info-popover";
 import LayerItemStyle from "./layer-item-style";
 
-const DragHandle = SortableHandle(() => (
-  <div className={tw`mt-1 w-6 text-center cursor-move`}>
-    <GrabberIcon />
-  </div>
-));
+function DragHandle({
+  dragHandleProps,
+}: {
+  dragHandleProps?: Record<string, any>;
+}) {
+  return (
+    <div
+      className={tw`mt-1 w-6 text-center cursor-move`}
+      style={{ touchAction: "none" }}
+      {...dragHandleProps}
+    >
+      <GrabberIcon />
+    </div>
+  );
+}
 
 interface LayerItemProps {
   item: GeoserverLayer;
   extended?: boolean;
+  dragHandleProps?: Record<string, any>;
 }
 
 declare const window;
 
-export default function LayerItem({ item, extended }: LayerItemProps) {
+export default function LayerItem({
+  item,
+  extended,
+  dragHandleProps,
+}: LayerItemProps) {
   const { t } = useT();
-  const { layer, query, mp, query: { setClickedLngLat }, setIsInfoBarOpen } = useLayers();
+  const {
+    layer,
+    query,
+    mp,
+    query: { setClickedLngLat },
+    setIsInfoBarOpen,
+  } = useLayers();
+
   const [isAdded, setIsAdded] = useState(layer.selectedIds.includes(item.id));
   const [isLoading, setIsLoading] = useState(false);
 
@@ -48,18 +69,18 @@ export default function LayerItem({ item, extended }: LayerItemProps) {
     () =>
       mp.canLayerShare
         ? {
-          url: `${window.location.href.split("?")[0]}?layers=${item.id}`,
-          title: item.title,
-        }
+            url: `${window.location.href.split("?")[0]}?layers=${item.id}`,
+            title: item.title,
+          }
         : undefined,
     [item.id]
   );
 
   const onToggleLayer = async () => {
     setIsLoading(true);
-    setIsInfoBarOpen(true)
-    layer.setSelectedFeatures([])
-    setClickedLngLat(null)
+    setIsInfoBarOpen(true);
+    layer.setSelectedFeatures([]);
+    setClickedLngLat(null);
     await layer.toggle({ layerId: item.id, add: !isAdded });
     setIsAdded(!isAdded);
     setIsLoading(false);
@@ -90,7 +111,7 @@ export default function LayerItem({ item, extended }: LayerItemProps) {
             onChange={onToggleLayer}
             isLoading={isLoading}
           />
-          {extended && <DragHandle />}
+          {extended && <DragHandle dragHandleProps={dragHandleProps} />}
         </div>
         <img
           className={tw`flex-shrink-0 overflow-hidden h-16 w-16 p-1 mb-2 object-cover border border-gray-200 rounded`}

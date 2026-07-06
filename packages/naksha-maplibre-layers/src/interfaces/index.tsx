@@ -14,6 +14,7 @@ export interface NakshaMaplibreLayersProps {
 
   loadToC?: boolean;
   showToC?: boolean;
+  showFullscreenControl?: boolean;
 
   managePublishing?: boolean;
   nakshaEndpointToken?: string;
