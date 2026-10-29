@@ -13,11 +13,11 @@ import {
 
 import { TerraDrawMapLibreGLAdapter } from "terra-draw-maplibre-gl-adapter";
 
-import maplibregl from "maplibre-gl";
+import type { Map } from "maplibre-gl";
 import { tw } from "twind";
 import React from "react";
 
-export function setupDraw(map: maplibregl.Map) {
+export function setupDraw(map: Map) {
   return new TerraDraw({
     tracked: true,
     adapter: new TerraDrawMapLibreGLAdapter({

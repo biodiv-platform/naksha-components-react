@@ -1,8 +1,11 @@
-import maplibregl from "maplibre-gl";
+import {
+  FullscreenControl,
+  type Map as MaplibreMap,
+  NavigationControl,
+} from "maplibre-gl";
 import { useRef, useState, useEffect, useCallback } from "react";
-import { GeoJSONStoreFeatures } from "terra-draw/dist/store/store";
 import { ensureModeProperty, MapStyleSwitcher, setupDraw } from "./setup-draw";
-import { TerraDraw } from "terra-draw";
+import { TerraDraw, GeoJSONStoreFeatures } from "terra-draw";
 import { setupMaplibreMap } from "./setup-maplibre";
 import { NakshaMaplibreViewProps } from "../interfaces";
 import MapButtons from "./map-buttons/map-buttons";
@@ -11,7 +14,7 @@ import { defaultMapStyles } from "@biodiv-platform/naksha-commons";
 
 const Map = (props: NakshaMaplibreViewProps) => {
   const mapRef = useRef<HTMLDivElement>(null);
-  const [map, setMap] = useState<maplibregl.Map>();
+  const [map, setMap] = useState<MaplibreMap>();
   const [mode, setMode] = useState("static");
   const [draw, setDraw] = useState<TerraDraw>();
   const drawRef = useRef<TerraDraw>();
@@ -58,12 +61,12 @@ const Map = (props: NakshaMaplibreViewProps) => {
       maplibreMap.setMaxZoom(mapStyleConfig.maxZoom);
     }
 
-    const navControl = new maplibregl.NavigationControl({
+    const navControl = new NavigationControl({
       showCompass: true,
       showZoom: true,
       visualizePitch: true,
     });
-    const fullscreen = new maplibregl.FullscreenControl({});
+    const fullscreen = new FullscreenControl({});
     maplibreMap.addControl(navControl, "bottom-right");
     maplibreMap.addControl(fullscreen, "bottom-right");
 

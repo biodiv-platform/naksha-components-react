@@ -1,4 +1,4 @@
-import maplibregl from "maplibre-gl";
+import { getRTLTextPluginStatus, Map, setRTLTextPlugin } from "maplibre-gl";
 
 export function setupMaplibreMap({
   containerId,
@@ -17,14 +17,14 @@ export function setupMaplibreMap({
   bearing?: number;
   mapstyle?: string;
 }) {
-  if (maplibregl.getRTLTextPluginStatus() === "unavailable") {
-    maplibregl.setRTLTextPlugin(
+  if (getRTLTextPluginStatus() === "unavailable") {
+    setRTLTextPlugin(
       "https://unpkg.com/@mapbox/mapbox-gl-rtl-text@0.2.3/mapbox-gl-rtl-text.min.js",
       true
     );
   }
 
-  return new maplibregl.Map({
+  return new Map({
     container: containerId,
     style: mapstyle,
     center: { lat: latitude, lng: longitude },

@@ -1,6 +1,6 @@
 {
   "name": "@biodiv-platform/naksha-maplibre-draw",
-  "version": "5.0.10",
+  "version": "5.0.11",
   "author": "arun",
   "main": "./dist/index.js",
   "module": "./dist/esm/index.js",
@@ -18,7 +18,7 @@
     "dev": "tsup src/index.tsx --legacy-output --format esm,cjs --watch --dts --external react"
   },
   "peerDependencies": {
-    "maplibre-gl": "^5.7.0",
+    "maplibre-gl": "^6.16.0",
     "react": ">=18",
     "react-map-gl": "^8.0.4"
   },
@@ -27,7 +27,7 @@
     "@biodiv-platform/tsconfig": "*",
     "@types/react": "^18.0.13",
     "@types/react-dom": "^18.0.5",
-    "maplibre-gl": "^5.7.0",
+    "maplibre-gl": "^6.16.0",
     "react": ">=18",
     "react-map-gl": "^8.0.4",
     "tsup": "^6.1.2",
