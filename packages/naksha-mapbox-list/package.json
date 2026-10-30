@@ -1,6 +1,6 @@
 {
   "name": "@biodiv-platform/naksha-mapbox-list",
-  "version": "4.5.0",
+  "version": "4.5.1",
   "author": "harshzalavadiya",
   "main": "./dist/index.js",
   "module": "./dist/esm/index.js",
@@ -38,7 +38,7 @@
     "@biodiv-platform/naksha-commons": "*",
     "boundingbox": "^1.4.0",
     "clsx": "^1.1.1",
-    "colorbrewer": "^1.5.2",
+    "colorbrewer": "1.5.2",
     "geohash": "^0.0.1",
     "highlight-search-result": "^1.0.4",
     "immer": "^9.0.15",

@@ -1,6 +1,6 @@
 {
   "name": "naksha-components-react",
-  "version": "5.0.4",
+  "version": "5.0.5",
   "author": "harshzalavadiya",
   "main": "./dist/index.js",
   "module": "./dist/esm/index.js",
@@ -23,8 +23,8 @@
     "@biodiv-platform/eslint-preset": "4.4.9",
     "@biodiv-platform/naksha-gmaps-draw": "4.5.3",
     "@biodiv-platform/naksha-gmaps-view": "4.4.9",
-    "@biodiv-platform/naksha-maplibre-draw": "5.0.11",
-    "@biodiv-platform/naksha-maplibre-layers": "5.0.6",
+    "@biodiv-platform/naksha-maplibre-draw": "5.0.12",
+    "@biodiv-platform/naksha-maplibre-layers": "5.0.7",
     "@biodiv-platform/naksha-maplibre-view": "5.0.4",
     "@biodiv-platform/tsconfig": "4.4.9"
   },

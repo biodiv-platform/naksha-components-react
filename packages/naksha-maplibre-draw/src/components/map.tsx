@@ -1,7 +1,7 @@
-import {
-  FullscreenControl,
-  type Map as MaplibreMap,
-  NavigationControl,
+import type {
+  FullscreenControl as IFullscreenControl,
+  Map as MaplibreMap,
+  NavigationControl as INavigationControl,
 } from "maplibre-gl";
 import { useRef, useState, useEffect, useCallback } from "react";
 import { ensureModeProperty, MapStyleSwitcher, setupDraw } from "./setup-draw";
@@ -43,38 +43,62 @@ const Map = (props: NakshaMaplibreViewProps) => {
   );
 
   useEffect(() => {
+    let isCancelled = false;
+    let activeMap: MaplibreMap | undefined;
+    let activeNavControl: INavigationControl | undefined;
+    let activeFullscreen: IFullscreenControl | undefined;
+
     if (features.length > 0) {
       storedFeaturesRef.current = ensureModeProperty(features);
     }
 
-    const maplibreMap = setupMaplibreMap({
-      containerId: "maplibre-map",
-      latitude: props.defaultViewState?.latitude ?? 0,
-      longitude: props.defaultViewState?.longitude ?? 0,
-      zoom: props.defaultViewState?.zoom ?? 0,
-      pitch: props.defaultViewState?.pitch ?? 0,
-      bearing: props.defaultViewState?.bearing ?? 0,
-      mapstyle: mapStyle,
-    });
+    (async () => {
+      const { NavigationControl, FullscreenControl } = await import(
+        "maplibre-gl"
+      );
 
-    if ("maxZoom" in mapStyleConfig && mapStyleConfig.maxZoom) {
-      maplibreMap.setMaxZoom(mapStyleConfig.maxZoom);
-    }
+      const maplibreMap = await setupMaplibreMap({
+        containerId: "maplibre-map",
+        latitude: props.defaultViewState?.latitude ?? 0,
+        longitude: props.defaultViewState?.longitude ?? 0,
+        zoom: props.defaultViewState?.zoom ?? 0,
+        pitch: props.defaultViewState?.pitch ?? 0,
+        bearing: props.defaultViewState?.bearing ?? 0,
+        mapstyle: mapStyle,
+      });
 
-    const navControl = new NavigationControl({
-      showCompass: true,
-      showZoom: true,
-      visualizePitch: true,
-    });
-    const fullscreen = new FullscreenControl({});
-    maplibreMap.addControl(navControl, "bottom-right");
-    maplibreMap.addControl(fullscreen, "bottom-right");
+      if (isCancelled) {
+        maplibreMap.remove();
+        return;
+      }
 
-    maplibreMap.once("style.load", () => {
-      setMap(maplibreMap);
-    });
+      activeMap = maplibreMap;
+
+      if ("maxZoom" in mapStyleConfig && mapStyleConfig.maxZoom) {
+        maplibreMap.setMaxZoom(mapStyleConfig.maxZoom);
+      }
+
+      const navControl = new NavigationControl({
+        showCompass: true,
+        showZoom: true,
+        visualizePitch: true,
+      });
+      const fullscreen = new FullscreenControl({});
+      activeNavControl = navControl;
+      activeFullscreen = fullscreen;
+
+      maplibreMap.addControl(navControl, "bottom-right");
+      maplibreMap.addControl(fullscreen, "bottom-right");
+
+      maplibreMap.once("style.load", () => {
+        if (!isCancelled) {
+          setMap(maplibreMap);
+        }
+      });
+    })();
 
     return () => {
+      isCancelled = true;
       if (drawRef.current) {
         storedFeaturesRef.current = drawRef.current.getSnapshot();
       }
@@ -87,10 +111,10 @@ const Map = (props: NakshaMaplibreViewProps) => {
         drawRef.current = undefined;
         setDraw(undefined);
       }
-      if (maplibreMap) {
-        maplibreMap.removeControl(navControl);
-        maplibreMap.removeControl(fullscreen);
-        maplibreMap.remove();
+      if (activeMap) {
+        if (activeNavControl) activeMap.removeControl(activeNavControl);
+        if (activeFullscreen) activeMap.removeControl(activeFullscreen);
+        activeMap.remove();
       }
     };
   }, [mapStyle]);

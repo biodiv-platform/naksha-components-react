@@ -1,6 +1,6 @@
-import { getRTLTextPluginStatus, Map, setRTLTextPlugin } from "maplibre-gl";
+import type { Map as MaplibreMap } from "maplibre-gl";
 
-export function setupMaplibreMap({
+export async function setupMaplibreMap({
   containerId,
   latitude = 0,
   longitude = 0,
@@ -16,7 +16,11 @@ export function setupMaplibreMap({
   pitch?: number;
   bearing?: number;
   mapstyle?: string;
-}) {
+}): Promise<MaplibreMap> {
+  const { getRTLTextPluginStatus, Map, setRTLTextPlugin } = await import(
+    "maplibre-gl"
+  );
+
   if (getRTLTextPluginStatus() === "unavailable") {
     setRTLTextPlugin(
       "https://unpkg.com/@mapbox/mapbox-gl-rtl-text@0.2.3/mapbox-gl-rtl-text.min.js",
