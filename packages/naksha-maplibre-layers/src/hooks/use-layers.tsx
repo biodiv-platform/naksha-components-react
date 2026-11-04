@@ -338,6 +338,14 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
     }
   };
 
+  // lets the host app switch layers by changing the `selectedLayers` prop
+  const selectedLayersProp = (_mp.selectedLayers || []).join(",");
+  useEffect(() => {
+    if (selectedLayersProp !== selectedLayerIds.join(",")) {
+      setSelectedLayerIds(selectedLayersProp ? selectedLayersProp.split(",") : []);
+    }
+  }, [selectedLayersProp]);
+
   useEffect(() => {
     if (mp.onSelectedLayersChange) {
       mp.onSelectedLayersChange(selectedLayerIds);
