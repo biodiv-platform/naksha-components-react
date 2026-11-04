@@ -3,11 +3,10 @@ import { tw } from "twind";
 
 import { SearchIcon } from "./icons";
 
-interface InputProps
-  extends React.DetailedHTMLProps<
-    React.InputHTMLAttributes<HTMLInputElement>,
-    HTMLInputElement
-  > {
+interface InputProps extends React.DetailedHTMLProps<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  HTMLInputElement
+> {
   label?: string;
   name?: string;
 }

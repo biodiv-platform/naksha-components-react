@@ -2,33 +2,28 @@
   "name": "naksha-turborepo",
   "version": "0.0.0",
   "private": true,
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
   "repository": "strandls/naksha-components-react",
   "author": "harshzalavadiya",
   "license": "Apache-2.0",
   "scripts": {
     "build": "turbo run build",
-    "dev": "turbo run dev --parallel",
+    "dev": "turbo run dev --parallel --concurrency 15",
     "lint": "turbo run lint",
     "clean": "turbo run clean && rm -rf node_modules dist",
-    "prerelease": "yarn run build",
+    "prerelease": "pnpm run build",
     "release": "lerna publish --no-private",
     "release:local": "lerna publish --no-git-tag-version --force-publish --no-private --no-push --registry=\"http://localhost:4873/\"",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
-    "prettier": "^2.7.1",
-    "turbo": "latest"
+    "prettier": "^3.9.10",
+    "turbo": "^2.11.10"
   },
   "engines": {
-    "npm": ">=7.0.0",
-    "node": ">=14.0.0"
+    "node": ">=18.0.0"
   },
-  "packageManager": "yarn@1.22.17",
+  "packageManager": "pnpm@11.10.0",
   "dependencies": {
-    "lerna": "^5.1.4"
+    "lerna": "^10.1.1"
   }
 }

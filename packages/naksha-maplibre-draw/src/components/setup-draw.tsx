@@ -76,6 +76,7 @@ export function setupDraw(map: Map) {
       }),
       new TerraDrawPointMode(),
       new TerraDrawLineStringMode({
+        showCoordinatePoints: true,
         validation: (feature, { updateType }) => {
           if (updateType === "finish" || updateType === "commit") {
             return ValidateNotSelfIntersecting(feature);
@@ -87,7 +88,8 @@ export function setupDraw(map: Map) {
       }),
       new TerraDrawRectangleMode(),
       new TerraDrawPolygonMode({
-        pointerDistance: 30,
+        pointerDistance: 40,
+        showCoordinatePoints: true,
         validation: (feature, { updateType }) => {
           if (updateType === "finish" || updateType === "commit") {
             return ValidateNotSelfIntersecting(feature);
@@ -116,10 +118,10 @@ export const ensureModeProperty = (features: any[]): GeoJSONStoreFeatures[] => {
       type === "Point"
         ? "point"
         : type === "Polygon"
-        ? "polygon"
-        : type === "LineString"
-        ? "linestring"
-        : "unknown";
+          ? "polygon"
+          : type === "LineString"
+            ? "linestring"
+            : "unknown";
     return {
       ...feature,
       properties: { ...feature.properties, mode },
@@ -138,7 +140,7 @@ export const IconButton = React.forwardRef<HTMLDivElement, any>(
     <button
       ref={ref}
       type="button"
-      className={tw`h-8 px-3 py-2 rounded-md focus:outline-none  cursor-pointer text-md flex align-middle items-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 disabled:cursor-not-allowed disabled:bg-gray-100! disabled:opacity-50`}
+      className={tw`h-8 px-3 py-2 rounded-md focus:outline-none cursor-pointer text-base flex align-middle items-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 disabled:cursor-not-allowed disabled:bg-gray-100! disabled:opacity-50`}
       {...props}
     />
   )

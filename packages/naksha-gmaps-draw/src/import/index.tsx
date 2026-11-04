@@ -105,15 +105,29 @@ const NakshaImport: React.FC<NakshaImportProps> = ({
         Point
       </h1>
       <div style={{ display: "flex", alignItems: "center" }}>
-        {React.cloneElement(InputComponent, {
-          ref: importInputRef,
-          width: "300px",
-        })}
-        {React.cloneElement(ButtonComponent, {
-          onClick: handleOnAddFeature,
-          type: "button",
-          marginLeft: "10px",
-        })}
+        {React.isValidElement(InputComponent) ? (
+          React.cloneElement(InputComponent, {
+            ref: importInputRef,
+            width: "300px",
+          } as any)
+        ) : (
+          <input ref={importInputRef} style={{ width: "300px" }} />
+        )}
+        {React.isValidElement(ButtonComponent) ? (
+          React.cloneElement(ButtonComponent, {
+            onClick: handleOnAddFeature,
+            type: "button",
+            marginLeft: "10px",
+          } as any)
+        ) : (
+          <button
+            type="button"
+            onClick={handleOnAddFeature}
+            style={{ marginLeft: "10px" }}
+          >
+            Add
+          </button>
+        )}
       </div>
 
       {uploadStatus && (
@@ -128,33 +142,63 @@ const NakshaImport: React.FC<NakshaImportProps> = ({
         >
           {isPointsValid ? (
             <span style={{ marginRight: "5px", fontSize: "1.25rem" }}>
-              {React.cloneElement(SuccessIcon, { boxSize: 6 })}
+              {React.isValidElement(SuccessIcon) ? (
+                React.cloneElement(SuccessIcon, { boxSize: 6 } as any)
+              ) : (
+                "✓"
+              )}
             </span>
           ) : (
             <span
               style={{ marginRight: "5px", fontSize: "1.25rem", color: "red" }}
             >
-              {React.cloneElement(FailureIcon, { boxSize: 4 })}
+              {React.isValidElement(FailureIcon) ? (
+                React.cloneElement(FailureIcon, { boxSize: 4 } as any)
+              ) : (
+                "⚠"
+              )}
             </span>
           )}
           {uploadStatus}
         </div>
       )}
-     {importedPoints.length > 0 && (
-  <div style={{ marginTop: "10px", paddingLeft: "15px" }}>
-    <div style={{ fontSize: "sm" }}>Added Points:</div>
-    <ul style={{ listStyleType: "none", padding: "0" }}>
-      {importedPoints.map((point) => (
-        <li key={point.properties.id} style={{ display: "flex", alignItems: "center", marginBottom: "5px" }}>
-          {React.cloneElement(LocationIcon, { boxSize: 6, marginRight: 2, color: 'teal' })}
-          <span style={{ overflow: "hidden", whiteSpace: "pre-wrap", textOverflow: "ellipsis", maxWidth: "300px" }}>
-            {point.properties.name}
-          </span>
-        </li>
-      ))}
-    </ul>
-  </div>
-)}
+      {importedPoints.length > 0 && (
+        <div style={{ marginTop: "10px", paddingLeft: "15px" }}>
+          <div style={{ fontSize: "sm" }}>Added Points:</div>
+          <ul style={{ listStyleType: "none", padding: "0" }}>
+            {importedPoints.map((point) => (
+              <li
+                key={point.properties.id}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  marginBottom: "5px",
+                }}
+              >
+                {React.isValidElement(LocationIcon) ? (
+                  React.cloneElement(LocationIcon, {
+                    boxSize: 6,
+                    marginRight: 2,
+                    color: "teal",
+                  } as any)
+                ) : (
+                  <span style={{ marginRight: "6px" }}>📍</span>
+                )}
+                <span
+                  style={{
+                    overflow: "hidden",
+                    whiteSpace: "pre-wrap",
+                    textOverflow: "ellipsis",
+                    maxWidth: "300px",
+                  }}
+                >
+                  {point.properties.name}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };

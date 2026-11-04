@@ -186,25 +186,24 @@ const NakshaGmapsDraw = React.forwardRef(
             )}
 
             <div style={{ flex: "1" }}></div>
-            <ModalImport
-              ButtonComponent={
-                importButtonComponent || <button children="add" />
-              }
-              ModalComponent={
-                importModalComponent &&
-                React.cloneElement(importModalComponent, { isOpen, onClose })
-              }
-              InputComponent={importInputComponent || <input />}
-              addFeature={addFeature}
-              ButtonComponentModal={
-                importButtonComponentModal || <button children="add" />
-              }
-              DeleteIcon={importDeleteIcon}
-              LocationIcon={importLocationIcon}
-              FileIcon={importFileIcon}
-              SuccessIcon={importSuccessIcon}
-              FailureIcon={importFailureIcon}
-            />
+            {isImport && (
+              <ModalImport
+                ButtonComponent={
+                  importButtonComponent || <button children="add" />
+                }
+                ModalComponent={importModalComponent}
+                InputComponent={importInputComponent || <input />}
+                addFeature={addFeature}
+                ButtonComponentModal={
+                  importButtonComponentModal || <button children="Import" />
+                }
+                DeleteIcon={importDeleteIcon}
+                LocationIcon={importLocationIcon}
+                FileIcon={importFileIcon}
+                SuccessIcon={importSuccessIcon}
+                FailureIcon={importFailureIcon}
+              />
+            )}
           </div>
           {showTrace && (
             <TraceLocation

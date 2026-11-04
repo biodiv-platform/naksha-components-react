@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { useVirtual } from "react-virtual";
-import AutoSizer from "react-virtualized-auto-sizer";
+import { AutoSizer } from "react-virtualized-auto-sizer";
 import { tw } from "twind";
 
 import useLayers from "../../../hooks/use-layers";

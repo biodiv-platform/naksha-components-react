@@ -8,6 +8,7 @@ export interface NakshaMaplibreViewProps {
   onFeaturesChange?;
   isControlled?: boolean;
   isMultiple?: boolean;
+  workerUrl?: string;
   mapStyles?: Array<{
     text: string;
     key: string;

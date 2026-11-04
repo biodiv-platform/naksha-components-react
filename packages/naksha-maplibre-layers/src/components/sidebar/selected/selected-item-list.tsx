@@ -4,9 +4,13 @@ import {
   DragEndEvent,
   PointerSensor,
   useSensor,
-  useSensors
+  useSensors,
 } from "@dnd-kit/core";
-import { SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import {
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import React from "react";
 
@@ -17,19 +21,30 @@ import LayerItem from "../common/layer-item";
 // `dragHandleProps` so only the grip icon (not the whole card) initiates a
 // drag - same behavior react-sortable-hoc's SortableHandle gave you.
 function SortableSelectedItem({ item, extended }) {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
-    id: item.id
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id: item.id,
   });
 
   const style: React.CSSProperties = {
     transform: CSS.Transform.toString(transform),
     transition,
-    opacity: isDragging ? 0.5 : 1
+    opacity: isDragging ? 0.5 : 1,
   };
 
   return (
     <div ref={setNodeRef} style={style}>
-      <LayerItem item={item} extended={extended} dragHandleProps={{ ...attributes, ...listeners }} />
+      <LayerItem
+        item={item}
+        extended={extended}
+        dragHandleProps={{ ...attributes, ...listeners }}
+      />
     </div>
   );
 }
@@ -45,8 +60,13 @@ interface SelectedItemListProps {
   onSortEnd: (result: { oldIndex: number; newIndex: number }) => void;
 }
 
-export const SelectedItemList = ({ layerList, onSortEnd }: SelectedItemListProps) => {
-  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 4 } }));
+export const SelectedItemList = ({
+  layerList,
+  onSortEnd,
+}: SelectedItemListProps) => {
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 4 } })
+  );
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -60,7 +80,11 @@ export const SelectedItemList = ({ layerList, onSortEnd }: SelectedItemListProps
   };
 
   return (
-    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragEnd={handleDragEnd}
+    >
       <SortableContext
         items={layerList.map((item) => item.id)}
         strategy={verticalListSortingStrategy}

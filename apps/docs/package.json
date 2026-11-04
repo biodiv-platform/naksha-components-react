@@ -2,26 +2,42 @@
   "name": "docs",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "clean": "rm -rf node_modules .next .turbo",
-    "dev": "next dev",
+    "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint ."
   },
   "dependencies": {
-    "@twind/next": "^1.0.9",
-    "axios": "^0.27.2",
-    "next": "12.1.6",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "@biodiv-platform/naksha-commons": "workspace:*",
+    "@biodiv-platform/naksha-gmaps-draw": "workspace:*",
+    "@biodiv-platform/naksha-gmaps-view": "workspace:*",
+    "@biodiv-platform/naksha-mapbox-draw": "workspace:*",
+    "@biodiv-platform/naksha-mapbox-list": "workspace:*",
+    "@biodiv-platform/naksha-mapbox-view": "workspace:*",
+    "@biodiv-platform/naksha-maplibre-draw": "workspace:*",
+    "@biodiv-platform/naksha-maplibre-layers": "workspace:*",
+    "@biodiv-platform/naksha-maplibre-view": "workspace:*",
+    "naksha-components-react": "workspace:*",
+    "@mapbox/mapbox-gl-draw": "^1.3.0",
+    "axios": "^1.21.0",
+    "mapbox-gl": "^2.8.2",
+    "maplibre-gl": "^6.16.0",
+    "next": "^16.4.4",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "twind": "^0.16.19"
   },
   "devDependencies": {
-    "naksha-components-react": "*",
-    "@biodiv-platform/tsconfig": "*",
-    "@types/node": "^18.0.0",
-    "@types/react": "18.0.13",
-    "eslint": "8.17.0",
-    "typescript": "^4.7.3"
+    "@biodiv-platform/eslint-preset": "workspace:*",
+    "@biodiv-platform/tsconfig": "workspace:*",
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "eslint": "^9.22.0",
+    "eslint-config-next": "^16.4.4",
+    "typescript": "^5.8.3"
   }
 }

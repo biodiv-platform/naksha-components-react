@@ -38,8 +38,8 @@ const MapButton = ({
       backgroundColor: disabled
         ? "#d3d3d3"
         : currentMode === mode
-        ? "#02cf87"
-        : "#f0f0f0",
+          ? "#02cf87"
+          : "#f0f0f0",
       cursor: disabled ? "not-allowed" : "pointer",
       opacity: disabled ? 0.6 : 1,
       width: 40,

@@ -1,10 +1,18 @@
 {
   "name": "@biodiv-platform/naksha-mapbox-draw",
   "version": "4.4.9",
+  "type": "module",
   "author": "harshzalavadiya",
-  "main": "./dist/index.js",
-  "module": "./dist/esm/index.js",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
   "sideEffects": false,
   "license": "Apache-2.0",
   "repository": "strandls/naksha-components-react",
@@ -14,31 +22,31 @@
   ],
   "scripts": {
     "clean": "rm -rf node_modules dist .turbo",
-    "build": "tsup src/index.tsx --legacy-output --minify --format esm,cjs --dts --external react",
-    "dev": "tsup src/index.tsx --legacy-output --format esm,cjs --watch --dts --external react"
+    "build": "tsup src/index.tsx --format esm,cjs --dts --minify --external react",
+    "dev": "tsup src/index.tsx --format esm,cjs --watch --dts --external react"
   },
   "peerDependencies": {
     "mapbox-gl": "^2.8.2",
-    "react": ">=18",
-    "react-map-gl": "^7.0.15"
+    "react": ">=18.0.0",
+    "react-map-gl": ">=7.0.15"
   },
   "devDependencies": {
-    "@biodiv-platform/eslint-preset": "*",
-    "@biodiv-platform/tsconfig": "*",
+    "@biodiv-platform/eslint-preset": "workspace:*",
+    "@biodiv-platform/tsconfig": "workspace:*",
     "@types/mapbox__mapbox-gl-draw": "^1.2.3",
-    "@types/react": "^18.0.13",
-    "@types/react-dom": "^18.0.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
     "mapbox-gl": "^2.8.2",
-    "react": ">=18",
-    "react-map-gl": "^7.0.15",
-    "tsup": "^6.1.2",
-    "typescript": "^4.7.3"
+    "react": "^19.3.1",
+    "react-map-gl": "^7.1.7",
+    "tsup": "^9.0.0",
+    "typescript": "^5.8.3"
   },
   "dependencies": {
-    "@biodiv-platform/naksha-commons": "*",
+    "@biodiv-platform/naksha-commons": "workspace:*",
     "@mapbox/mapbox-gl-draw": "^1.3.0",
-    "@turf/bbox": "^6.5.0",
+    "@turf/bbox": "^7.4.0",
     "boundingbox": "^1.4.0",
-    "react-gbus": "^1.1.2"
+    "react-gbus": "^1.1.3"
   }
 }

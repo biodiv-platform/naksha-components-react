@@ -38,7 +38,7 @@ export function StyleLegend({ item }) {
       ) : showImage ? (
         <li>
           <img
-          style={{margin:"5px"}}
+            style={{ margin: "5px" }}
             onError={() => setShowImage(false)}
             src={`${mp?.geoserver?.endpoint}/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&WIDTH=20&HEIGHT=20&STRICT=false&layer=biodiv:${item.id}`}
           />

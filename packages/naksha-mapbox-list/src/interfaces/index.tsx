@@ -79,8 +79,8 @@ export interface GeoserverLayer {
     endpoint?;
     fetcher?;
   };
-  onClick?: ({ bbox, feature, layerId}) => JSX.Element;
-  onHover?: ({ bbox, feature, layerId}) => JSX.Element;
+  onClick?: ({ bbox, feature, layerId }) => JSX.Element;
+  onHover?: ({ bbox, feature, layerId }) => JSX.Element;
   data?: {
     styles?: VectorStyleMeta[];
     styleIndex?;

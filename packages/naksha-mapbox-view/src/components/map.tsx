@@ -1,4 +1,7 @@
-import { defaultMapStyles, defaultViewState } from "@biodiv-platform/naksha-commons";
+import {
+  defaultMapStyles,
+  defaultViewState,
+} from "@biodiv-platform/naksha-commons";
 import React, { useEffect, useState } from "react";
 import MapGL, { Layer, NavigationControl, Source, useMap } from "react-map-gl";
 

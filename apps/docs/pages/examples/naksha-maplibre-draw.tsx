@@ -70,7 +70,7 @@ const changedGeojson = {
 
 export default function NakshaMapboxDrawPage() {
   const [controlled, setControlled] = useState(false);
-  const [multiple, setMultiple] = useState(false);
+  const [multiple, setMultiple] = useState(true);
   const [data, setData] = useState(geojson.features);
 
   const mapStyles = [
@@ -102,12 +102,20 @@ export default function NakshaMapboxDrawPage() {
         className={tw`absolute top-3 right-12 bg-white rounded p-4 shadow-md`}
       >
         <label>
-          <input type="checkbox" onChange={() => setControlled(!controlled)} />
+          <input
+            type="checkbox"
+            checked={controlled}
+            onChange={() => setControlled(!controlled)}
+          />
           Controlled {JSON.stringify(controlled)}
         </label>
         <br />
         <label>
-          <input type="checkbox" onChange={() => setMultiple(!multiple)} />
+          <input
+            type="checkbox"
+            checked={multiple}
+            onChange={() => setMultiple(!multiple)}
+          />
           Multiple {JSON.stringify(multiple)}
         </label>
         <br />

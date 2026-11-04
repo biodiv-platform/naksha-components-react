@@ -1,4 +1,7 @@
-import { defaultMapStyles, defaultViewState } from "@biodiv-platform/naksha-commons";
+import {
+  defaultMapStyles,
+  defaultViewState,
+} from "@biodiv-platform/naksha-commons";
 import bbox from "@turf/bbox";
 import React, { useEffect, useState } from "react";
 import MapGL, { NavigationControl, useMap } from "react-map-gl";

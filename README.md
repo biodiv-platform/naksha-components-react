@@ -25,8 +25,8 @@ Map Components for Biodiversity Informatics Platform
 
 ```sh
 git clone https://github.com/strandls/naksha-components-react.git
-yarn install
-yarn dev
+pnpm install
+pnpm dev
 ```
 
 ## 🔧 Configuration
@@ -34,16 +34,20 @@ yarn dev
 Code quality checks are done with `prettier`, `eslint`.
 
 ## 🔗🏠 Local Link
+
 ```
 cd packages/naksha-component-react
 yarn link (or `npm link` if yarn doesnt work)
 ```
+
 Then go to the project you want to link the package into(example: cca-ui):
+
 ```
 yarn link naksha-component-react
 ```
 
 ## 🔖📦Beta Publish on NPM
+
 Follow this tutorial : https://egghead.io/lessons/javascript-publishing-a-beta-version
 
 ## 🙏 Contributing

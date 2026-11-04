@@ -94,8 +94,8 @@ export const geohashToJSON = (data, level: number) => ({
     Object.keys(data).length === 0
       ? []
       : level === -1
-      ? processSquares(data)
-      : processRectangles(data, level),
+        ? processSquares(data)
+        : processRectangles(data, level),
 });
 
 export const getDataBins = (

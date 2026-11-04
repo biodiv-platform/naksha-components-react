@@ -11,7 +11,7 @@ interface LayerSelectionProps {
 
 export default function LayerSelection({ hideLabel }: LayerSelectionProps) {
   const {
-    layer: {selectionStyle, handleSelectStyle },
+    layer: { selectionStyle, handleSelectStyle },
   } = useLayers();
   const { t } = useT();
 

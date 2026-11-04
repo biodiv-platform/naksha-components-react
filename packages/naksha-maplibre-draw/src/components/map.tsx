@@ -28,6 +28,13 @@ const Map = (props: NakshaMaplibreViewProps) => {
   const mapStyleConfig = mapTile[selectedMapStyleIdx];
 
   const storedFeaturesRef = useRef<GeoJSONStoreFeatures[]>([]);
+  const isMultipleRef = useRef(isMultiple);
+  isMultipleRef.current = isMultiple;
+
+  const onFeaturesChangeRef = useRef(onFeaturesChange);
+  onFeaturesChangeRef.current = onFeaturesChange;
+
+  const prevFeaturesRef = useRef<string>("");
 
   const autoFocus = useCallback(
     (features: GeoJSONStoreFeatures[]) => {
@@ -53,9 +60,8 @@ const Map = (props: NakshaMaplibreViewProps) => {
     }
 
     (async () => {
-      const { NavigationControl, FullscreenControl } = await import(
-        "maplibre-gl"
-      );
+      const { NavigationControl, FullscreenControl } =
+        await import("maplibre-gl");
 
       const maplibreMap = await setupMaplibreMap({
         containerId: "maplibre-map",
@@ -65,6 +71,7 @@ const Map = (props: NakshaMaplibreViewProps) => {
         pitch: props.defaultViewState?.pitch ?? 0,
         bearing: props.defaultViewState?.bearing ?? 0,
         mapstyle: mapStyle,
+        workerUrl: props.workerUrl,
       });
 
       if (isCancelled) {
@@ -137,7 +144,7 @@ const Map = (props: NakshaMaplibreViewProps) => {
       let snapshot = terraDraw.getSnapshot();
       let userFeatures = filterUserFeatures(snapshot);
 
-      if (!isMultiple && userFeatures.length > 1) {
+      if (!isMultipleRef.current && userFeatures.length > 1) {
         const lastFeature = userFeatures.at(-1)!;
         const toRemove = userFeatures
           .slice(0, -1)
@@ -151,10 +158,47 @@ const Map = (props: NakshaMaplibreViewProps) => {
         }
         userFeatures = [lastFeature];
       }
-      onFeaturesChange?.(userFeatures);
+      onFeaturesChangeRef.current?.(userFeatures);
       autoFocus(userFeatures);
     };
     terraDraw.on("finish", handleChange);
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Enter") {
+        const currentModeName = terraDraw.getMode();
+        if (currentModeName === "polygon" || currentModeName === "linestring") {
+          const activeMode = (terraDraw as any)?._modes?.[currentModeName];
+          if (
+            activeMode &&
+            typeof activeMode.close === "function" &&
+            activeMode.currentId
+          ) {
+            e.preventDefault();
+            activeMode.close();
+          }
+        }
+      }
+    };
+
+    const handleDblClick = (e: MouseEvent) => {
+      const currentModeName = terraDraw.getMode();
+      if (currentModeName === "polygon" || currentModeName === "linestring") {
+        const activeMode = (terraDraw as any)?._modes?.[currentModeName];
+        if (
+          activeMode &&
+          typeof activeMode.close === "function" &&
+          activeMode.currentId
+        ) {
+          e.preventDefault();
+          e.stopPropagation();
+          activeMode.close();
+        }
+      }
+    };
+
+    const canvas = map.getCanvas();
+    canvas.addEventListener("dblclick", handleDblClick);
+    window.addEventListener("keydown", handleKeyDown);
 
     setTimeout(() => {
       if (terraDraw.getSnapshot().length === 0) {
@@ -164,7 +208,7 @@ const Map = (props: NakshaMaplibreViewProps) => {
         } else if (features.length > 0) {
           featuresToAdd = ensureModeProperty(features);
         }
-        if (!isMultiple && featuresToAdd.length > 1) {
+        if (!isMultipleRef.current && featuresToAdd.length > 1) {
           featuresToAdd = [featuresToAdd.at(-1)!];
         }
         if (featuresToAdd.length > 0) {
@@ -175,9 +219,30 @@ const Map = (props: NakshaMaplibreViewProps) => {
     }, 100);
 
     return () => {
+      canvas.removeEventListener("dblclick", handleDblClick);
+      window.removeEventListener("keydown", handleKeyDown);
       terraDraw.off("finish", handleChange);
     };
   }, [map]);
+
+  useEffect(() => {
+    if (!drawRef.current || !props.isControlled) return;
+    const featuresStr = JSON.stringify(features);
+    if (featuresStr !== prevFeaturesRef.current) {
+      prevFeaturesRef.current = featuresStr;
+      drawRef.current.clear();
+      if (features.length > 0) {
+        let featuresToAdd = ensureModeProperty(features);
+        if (!isMultipleRef.current && featuresToAdd.length > 1) {
+          featuresToAdd = [featuresToAdd.at(-1)!];
+        }
+        if (featuresToAdd.length > 0) {
+          drawRef.current.addFeatures(featuresToAdd);
+          autoFocus(featuresToAdd);
+        }
+      }
+    }
+  }, [features, props.isControlled, autoFocus]);
 
   const changeMode = useCallback(
     (newMode: string) => {

@@ -8,6 +8,7 @@ export async function setupMaplibreMap({
   pitch,
   bearing,
   mapstyle,
+  workerUrl,
 }: {
   containerId: string;
   latitude?: number;
@@ -16,10 +17,16 @@ export async function setupMaplibreMap({
   pitch?: number;
   bearing?: number;
   mapstyle?: string;
+  workerUrl?: string;
 }): Promise<MaplibreMap> {
-  const { getRTLTextPluginStatus, Map, setRTLTextPlugin } = await import(
-    "maplibre-gl"
-  );
+  const { getRTLTextPluginStatus, Map, setRTLTextPlugin, config } =
+    await import("maplibre-gl");
+
+  if (workerUrl) {
+    config.WORKER_URL = workerUrl;
+  } else if (!config.WORKER_URL) {
+    config.WORKER_URL = "/maplibre-gl-worker.mjs";
+  }
 
   if (getRTLTextPluginStatus() === "unavailable") {
     setRTLTextPlugin(

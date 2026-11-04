@@ -110,7 +110,6 @@ export const toFullGeoJson = (features) => {
     }),
   };
 
-
   return mergedGeoJson;
 };
 

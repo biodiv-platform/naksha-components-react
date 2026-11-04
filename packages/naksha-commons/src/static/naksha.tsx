@@ -23,7 +23,8 @@ export const defaultMapStyles = [
   {
     text: "Satellite",
     key: MapStyles.MAP_SATELLITE,
-    style: "https://raw.githubusercontent.com/go2garret/maps/main/src/assets/json/arcgis_hybrid.json",
+    style:
+      "https://raw.githubusercontent.com/go2garret/maps/main/src/assets/json/arcgis_hybrid.json",
   },
 ];
 

@@ -1,10 +1,18 @@
 {
   "name": "naksha-components-react",
-  "version": "5.0.5",
+  "version": "5.0.6",
+  "type": "module",
   "author": "harshzalavadiya",
-  "main": "./dist/index.js",
-  "module": "./dist/esm/index.js",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
   "sideEffects": false,
   "license": "Apache-2.0",
   "repository": "strandls/naksha-components-react",
@@ -13,27 +21,28 @@
   ],
   "scripts": {
     "clean": "rm -rf node_modules dist .turbo",
-    "build": "tsup src/index.tsx --legacy-output --minify --format esm,cjs --dts --external react",
-    "dev": "tsup src/index.tsx --legacy-output --format esm,cjs --watch --dts --external react"
+    "build": "tsup src/index.tsx --format esm,cjs --dts --minify --external react",
+    "dev": "tsup src/index.tsx --format esm,cjs --watch --dts --external react"
   },
   "peerDependencies": {
     "react": ">=18.2.0"
   },
   "dependencies": {
-    "@biodiv-platform/eslint-preset": "4.4.9",
-    "@biodiv-platform/naksha-gmaps-draw": "4.5.3",
-    "@biodiv-platform/naksha-gmaps-view": "4.4.9",
-    "@biodiv-platform/naksha-maplibre-draw": "5.0.12",
-    "@biodiv-platform/naksha-maplibre-layers": "5.0.7",
-    "@biodiv-platform/naksha-maplibre-view": "5.0.4",
-    "@biodiv-platform/tsconfig": "4.4.9"
+    "@biodiv-platform/naksha-commons": "workspace:*",
+    "@biodiv-platform/naksha-gmaps-draw": "workspace:*",
+    "@biodiv-platform/naksha-gmaps-view": "workspace:*",
+    "@biodiv-platform/naksha-maplibre-draw": "workspace:*",
+    "@biodiv-platform/naksha-maplibre-layers": "workspace:*",
+    "@biodiv-platform/naksha-maplibre-view": "workspace:*"
   },
   "devDependencies": {
-    "@types/react": "^18.0.13",
-    "@types/react-dom": "^18.0.5",
-    "react": ">=18.2.0",
-    "tsup": "^6.1.2",
-    "typescript": "^5.7.3"
+    "@biodiv-platform/eslint-preset": "workspace:*",
+    "@biodiv-platform/tsconfig": "workspace:*",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "react": "^19.3.1",
+    "tsup": "^9.0.0",
+    "typescript": "^5.8.3"
   },
   "publishConfig": {
     "access": "public"

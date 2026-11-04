@@ -1,4 +1,7 @@
-import { GMAPS_LIBRARIES, mapboxToGmapsViewState } from "@biodiv-platform/naksha-commons";
+import {
+  GMAPS_LIBRARIES,
+  mapboxToGmapsViewState,
+} from "@biodiv-platform/naksha-commons";
 import { GoogleMap, LoadScriptNext } from "@react-google-maps/api";
 import React, { useEffect, useRef, useState } from "react";
 

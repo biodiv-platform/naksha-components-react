@@ -1,12 +1,15 @@
 {
   "name": "@biodiv-platform/tsconfig",
   "version": "4.4.9",
-  "main": "index.js",
+  "type": "module",
   "files": [
     "base.json",
     "nextjs.json",
     "react-library.json"
   ],
+  "exports": {
+    "./*": "./*"
+  },
   "publishConfig": {
     "access": "public"
   }
