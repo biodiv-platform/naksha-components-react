@@ -1,6 +1,6 @@
 {
   "name": "@biodiv-platform/naksha-gmaps-draw",
-  "version": "4.5.4",
+  "version": "4.5.5-beta.0",
   "type": "module",
   "author": "harshzalavadiya",
   "main": "./dist/index.cjs",

@@ -1,6 +1,6 @@
 {
   "name": "@biodiv-platform/naksha-gmaps-view",
-  "version": "4.5.0",
+  "version": "4.5.1-beta.0",
   "type": "module",
   "author": "harshzalavadiya",
   "main": "./dist/index.cjs",

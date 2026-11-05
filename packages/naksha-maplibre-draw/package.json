@@ -1,6 +1,6 @@
 {
   "name": "@biodiv-platform/naksha-maplibre-draw",
-  "version": "5.0.14",
+  "version": "5.0.15-beta.0",
   "type": "module",
   "author": "arun",
   "main": "./dist/index.cjs",
