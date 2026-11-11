@@ -6,7 +6,18 @@ type LayerType = "grid" | "vector" | "raster";
 export interface ExtendedMarkerProps {
   latitude: number;
   longitude: number;
-  colorHex: string;
+  colorHex?: string;
+  anchor?:
+    | "center"
+    | "top"
+    | "bottom"
+    | "left"
+    | "right"
+    | "top-left"
+    | "top-right"
+    | "bottom-left"
+    | "bottom-right";
+  iconUrl?: string;
 }
 
 export interface NakshaMaplibreLayersProps {

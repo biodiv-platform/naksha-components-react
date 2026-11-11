@@ -1,6 +1,6 @@
 {
   "name": "naksha-components-react",
-  "version": "5.0.7",
+  "version": "5.0.8",
   "type": "module",
   "author": "harshzalavadiya",
   "main": "./dist/index.cjs",

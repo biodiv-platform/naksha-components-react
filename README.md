@@ -37,13 +37,13 @@ Code quality checks are done with `prettier`, `eslint`.
 
 ```
 cd packages/naksha-component-react
-yarn link (or `npm link` if yarn doesnt work)
+pnpm link (or `npm link` if pnpm doesnt work)
 ```
 
 Then go to the project you want to link the package into(example: cca-ui):
 
 ```
-yarn link naksha-component-react
+pnpm link naksha-component-react
 ```
 
 ## 🔖📦Beta Publish on NPM

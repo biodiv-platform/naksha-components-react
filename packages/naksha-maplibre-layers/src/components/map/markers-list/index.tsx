@@ -11,15 +11,33 @@ const MarkersList = () => {
 
   return (
     <>
-      {markersMemoized?.map(({ latitude, longitude, colorHex }, index) => (
-        <Marker1 key={index} latitude={latitude} longitude={longitude}>
-          <img
-            style={{ cursor: "pointer" }}
-            alt="Marker"
-            src="https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png"
-          />
-        </Marker1>
-      ))}
+      {markersMemoized?.map(
+        ({ latitude, longitude, colorHex, anchor = "bottom", iconUrl }, index) => (
+          <Marker1
+            key={index}
+            latitude={latitude}
+            longitude={longitude}
+            anchor={anchor}
+            subpixelPositioning={true}
+          >
+            <img
+              style={{
+                cursor: "pointer",
+                display: "block",
+                width: "25px",
+                height: "41px",
+              }}
+              width={25}
+              height={41}
+              alt="Marker"
+              src={
+                iconUrl ||
+                "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png"
+              }
+            />
+          </Marker1>
+        )
+      )}
     </>
   );
 };

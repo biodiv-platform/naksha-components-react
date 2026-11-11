@@ -1,6 +1,6 @@
 {
   "name": "@biodiv-platform/naksha-commons",
-  "version": "5.0.0-beta.3",
+  "version": "5.0.0",
   "type": "module",
   "author": "harshzalavadiya",
   "main": "./dist/index.cjs",
