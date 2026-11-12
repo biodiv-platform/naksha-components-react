@@ -15,6 +15,10 @@ export interface NakshaMaplibreLayersProps {
   loadToC?: boolean;
   showToC?: boolean;
   showFullscreenControl?: boolean;
+  /** distance scale bar */
+  showScaleControl?: boolean;
+  /** button that returns the map to `defaultViewState` */
+  showResetControl?: boolean;
 
   managePublishing?: boolean;
   nakshaEndpointToken?: string;
@@ -45,6 +49,24 @@ export interface NakshaMaplibreLayersProps {
   markers?: ExtendedMarkerProps[];
 
   children?;
+}
+
+/** Grid layer look; without `colors` and `breaks` bins and colours come from the data */
+export interface GridLayerStyle {
+  /** one colour per step, lowest first */
+  colors?: string[];
+  /** lowest count of each step after the first, so one fewer than `colors` */
+  breaks?: number[];
+  outlineColor?: string;
+  opacity?: number;
+}
+
+/** What a grid or vector layer's `onHover` and `onClick` receive */
+export interface LayerFeatureEvent {
+  /** [minLon, minLat, maxLon, maxLat] of the feature */
+  bbox?: number[];
+  feature;
+  layerId: string;
 }
 
 interface VectorStyleMeta {
@@ -85,9 +107,11 @@ export interface GeoserverLayer {
     tiles?;
     endpoint?;
     fetcher?;
-  };
-  onClick?: ({ bbox, feature, layerId }) => JSX.Element;
-  onHover?: ({ bbox, feature, layerId }) => JSX.Element;
+  } & GridLayerStyle;
+  /** content of a popup pinned on click; replaces the info bar for this layer */
+  onClick?: (event: LayerFeatureEvent) => JSX.Element;
+  /** content of the hover popup; replaces the default property table */
+  onHover?: (event: LayerFeatureEvent) => JSX.Element;
   data?: {
     styles?: VectorStyleMeta[];
     styleIndex?;

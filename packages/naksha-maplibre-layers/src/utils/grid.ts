@@ -35,21 +35,36 @@ const aggregateGeohashKey = (key, level, binSize?) => {
   ];
 };
 
+/**
+ * A grid cell's value is either a count or an object of numbers that has a `count`
+ * (e.g. `{ count: 12, ibp: 8, gbif: 4 }`); both become feature properties
+ */
+const toCellProperties = (value): { [key: string]: number } =>
+  typeof value === "number" ? { count: value } : value;
+
+/** Adds every number in `properties` to `total` */
+const addCellProperties = (total, properties) => {
+  for (const [key, value] of Object.entries(properties)) {
+    total[key] = (total[key] || 0) + (value as number);
+  }
+  return total;
+};
+
 const processRectangles = function (data, level) {
   var counts = new Map();
   var bins = new Map();
   const features: any[] = [];
 
-  for (const [hash, count] of Object.entries(data)) {
+  for (const [hash, value] of Object.entries(data)) {
     const [kStart, kEnd] = aggregateGeohashKey(hash, level);
     bins.set(kStart, kEnd);
-    if (!counts.has(kStart)) {
-      counts.set(kStart, 0);
-    }
-    counts.set(kStart, counts.get(kStart) + count);
+    counts.set(
+      kStart,
+      addCellProperties(counts.get(kStart) || {}, toCellProperties(value))
+    );
   }
 
-  counts.forEach((count, hash) => {
+  counts.forEach((properties, hash) => {
     const bboxStart = GeoHash.decodeGeoHash(hash);
     const bboxEnd = GeoHash.decodeGeoHash(bins.get(hash));
     const feature = new BoundingBox({
@@ -58,7 +73,10 @@ const processRectangles = function (data, level) {
       maxlat: bboxEnd.latitude[1],
       maxlon: bboxEnd.longitude[1],
     }).toGeoJSON();
-    features.push({ ...feature, properties: { count, [PROPERTY_ID]: hash } });
+    features.push({
+      ...feature,
+      properties: { ...properties, [PROPERTY_ID]: hash },
+    });
   });
 
   return features;
@@ -67,7 +85,7 @@ const processRectangles = function (data, level) {
 const processSquares = (data) => {
   const features: any = [];
 
-  for (const [hash, count] of Object.entries(data)) {
+  for (const [hash, value] of Object.entries(data)) {
     const bbox = GeoHash.decodeGeoHash(hash);
     const feature = new BoundingBox({
       minlat: bbox.latitude[0],
@@ -75,14 +93,17 @@ const processSquares = (data) => {
       maxlat: bbox.latitude[1],
       maxlon: bbox.longitude[1],
     }).toGeoJSON();
-    features.push({ ...feature, properties: { count, [PROPERTY_ID]: hash } });
+    features.push({
+      ...feature,
+      properties: { ...toCellProperties(value), [PROPERTY_ID]: hash },
+    });
   }
 
   return features;
 };
 
 /**
- * Converts {geohash: count} to geojson
+ * Converts {geohash: count} or {geohash: {count, ...}} to geojson
  *
  * @param {*} data
  * @param {number} level
@@ -98,15 +119,34 @@ export const geohashToJSON = (data, level: number) => ({
         : processRectangles(data, level),
 });
 
-export const getDataBins = (
-  data: { [key: string]: number },
-  binCount: number
-) => {
-  const sortedData = Object.values(data).sort((a, b) => a - b);
+export const getDataBins = (data: { [key: string]: any }, binCount: number) => {
+  const sortedData = Object.values(data)
+    .map((value) => toCellProperties(value).count)
+    .sort((a, b) => a - b);
   const cutoff = Math.floor(sortedData.length / binCount);
   const tBins = new Array(binCount - 1)
     .fill(0)
     .map((_, index) => sortedData[cutoff * (index + 1)]);
   tBins.push(sortedData[sortedData.length - 1]);
   return tBins;
+};
+
+/** [minLon, minLat, maxLon, maxLat] of a GeoJSON feature */
+export const getFeatureBBox = (feature) => {
+  const points: number[][] = [];
+  const collect = (coords) =>
+    typeof coords[0] === "number"
+      ? points.push(coords)
+      : coords.forEach(collect);
+  collect(feature?.geometry?.coordinates || []);
+  if (!points.length) return undefined;
+
+  const lons = points.map(([lon]) => lon);
+  const lats = points.map(([, lat]) => lat);
+  return [
+    Math.min(...lons),
+    Math.min(...lats),
+    Math.max(...lons),
+    Math.max(...lats),
+  ];
 };

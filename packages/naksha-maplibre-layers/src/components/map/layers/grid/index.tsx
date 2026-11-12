@@ -27,7 +27,10 @@ export default function GridLayer({
       await getGridLayerData(
         data.source.fetcher,
         mapl?.getBounds(),
-        mapl?.getZoom()
+        mapl?.getZoom(),
+        undefined,
+        undefined,
+        data.source
       );
 
     if (success) {
