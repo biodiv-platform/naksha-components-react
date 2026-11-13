@@ -9,17 +9,30 @@ import MapGL, {
   Source,
   useMap,
 } from "react-map-gl/maplibre";
+import { config } from "maplibre-gl";
 
 import { NakshaMaplibreViewProps } from "../interfaces";
 import { featureStyle, lineStyle, pointStyle } from "../static/constants";
 import bbox from "@turf/bbox";
 import { MapStyleSwitcher } from "./selector";
+import { initMaplibreWorker } from "../utils/setup-maplibre";
 
 const NavControl: any = NavigationControl;
 
 export default function Map(props: NakshaMaplibreViewProps) {
   const { mapv } = useMap();
   const [viewState] = useState(props.defaultViewState || defaultViewState);
+
+  const [workerUrl, setWorkerUrl] = useState<string | undefined>(
+    props.workerUrl ||
+      (typeof window !== "undefined"
+        ? config.WORKER_URL || "/maplibre-gl-worker.mjs"
+        : undefined)
+  );
+
+  useEffect(() => {
+    initMaplibreWorker(props.workerUrl).then(setWorkerUrl);
+  }, [props.workerUrl]);
 
   const [selectedMapStyleIdx, setSelectedMapStyleIdx] = useState(
     props?.mapStyle || 0
@@ -28,13 +41,19 @@ export default function Map(props: NakshaMaplibreViewProps) {
   const mapTile = props.mapStyles ? props.mapStyles : defaultMapStyles;
   const selectedMapTile = mapTile[selectedMapStyleIdx];
   const mapStyle = selectedMapTile?.style;
-  const maxZoom = selectedMapTile?.maxZoom;
+  const maxZoom = (selectedMapTile as any)?.maxZoom;
 
   const onDataChange = () => {
     if (!props.data || !mapv) return;
 
-    const _bbox = bbox(props.data);
-    mapv.fitBounds(_bbox as any, { padding: 40, duration: 1000 });
+    try {
+      const _bbox = bbox(props.data);
+      if (_bbox.every(Number.isFinite)) {
+        mapv.fitBounds(_bbox as any, { padding: 40, duration: 1000 });
+      }
+    } catch (e) {
+      console.warn("Failed to compute bbox", e);
+    }
   };
 
   useEffect(() => {
@@ -48,6 +67,7 @@ export default function Map(props: NakshaMaplibreViewProps) {
   return (
     <MapGL
       id="mapv"
+      workerUrl={workerUrl}
       cursor="default"
       initialViewState={viewState}
       style={{ width: "100%", height: "100%" }}

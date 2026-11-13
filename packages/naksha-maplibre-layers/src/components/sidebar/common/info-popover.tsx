@@ -4,15 +4,17 @@ import { Popover, useArrowContainer } from "react-tiny-popover";
 import { tw } from "twind";
 
 import useLayers from "../../../hooks/use-layers";
-import { overflowStyle } from "../../../static/constants";
+import { LAYER_STATUS, overflowStyle } from "../../../static/constants";
 import {
   AttributionIcon,
   Button,
   ClockIcon,
+  DeleteIcon,
   DownloadIcon,
   EyeIcon,
   InfoIcon,
   LicenseIcon,
+  Switch,
   TagIcon,
 } from "../../core";
 
@@ -31,17 +33,17 @@ const LayerInfoLine = ({
   link,
   children,
 }: LayerInfoLineProps) => {
-  const content = <span>{children || "-"}</span>;
+  const content = <span className={tw`flex-1`}>{children || "-"}</span>;
 
   return (
     <div
-      className={tw`flex gap-3 text-sm text-gray-600 break-all`}
+      className={tw`flex items-center gap-3 text-sm text-gray-600 break-all`}
       title={name && title && `${name}: ${title}`}
     >
-      <div>{icon}</div>
+      <div className={tw`flex-shrink-0`}>{icon}</div>
       {link ? (
         <a
-          className={tw`text-blue-700 focus:outline-none focus:ring`}
+          className={tw`text-blue-700 focus:outline-none focus:ring flex-1`}
           target="_blank"
           rel="noopener"
           href={link}
@@ -80,19 +82,25 @@ export function InfoPopover({ item, containerStyle }: InfoPopoverProps) {
           name={t("visiblity")}
           title={item.layerStatus}
         >
-          {item.layerStatus}
-          <button
-            className={tw`text-blue-600 focus:outline-none ml-4`}
-            onClick={() => layer.togglePublish(item.id, item?.layerStatus)}
-          >
-            {t("toggle")}
-          </button>
-          <button
-            className={tw`text-red-600 focus:outline-none ml-4`}
-            onClick={() => layer.delete(item.id, t("are_you_sure"))}
-          >
-            {t("delete")}
-          </button>
+          <div className={tw`flex items-center gap-3`}>
+            <span>{item.layerStatus}</span>
+            <Switch
+              label={t("published")}
+              checked={
+                item.layerStatus?.toLowerCase() ===
+                LAYER_STATUS.ACTIVE.toLowerCase()
+              }
+              onChange={() => layer.togglePublish(item.id, item?.layerStatus)}
+            />
+            <button
+              type="button"
+              title={t("delete")}
+              className={tw`text-red-500 hover:text-red-700 focus:outline-none cursor-pointer flex items-center p-0.5 rounded hover:bg-red-50 transition-colors`}
+              onClick={() => layer.delete(item.id, t("are_you_sure"))}
+            >
+              <DeleteIcon />
+            </button>
+          </div>
         </LayerInfoLine>
       )}
 
@@ -148,7 +156,7 @@ export const PopoverWrapper = ({ item }) => {
       isOpen={isPopoverOpen}
       padding={10}
       positions={["right"]}
-      containerStyle={{ zIndex: 99 }}
+      containerStyle={{ zIndex: "99" }}
       onClickOutside={togglePopover}
       content={<InfoPopover item={item} />}
     >

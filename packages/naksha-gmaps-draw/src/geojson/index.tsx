@@ -10,9 +10,9 @@ const GeojsonImport = ({
 }) => {
   const [isGeoJSONValid, setIsGeoJSONValid] = useState(true);
   const [uploadStatus, setUploadStatus] = useState("");
-  const [filesToUpload, setFilesToUpload] = useState([]);
-  const [uploadedFiles, setUploadedFiles] = useState([]);
-  const fileInputRef = useRef(null);
+  const [filesToUpload, setFilesToUpload] = useState<any[]>([]);
+  const [uploadedFiles, setUploadedFiles] = useState<any[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleDragEnter = (e) => {
     e.preventDefault();
@@ -29,7 +29,9 @@ const GeojsonImport = ({
   };
 
   const handleFileInputChange = () => {
-    const selectedFiles = Array.from(fileInputRef.current.files);
+    const selectedFiles = fileInputRef.current?.files
+      ? Array.from(fileInputRef.current.files)
+      : [];
     setFilesToUpload(selectedFiles);
   };
 
@@ -150,7 +152,7 @@ const GeojsonImport = ({
             width: "300px",
             height: "100px",
           }}
-          onClick={() => fileInputRef.current.click()}
+          onClick={() => fileInputRef.current?.click()}
         >
           <input
             type="file"

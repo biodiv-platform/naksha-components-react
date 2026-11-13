@@ -11,6 +11,14 @@ interface InputProps extends React.DetailedHTMLProps<
   name?: string;
 }
 
+interface SelectProps extends React.DetailedHTMLProps<
+  React.SelectHTMLAttributes<HTMLSelectElement>,
+  HTMLSelectElement
+> {
+  label?: string;
+  name?: string;
+}
+
 export const Input = (props: InputProps) => (
   <div>
     {props.label && (
@@ -28,7 +36,7 @@ export const Input = (props: InputProps) => (
   </div>
 );
 
-export const SelectInput = (props: InputProps) => (
+export const SelectInput = (props: SelectProps) => (
   <div>
     {props.label && (
       <label className={tw`text-gray-700`} htmlFor={props.name}>

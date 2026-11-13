@@ -69,11 +69,14 @@ export default function LayerItem({
     () =>
       mp.canLayerShare
         ? {
-            url: `${window.location.href.split("?")[0]}?layers=${item.id}`,
+            url:
+              typeof window !== "undefined"
+                ? `${window.location.href.split("?")[0]}?layers=${item.id}`
+                : "",
             title: item.title,
           }
         : undefined,
-    [item.id]
+    [mp.canLayerShare, item.id, item.title]
   );
 
   const onToggleLayer = async () => {

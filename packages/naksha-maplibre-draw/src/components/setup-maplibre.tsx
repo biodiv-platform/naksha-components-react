@@ -1,7 +1,10 @@
 import type { Map as MaplibreMap } from "maplibre-gl";
 
+let cachedWorkerUrlPromise: Promise<string> | null = null;
+
 export async function setupMaplibreMap({
-  containerId,
+  container,
+  containerId = "maplibre-map",
   latitude = 0,
   longitude = 0,
   zoom,
@@ -10,7 +13,8 @@ export async function setupMaplibreMap({
   mapstyle,
   workerUrl,
 }: {
-  containerId: string;
+  container?: HTMLElement | string;
+  containerId?: string;
   latitude?: number;
   longitude?: number;
   zoom?: number;
@@ -25,7 +29,21 @@ export async function setupMaplibreMap({
   if (workerUrl) {
     config.WORKER_URL = workerUrl;
   } else if (!config.WORKER_URL) {
-    config.WORKER_URL = "/maplibre-gl-worker.mjs";
+    if (typeof window !== "undefined") {
+      if (!cachedWorkerUrlPromise) {
+        cachedWorkerUrlPromise = (async () => {
+          try {
+            const res = await fetch("/maplibre-gl-worker.mjs", { method: "HEAD" });
+            const contentType = res.headers.get("content-type") || "";
+            if (res.ok && !contentType.includes("text/html")) {
+              return "/maplibre-gl-worker.mjs";
+            }
+          } catch {}
+          return "https://unpkg.com/maplibre-gl@6.16.0/dist/maplibre-gl-worker.mjs";
+        })();
+      }
+      config.WORKER_URL = await cachedWorkerUrlPromise;
+    }
   }
 
   if (getRTLTextPluginStatus() === "unavailable") {
@@ -36,7 +54,7 @@ export async function setupMaplibreMap({
   }
 
   return new Map({
-    container: containerId,
+    container: container || containerId,
     style: mapstyle,
     center: { lat: latitude, lng: longitude },
     zoom,

@@ -58,6 +58,7 @@ export function SelectedItem({ item, extended }: { item; extended?: boolean }) {
 interface SelectedItemListProps {
   layerList: Array<{ id: string | number; [key: string]: any }>;
   onSortEnd: (result: { oldIndex: number; newIndex: number }) => void;
+  useDragHandle?: boolean;
 }
 
 export const SelectedItemList = ({

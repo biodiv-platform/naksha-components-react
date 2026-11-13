@@ -14,7 +14,7 @@ import {
 } from "../icon-buttons/icons";
 import { GeoJSONStoreFeatures, TerraDraw } from "terra-draw";
 import MapButton from "../map-button/map-button";
-import { IconButton } from "../setup-draw";
+import { filterUserFeatures, IconButton } from "../setup-draw";
 
 type MapButtonsProps = {
   mode: string;
@@ -72,7 +72,7 @@ function MapButtons({
         };
         if (!isMultiple) draw.clear();
         draw.addFeatures([pt]);
-        onFeaturesChange?.(draw.getSnapshot());
+        onFeaturesChange?.(filterUserFeatures(draw.getSnapshot()));
         autoFocus?.([pt]);
       },
       (error) => {

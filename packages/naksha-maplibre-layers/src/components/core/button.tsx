@@ -3,7 +3,7 @@ import { tw } from "twind";
 
 import { InfoIcon, LayersIcon } from "./icons";
 
-export const Button = React.forwardRef<HTMLDivElement, any>((props, ref) => (
+export const Button = React.forwardRef<HTMLButtonElement, any>((props, ref) => (
   <button
     ref={ref}
     type="button"

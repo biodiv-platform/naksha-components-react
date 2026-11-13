@@ -1,9 +1,11 @@
 import { defaultMapStyles, useDebounce } from "@biodiv-platform/naksha-commons";
 import React, {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import { useMap } from "react-map-gl/maplibre";
@@ -81,6 +83,10 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
   const [mp, setMP] = useState<NakshaMaplibreLayersProps>(_mp);
   const { mapl } = useMap();
 
+  useEffect(() => {
+    setMP((prev) => ({ ...prev, ..._mp }));
+  }, [_mp]);
+
   const [queryTerm, setQueryTerm] = useState("");
   const queryTermDebounced = useDebounce(queryTerm, 500);
 
@@ -104,6 +110,15 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
   const [selectedLayerIds, setSelectedLayerIds] = useState<string[]>(
     mp.selectedLayers || []
   );
+
+  useEffect(() => {
+    if (
+      mp.selectedLayers &&
+      mp.selectedLayers.join(",") !== selectedLayerIds.join(",")
+    ) {
+      setSelectedLayerIds(mp.selectedLayers);
+    }
+  }, [mp.selectedLayers]);
 
   const [hoverFeatures, setHoverFeatures] = useState<any>();
 
@@ -138,267 +153,330 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
     return sortedLayers;
   }, [layers, selectedLayerIds]);
 
-  const getLayerIndexById = (layerId) => {
-    return layers.findIndex((layer) => layer.id === layerId);
-  };
+  const getLayerIndexById = useCallback(
+    (layerId) => layers.findIndex((layer) => layer.id === layerId),
+    [layers]
+  );
 
-  const updateLayerById = (layerId, updatedLayer) => {
+  const updateLayerById = useCallback((layerId, updatedLayer) => {
     setLayers((_layers) =>
       _layers.map((l) => (l.id === layerId ? { ...l, ...updatedLayer } : l))
     );
-  };
+  }, []);
 
-  const toggleVectorLayer = async (layerIndex, styleIndex, focus) => {
-    const layer = layers[layerIndex];
-    const layerData = await getLayerStyle(
-      layer,
-      styleIndex,
-      mp.nakshaApiEndpoint,
-      mp.geoserver
-    );
-    updateLayerById(layer.id, { data: layerData });
-    focus &&
-      mapl?.fitBounds(layer.bbox as any, { padding: 40, duration: 1000 });
-  };
+  const toggleVectorLayer = useCallback(
+    async (layerIndex, styleIndex, focus) => {
+      const layer = layers[layerIndex];
+      if (!layer) return;
+      const layerData = await getLayerStyle(
+        layer,
+        styleIndex,
+        mp.nakshaApiEndpoint,
+        mp.geoserver
+      );
+      updateLayerById(layer.id, { data: layerData });
+      focus &&
+        mapl?.fitBounds(layer.bbox as any, { padding: 40, duration: 1000 });
+    },
+    [layers, mp.nakshaApiEndpoint, mp.geoserver, updateLayerById, mapl]
+  );
 
-  const updateLayerStyle = async (layerId, styleIndex) => {
-    const layerIndex = getLayerIndexById(layerId);
-    toggleVectorLayer(layerIndex, styleIndex, false);
-  };
+  const updateLayerStyle = useCallback(
+    async (layerId, styleIndex) => {
+      const layerIndex = getLayerIndexById(layerId);
+      toggleVectorLayer(layerIndex, styleIndex, false);
+    },
+    [getLayerIndexById, toggleVectorLayer]
+  );
 
-  const onMapHover = async (e) => {
-    if (!selectedLayerIds.length || !mapl) return; // if no layer is selected popup is unncessary
+  const onMapHover = useCallback(
+    async (e) => {
+      if (!selectedLayerIds.length || !mapl) return;
 
-    try {
-      const lastLayerId = selectedLayerIds[0];
+      try {
+        const lastLayerId = selectedLayerIds[0];
 
-      const feats = mapl.queryRenderedFeatures(e.point, {
-        layers: [lastLayerId],
-      });
+        const feats = mapl.queryRenderedFeatures(e.point, {
+          layers: [lastLayerId],
+        });
 
-      if (feats.length) {
-        const fId = feats[0]?.id || feats[0]?.properties?.[PROPERTY_ID];
+        if (feats.length) {
+          const fId = feats[0]?.id || feats[0]?.properties?.[PROPERTY_ID];
 
-        // If same feature as earlier don't recompute properties
-        if (fId === hoverFeatures?.id) return;
+          if (fId === hoverFeatures?.id) return;
 
-        const layer = layers[getLayerIndexById(lastLayerId)];
+          const layer = layers[getLayerIndexById(lastLayerId)];
+          if (!layer) return;
 
-        const hoverProperties = layer?.data?.summaryColumn.map((sc) => [
-          layer.data?.propertyMap?.[sc] || sc,
-          feats[0].properties?.[sc],
+          const hoverProperties = layer?.data?.summaryColumn?.map((sc) => [
+            layer.data?.propertyMap?.[sc] || sc,
+            feats[0].properties?.[sc],
+          ]);
+
+          setHoverFeatures({
+            id: fId,
+            title: layer.title,
+            data: hoverProperties || [],
+            coordinates: e.lngLat,
+          });
+        } else {
+          setHoverFeatures((prev) => (prev !== undefined ? undefined : prev));
+        }
+      } catch (e) {}
+    },
+    [selectedLayerIds, mapl, hoverFeatures?.id, layers, getLayerIndexById]
+  );
+
+  const toggleLayer = useCallback(
+    async ({
+      layerId,
+      add,
+      styleIndex = 0,
+      focus = true,
+    }) => {
+      if (!add) {
+        setSelectedLayerIds((prev) => prev.filter((_lyrId) => layerId !== _lyrId));
+        return;
+      }
+
+      const layerIndex = getLayerIndexById(layerId);
+      const targetLayer = layers[layerIndex];
+      const sourceType = targetLayer?.source.type;
+
+      if (sourceType === "grid") {
+        setSelectedLayerIds((_slIds) => [
+          layerId,
+          ..._slIds.filter((lid) => lid !== layerId),
         ]);
 
-        setHoverFeatures({
-          id: fId,
-          title: layer.title,
-          data: hoverProperties,
-        });
+        if (focus && targetLayer?.bbox) {
+          setTimeout(() => {
+            mapl?.fitBounds(targetLayer.bbox as any, {
+              padding: 40,
+              duration: 1000,
+            });
+          }, 100);
+        }
       } else {
-        setHoverFeatures(undefined);
+        await toggleVectorLayer(layerIndex, styleIndex, focus);
+        setSelectedLayerIds((_slIds) => [
+          layerId,
+          ..._slIds.filter((lid) => lid !== layerId),
+        ]);
       }
-    } catch (e) {}
-  };
+    },
+    [getLayerIndexById, layers, mapl, toggleVectorLayer]
+  );
 
-  const toggleLayer = async ({
-    layerId,
-    add,
-    styleIndex = 0,
-    focus = true,
-  }) => {
-    if (!add) {
-      setSelectedLayerIds(
-        selectedLayerIds.filter((_lyrId) => layerId !== _lyrId)
+  const clearAllLayers = useCallback(async () => setSelectedLayerIds([]), []);
+
+  const updateMP = useCallback((key, value) => {
+    setMP((prev) => ({ ...prev, [key]: value }));
+  }, []);
+
+  const toggleLayerPublishing = useCallback(
+    (layerId, layerStatus) => {
+      const isActive = layerStatus === LAYER_STATUS.PENDING;
+
+      axToggleLayerPublishing(
+        mp.nakshaEndpointToken,
+        mp.nakshaApiEndpoint,
+        layerId,
+        isActive
       );
-      return;
-    }
 
-    const layerIndex = getLayerIndexById(layerId);
-    const sourceType = layers[layerIndex]?.source.type;
+      updateLayerById(layerId, {
+        layerStatus: isActive ? LAYER_STATUS.ACTIVE : LAYER_STATUS.PENDING,
+      });
+    },
+    [mp.nakshaEndpointToken, mp.nakshaApiEndpoint, updateLayerById]
+  );
 
-    // Handle grid layers separately
-    if (sourceType === "grid") {
-      // Just update selection without calling toggleVectorLayer
-      setSelectedLayerIds((_slIds) => [
-        layerId,
-        ..._slIds.filter((lid) => lid !== layerId),
-      ]);
-
-      // If grid layer has bbox, zoom to it
-      if (focus && layers[layerIndex]?.bbox) {
-        setTimeout(() => {
-          mapl?.fitBounds(layers[layerIndex].bbox as any, {
-            padding: 40,
-            duration: 1000,
-          });
-        }, 100);
+  const deleteLayer = useCallback(
+    async (layerId, message) => {
+      if (confirm(message)) {
+        axDeleteLayer(mp.nakshaEndpointToken, mp.nakshaApiEndpoint, layerId);
+        setLayers((prev) => prev.filter((l) => l.id !== layerId));
       }
-    } else {
-      // For vector layers, use the original logic
-      await toggleVectorLayer(layerIndex, styleIndex, focus);
-      setSelectedLayerIds((_slIds) => [
-        layerId,
-        ..._slIds.filter((lid) => lid !== layerId),
-      ]);
-    }
-  };
-  const clearAllLayers = async () => setSelectedLayerIds([]);
+    },
+    [mp.nakshaEndpointToken, mp.nakshaApiEndpoint]
+  );
 
-  const updateMP = (key, value) => {
-    setMP({ ...mp, [key]: value });
-  };
+  const zoomToExtent = useCallback(
+    (layerId) => {
+      const layer = layers.find((l) => l.id === layerId);
+      if (layer?.bbox) {
+        mapl?.fitBounds(layer.bbox as any, { padding: 40, duration: 1000 });
+      }
+    },
+    [layers, mapl]
+  );
 
-  const toggleLayerPublishing = (layerId, layerStatus) => {
-    const isActive = layerStatus === LAYER_STATUS.PENDING;
-
-    axToggleLayerPublishing(
-      mp.nakshaEndpointToken,
-      mp.nakshaApiEndpoint,
-      layerId,
-      isActive
-    );
-
-    updateLayerById(layerId, {
-      layerStatus: isActive ? LAYER_STATUS.ACTIVE : LAYER_STATUS.PENDING,
-    });
-  };
-
-  const deleteLayer = async (layerId, message) => {
-    if (confirm(message)) {
-      axDeleteLayer(mp.nakshaEndpointToken, mp.nakshaApiEndpoint, layerId);
-      setLayers(layers.filter((l) => l.id !== layerId));
-    }
-  };
-
-  const zoomToExtent = (layerId) => {
-    const layerIndex = getLayerIndexById(layerId);
-    const layer = layers[layerIndex];
-    mapl?.fitBounds(layer.bbox as any, { padding: 40, duration: 1000 });
-  };
-
-  const getBBoxFromLngLat = () => {
+  const getBBoxFromLngLat = useCallback(() => {
+    if (!clickedLngLat) return [0, 0, 0, 0];
     return [
       clickedLngLat.lng,
       clickedLngLat.lat,
       clickedLngLat.lng + 0.1,
       clickedLngLat.lat + 0.1,
     ];
-  };
+  }, [clickedLngLat]);
 
-  const handleSelectStyle = (value: string) => {
-    setSelectionStyle(value);
-    if (value === SELECTION_STYLE.TOP) {
-      featuresAtLatLng(value);
-    }
-  };
-  const featuresAtLatLng = (value?) => {
-    if (!clickedLngLat) return;
+  const featuresAtLatLng = useCallback(
+    (value?) => {
+      if (!clickedLngLat || !mapl) return;
 
-    try {
-      const finalXY = mapl?.project([clickedLngLat.lng, clickedLngLat.lat]);
+      try {
+        const finalXY = mapl.project([clickedLngLat.lng, clickedLngLat.lat]);
 
-      let queryFeat: any = mapl?.queryRenderedFeatures(finalXY, {
-        layers:
-          selectionStyle === SELECTION_STYLE.TOP
-            ? [selectedLayerIds[0]]
-            : selectedLayerIds,
-      });
+        let queryFeat: any = mapl.queryRenderedFeatures(finalXY, {
+          layers:
+            selectionStyle === SELECTION_STYLE.TOP
+              ? [selectedLayerIds[0]]
+              : selectedLayerIds,
+        });
 
-      // Add all the raster layer feature to queryFeat when all info must be shown
-      // in the info box
-      if ((value || selectionStyle) === SELECTION_STYLE.ALL) {
-        const rasterLayerFeat = selectedLayers
-          .filter((item) => item.layerType == "RASTER")
-          .map((item) => ({
-            sourceLayer: item.id,
-            layerType: "raster",
-            bbox: getBBoxFromLngLat(),
-          }));
-        queryFeat = [...queryFeat, ...rasterLayerFeat];
+        if ((value || selectionStyle) === SELECTION_STYLE.ALL) {
+          const rasterLayerFeat = selectedLayers
+            .filter((item) => item.layerType == "RASTER")
+            .map((item) => ({
+              sourceLayer: item.id,
+              layerType: "raster",
+              bbox: getBBoxFromLngLat(),
+            }));
+          queryFeat = [...queryFeat, ...rasterLayerFeat];
+        }
+
+        setSelectedFeatures(
+          selectedLayers?.[0]?.layerType === "RASTER" &&
+            selectionStyle !== SELECTION_STYLE.ALL
+            ? selectedLayerIds.length && queryFeat?.length
+              ? queryFeat
+              : [
+                  {
+                    sourceLayer: selectedLayerIds[0],
+                    layerType: "raster",
+                    bbox: getBBoxFromLngLat(),
+                  },
+                ]
+            : queryFeat
+        );
+      } catch (e) {
+        console.error(e);
       }
+    },
+    [clickedLngLat, mapl, selectionStyle, selectedLayerIds, selectedLayers, getBBoxFromLngLat]
+  );
 
-      setSelectedFeatures(
-        // if fist layer is raster and select all in not set
-        // send a raster based feature object
-        selectedLayers?.[0].layerType === "RASTER" &&
-          selectionStyle !== SELECTION_STYLE.ALL
-          ? selectedLayerIds.length && queryFeat?.length
-            ? queryFeat
-            : [
-                {
-                  sourceLayer: selectedLayerIds[0],
-                  layerType: "raster",
-                  bbox: getBBoxFromLngLat(),
-                },
-              ]
-          : queryFeat
-      );
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  const handleSelectStyle = useCallback(
+    (value: string) => {
+      setSelectionStyle(value);
+      if (value === SELECTION_STYLE.TOP) {
+        featuresAtLatLng(value);
+      }
+    },
+    [featuresAtLatLng]
+  );
 
+  const isFirstRender = useRef(true);
   useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
     if (mp.onSelectedLayersChange) {
       mp.onSelectedLayersChange(selectedLayerIds);
     }
   }, [selectedLayerIds]);
 
   useEffect(() => {
-    // we have no sureway to know that all layers are loaded
-    // this will wait for 300ms for layer to be loaded
-    // if it takes more then 300 selection will be discarded
-    setTimeout(featuresAtLatLng, 300);
-  }, [clickedLngLat, selectionStyle, selectedLayerIds]);
+    const timer = setTimeout(featuresAtLatLng, 300);
+    return () => clearTimeout(timer);
+  }, [clickedLngLat, selectionStyle, selectedLayerIds, featuresAtLatLng]);
+
+  const layerContext = useMemo(
+    () => ({
+      mapStyle,
+      featuresAtLatLng,
+      setMapStyle,
+      maxZoom,
+      setMaxZoom,
+      mapStyles: styles,
+      all: layers,
+      setAll: setLayers,
+      selectedIds: selectedLayerIds,
+      handleSelectStyle,
+      setSelectedIds: setSelectedLayerIds,
+      selectedLayers,
+      clearAll: clearAllLayers,
+      toggle: toggleLayer,
+      updateStyle: updateLayerStyle,
+      selectedFeatures,
+      selectedFeaturesId,
+      setSelectedFeatures,
+      togglePublish: toggleLayerPublishing,
+      delete: deleteLayer,
+      selectionStyle,
+      setSelectionStyle,
+      zoomToExtent,
+      gridLegends,
+      setGridLegends,
+    }),
+    [
+      mapStyle,
+      featuresAtLatLng,
+      maxZoom,
+      styles,
+      layers,
+      selectedLayerIds,
+      handleSelectStyle,
+      selectedLayers,
+      clearAllLayers,
+      toggleLayer,
+      updateLayerStyle,
+      selectedFeatures,
+      selectedFeaturesId,
+      toggleLayerPublishing,
+      deleteLayer,
+      selectionStyle,
+      zoomToExtent,
+      gridLegends,
+    ]
+  );
+
+  const queryContext = useMemo(
+    () => ({
+      term: queryTermDebounced,
+      setTerm: setQueryTerm,
+      clickedLngLat,
+      setClickedLngLat,
+    }),
+    [queryTermDebounced, clickedLngLat]
+  );
+
+  const hoverContext = useMemo(
+    () => ({
+      onHover: onMapHover,
+      features: hoverFeatures,
+    }),
+    [onMapHover, hoverFeatures]
+  );
+
+  const contextValue = useMemo(
+    () => ({
+      mp,
+      updateMP,
+      layer: layerContext,
+      query: queryContext,
+      isInfoBarOpen,
+      setIsInfoBarOpen,
+      hover: hoverContext,
+    }),
+    [mp, updateMP, layerContext, queryContext, isInfoBarOpen, hoverContext]
+  );
 
   return (
-    <LayersContext.Provider
-      value={{
-        mp,
-        updateMP,
-        layer: {
-          mapStyle,
-          featuresAtLatLng,
-          setMapStyle,
-          maxZoom,
-          setMaxZoom,
-          mapStyles: styles,
-          all: layers,
-          setAll: setLayers,
-          selectedIds: selectedLayerIds,
-          handleSelectStyle,
-          setSelectedIds: setSelectedLayerIds,
-          selectedLayers: selectedLayers,
-          clearAll: clearAllLayers,
-          toggle: toggleLayer,
-          updateStyle: updateLayerStyle,
-          selectedFeatures,
-          selectedFeaturesId,
-          setSelectedFeatures,
-          togglePublish: toggleLayerPublishing,
-          delete: deleteLayer,
-          selectionStyle: selectionStyle,
-          setSelectionStyle: setSelectionStyle,
-
-          zoomToExtent,
-
-          gridLegends,
-          setGridLegends,
-        },
-        query: {
-          term: queryTermDebounced,
-          setTerm: setQueryTerm,
-          clickedLngLat,
-          setClickedLngLat,
-        },
-        isInfoBarOpen,
-        setIsInfoBarOpen,
-        hover: {
-          onHover: onMapHover,
-          features: hoverFeatures,
-        },
-      }}
-    >
+    <LayersContext.Provider value={contextValue}>
       {children}
     </LayersContext.Provider>
   );

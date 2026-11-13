@@ -41,7 +41,7 @@ export default function InfoBarPanel({ data: payload }) {
         : [];
     } else {
       properties = Object.entries(currentLayer?.data?.propertyMap || {}).map(
-        ([k, v]) => [v, payload?.properties?.[k]] || "-"
+        ([k, v]) => [v, payload?.properties?.[k] || "-"]
       );
     }
 

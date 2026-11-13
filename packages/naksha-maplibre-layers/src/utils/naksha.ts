@@ -1,5 +1,3 @@
-import { produce } from "immer";
-
 import {
   axGetGeoserverLayerStyle,
   axGetGeoserverLayerStyleList,
@@ -15,35 +13,33 @@ export const parseGeoserverLayersXml = async (
   geoserver,
   selectedLayers
 ) => {
-  const parsedLayers: any[] = [];
+  return Promise.all(
+    (layers || []).map(async (l) => {
+      const isAdded = selectedLayers?.includes(l.name);
+      const isRaster = l.layerType?.toLowerCase() === "raster";
+      const _l = {
+        ...l,
+        id: l.name,
+        thumbnail: nakshaApiEndpoint + l.thumbnail,
+        source: {
+          type: isRaster ? "raster" : "vector",
+          scheme: "tms",
+          tiles: [
+            `${geoserver.endpoint}/gwc/service/tms/1.0.0/${geoserver.workspace}:${l.name}@EPSG%3A900913@pbf/{z}/{x}/{y}.pbf`,
+          ],
+        },
+        data: { styles: [] },
+        isAdded,
+      };
 
-  for (const l of layers) {
-    const isAdded = selectedLayers.includes(l.name);
-    const _l = {
-      ...l,
-      id: l.name,
-      thumbnail: nakshaApiEndpoint + l.thumbnail,
-      source: {
-        type: l.layerType.toLowerCase() === "raster" ? "raster" : "vector",
-        scheme: "tms",
-        tiles: [
-          `${geoserver.endpoint}/gwc/service/tms/1.0.0/${geoserver.workspace}:${l.name}@EPSG%3A900913@pbf/{z}/{x}/{y}.pbf`,
-        ],
-      },
-      data: { styles: [] },
-      isAdded,
-    };
-
-    if (isAdded) {
-      // if layer is already added pre-fetch it's initial style
-      const _ld = await getLayerStyle(_l, 0, nakshaApiEndpoint, geoserver);
-      parsedLayers.push({ ..._l, data: _ld });
-    } else {
-      parsedLayers.push(_l);
-    }
-  }
-
-  return parsedLayers;
+      if (isAdded && !isRaster) {
+        // if layer is already added pre-fetch its initial style in parallel
+        const _ld = await getLayerStyle(_l, 0, nakshaApiEndpoint, geoserver);
+        return { ..._l, data: _ld };
+      }
+      return _l;
+    })
+  );
 };
 
 /**
@@ -61,33 +57,50 @@ export const getLayerStyle = async (
   nakshaApiEndpoint,
   geoserver
 ) => {
-  const nextSl = produce(layer.data, async (_draft: any) => {
-    if (_draft.styles.length === 0) {
-      const { success, data } = await axGetGeoserverLayerStyleList(
-        layer.id,
-        nakshaApiEndpoint
-      );
-      if (success) {
-        _draft.layerName = data.layerName;
-        _draft.styles = data.styles;
-        _draft.summaryColumn = data.summaryColumn;
-        _draft.titleColumn = data.titleColumn;
-        _draft.propertyMap = Object.fromEntries(
-          data.styles.map((o) => [o.styleName, o.styleTitle])
-        );
-      }
-    }
+  const currentData = layer.data || { styles: [] };
+  let layerName = currentData.layerName;
+  let styles = currentData.styles ? [...currentData.styles] : [];
+  let summaryColumn = currentData.summaryColumn;
+  let titleColumn = currentData.titleColumn;
+  let propertyMap = currentData.propertyMap;
 
-    // styles returns empty array for raster file
-    if (_draft.styles[styleIndex] && !_draft.styles[styleIndex]?.colors) {
-      _draft.styles[styleIndex].colors = await axGetGeoserverLayerStyle(
-        layer.id,
-        geoserver?.workspace,
-        _draft.styles[styleIndex].styleName,
-        nakshaApiEndpoint
+  if (styles.length === 0) {
+    const { success, data } = await axGetGeoserverLayerStyleList(
+      layer.id,
+      nakshaApiEndpoint
+    );
+    if (success && data) {
+      layerName = data.layerName;
+      styles = (data.styles || []).map((s: any) => ({ ...s }));
+      summaryColumn = data.summaryColumn;
+      titleColumn = data.titleColumn;
+      propertyMap = Object.fromEntries(
+        (data.styles || []).map((o: any) => [o.styleName, o.styleTitle])
       );
     }
-    _draft.styleIndex = styleIndex;
-  });
-  return nextSl;
+  }
+
+  // styles returns empty array for raster file
+  if (styles[styleIndex] && !styles[styleIndex]?.colors) {
+    const colors = await axGetGeoserverLayerStyle(
+      layer.id,
+      geoserver?.workspace,
+      styles[styleIndex].styleName,
+      nakshaApiEndpoint
+    );
+    styles[styleIndex] = {
+      ...styles[styleIndex],
+      colors,
+    };
+  }
+
+  return {
+    ...currentData,
+    layerName,
+    styles,
+    summaryColumn,
+    titleColumn,
+    propertyMap,
+    styleIndex,
+  };
 };

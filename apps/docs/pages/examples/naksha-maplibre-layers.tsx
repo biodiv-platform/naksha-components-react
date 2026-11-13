@@ -77,11 +77,11 @@ const onObservationGridHover = ({ feature }) => (
 
 export default function NakshaMaplibreListPage() {
   return (
-    <div className={tw`h-[30vh] w-[18vw]`}>
+    <div className={tw`h-[100vh] w-[100vw]`}>
       <NakshaMaplibreLayers
         defaultViewState={mapCenter}
-        // loadToC={true}
-        // showToC={true}
+        loadToC={true}
+        showToC={true}
         managePublishing={true}
         nakshaApiEndpoint="http://localhost:8010/proxy/nakshaIntegrator-api/api"
         // nakshaEndpointToken={process.env.NEXT_PUBLIC_NAKSHA_TOKEN}
@@ -94,22 +94,6 @@ export default function NakshaMaplibreListPage() {
         onLayerDownload={console.log}
         canLayerShare={true}
         selectedLayers={["global-observations"]}
-        // markers={[
-        //   {
-        //     latitude: 23.241346,
-        //     longitude: 78.046875,
-        //     colorHex: "07BEF1",
-        //   },
-        // ]}
-
-        // markers={[
-        //   {
-        //     latitude: 26.1584,
-        //     longitude: 94.5624,
-        //     colorHex: "07BEF1",
-        //   },
-        // ]}
-
         markers={[
           {
             latitude: 16.7289,

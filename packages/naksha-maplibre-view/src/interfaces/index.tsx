@@ -3,6 +3,7 @@ import { ViewState } from "react-map-gl/maplibre";
 
 export interface NakshaMaplibreViewProps {
   defaultViewState?: Partial<ViewState>;
+  workerUrl?: string;
   mapStyle?: MapStyles;
   data?: any;
   mapStyles?: Array<{

@@ -7,13 +7,14 @@ import useLayers from "../../../hooks/use-layers";
 
 const Pop: any = Popup;
 
-export default function HoverPopup({ coordinates }) {
+export default function HoverPopup({ coordinates }: { coordinates?: any }) {
   const { hover } = useLayers();
+  const coords = coordinates || hover.features?.coordinates;
 
-  return coordinates?.lat && hover.features ? (
+  return coords?.lat && hover.features ? (
     <Pop
-      latitude={coordinates.lat}
-      longitude={coordinates.lng}
+      latitude={coords.lat}
+      longitude={coords.lng}
       closeButton={false}
     >
       <table className={tw`table-auto border`}>

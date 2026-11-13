@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useMap } from "react-map-gl/maplibre";
 
 import useLayers from "../../hooks/use-layers";
@@ -10,10 +10,11 @@ export default function Sidebar() {
   const { mp, layer } = useLayers();
   const [isOpen, setIsOpen] = useState(mp.showToC);
   const { mapl } = useMap();
+  const loadedRef = useRef(false);
 
-  const toggleOpen = () => setIsOpen(!isOpen);
+  const toggleOpen = React.useCallback(() => setIsOpen((prev) => !prev), []);
 
-  async function loadToC() {
+  const loadToC = React.useCallback(async () => {
     const _layers = await axGetGeoserverLayers(
       mp.nakshaEndpointToken,
       mp.nakshaApiEndpoint,
@@ -30,11 +31,29 @@ export default function Sidebar() {
       _layer?.bbox &&
         mapl?.fitBounds(_layer.bbox, { padding: 40, duration: 1000 });
     }
-  }
+  }, [
+    mp.nakshaEndpointToken,
+    mp.nakshaApiEndpoint,
+    mp.geoserver,
+    mp.selectedLayers,
+    mp.layers,
+    layer.setAll,
+    layer.selectedIds,
+    mapl,
+  ]);
 
   useEffect(() => {
-    if (mapl && mp.loadToC) {
+    if (mp.loadToC && !loadedRef.current) {
+      loadedRef.current = true;
       loadToC();
+    }
+  }, [mp.loadToC]);
+
+  useEffect(() => {
+    if (mapl && layer.selectedIds.length && layer.all?.length) {
+      const _layer = layer.all.find((l) => l.id === layer.selectedIds[0]);
+      _layer?.bbox &&
+        mapl.fitBounds(_layer.bbox as any, { padding: 40, duration: 1000 });
     }
   }, [mapl]);
 

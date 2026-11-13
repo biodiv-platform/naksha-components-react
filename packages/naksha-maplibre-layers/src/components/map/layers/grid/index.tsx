@@ -1,10 +1,11 @@
 import bbox from "@turf/bbox";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Layer, Source, useMap } from "react-map-gl/maplibre";
 import useLayers from "../../../../hooks/use-layers";
 
 import { GeoserverLayer } from "../../../../interfaces";
 import { getGridLayerData } from "../../../../services/naksha";
+import { getZoomConfig } from "../../../../utils/grid";
 
 export default function GridLayer({
   data,
@@ -16,6 +17,7 @@ export default function GridLayer({
   const { layer } = useLayers();
   const { mapl } = useMap();
   const [layerData, setLayerData] = useState<any>({ geojson: {}, paint: {} });
+  const lastParamsRef = useRef<string>("");
 
   // Get current selection status
   const isSelected = layer.selectedIds.includes(data.id);
@@ -23,11 +25,25 @@ export default function GridLayer({
 
   // Fetch grid data
   const fetchGridData = async (shouldFitBounds = false) => {
+    if (!mapl) return;
+    const bounds = mapl.getBounds();
+    const zoom = mapl.getZoom();
+    if (!bounds) return;
+
+    const [geoAggegationPrecision] = getZoomConfig(zoom);
+    const { _ne, _sw } = bounds;
+    const cacheKey = `${_ne.lat.toFixed(4)},${_sw.lng.toFixed(4)},${_sw.lat.toFixed(4)},${_ne.lng.toFixed(4)},${geoAggegationPrecision}`;
+
+    if (cacheKey === lastParamsRef.current) {
+      return;
+    }
+    lastParamsRef.current = cacheKey;
+
     const { success, geojson, paint, stops, squareSize } =
       await getGridLayerData(
         data.source.fetcher,
-        mapl?.getBounds(),
-        mapl?.getZoom()
+        bounds,
+        zoom
       );
 
     if (success) {
@@ -36,23 +52,27 @@ export default function GridLayer({
       // Zoom to bounds only if this is the last selected layer
       if (shouldFitBounds && isLastSelected && data.zoomToFit) {
         try {
-          const [minLon, minLat, maxLon, maxLat] = bbox(geojson);
-          mapl?.fitBounds(
-            [
-              [minLon, minLat],
-              [maxLon, maxLat],
-            ],
-            { padding: 40, animate: true }
-          );
+          const b = bbox(geojson as any);
+          if (b.every(Number.isFinite)) {
+            const [minLon, minLat, maxLon, maxLat] = b;
+            mapl.fitBounds(
+              [
+                [minLon, minLat],
+                [maxLon, maxLat],
+              ],
+              { padding: 40, animate: true }
+            );
+          }
         } catch (e) {
           console.warn("Failed to compute bbox", e);
         }
       }
 
       // Update legend
-      layer.setGridLegends({
+      layer.setGridLegends((prev) => ({
+        ...prev,
         [data.id]: { stops, squareSize },
-      });
+      }));
     }
   };
 
@@ -69,11 +89,11 @@ export default function GridLayer({
   useEffect(() => {
     if (!isSelected || !mapl) return;
 
-    const handleIdle = () => fetchGridData(false);
-    mapl.on("idle", handleIdle);
+    const handleMoveEnd = () => fetchGridData(false);
+    mapl.on("moveend", handleMoveEnd);
 
     return () => {
-      mapl.off("idle", handleIdle);
+      mapl.off("moveend", handleMoveEnd);
     };
   }, [isSelected, mapl]);
 

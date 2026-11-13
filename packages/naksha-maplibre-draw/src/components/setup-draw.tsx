@@ -130,12 +130,27 @@ export const ensureModeProperty = (features: any[]): GeoJSONStoreFeatures[] => {
 };
 
 export const filterUserFeatures = (features: GeoJSONStoreFeatures[]) =>
-  features.filter(
-    (f) =>
-      f.geometry.type !== "Point" ||
-      (f.properties.mode !== "static" && f.properties.mode !== "select")
-  );
-export const IconButton = React.forwardRef<HTMLDivElement, any>(
+  features.filter((f) => {
+    const props = (f.properties || {}) as any;
+    if (props.currentlyDrawing) {
+      return false;
+    }
+    if (f.geometry.type !== "Point") {
+      return true;
+    }
+    if (
+      props.coordinatePoint ||
+      props.closingPoint ||
+      props.selectionPoint ||
+      props.midPoint ||
+      props.snappingPoint ||
+      (props.mode && props.mode !== "point")
+    ) {
+      return false;
+    }
+    return true;
+  });
+export const IconButton = React.forwardRef<HTMLButtonElement, any>(
   (props, ref) => (
     <button
       ref={ref}

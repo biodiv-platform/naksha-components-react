@@ -1,3 +1,4 @@
+import type { JSX } from "react";
 import { ViewState } from "react-map-gl/maplibre";
 import { MapStyles } from "@biodiv-platform/naksha-commons";
 
@@ -22,6 +23,7 @@ export interface ExtendedMarkerProps {
 
 export interface NakshaMaplibreLayersProps {
   defaultViewState?: Partial<ViewState>;
+  workerUrl?: string;
 
   loadToC?: boolean;
   showToC?: boolean;

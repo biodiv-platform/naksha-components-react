@@ -19,7 +19,7 @@ export function LayerList() {
     [layer.all, query.term]
   );
 
-  const parentRef = React.useRef<any>();
+  const parentRef = React.useRef<any>(null);
 
   const rowVirtualizer = useVirtual({
     size: filteredLayers.length,
@@ -28,8 +28,8 @@ export function LayerList() {
 
   return (
     <div className={tw`flex-grow-1 relative`}>
-      <AutoSizer disableWidth={true}>
-        {(p) => (
+      <AutoSizer
+        renderProp={(p) => (
           <div
             ref={parentRef}
             className="List"
@@ -57,7 +57,7 @@ export function LayerList() {
             </div>
           </div>
         )}
-      </AutoSizer>
+      />
     </div>
   );
 }
