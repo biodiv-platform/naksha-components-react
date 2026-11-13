@@ -1,6 +1,7 @@
 import cb from "colorbrewer";
 import axios from "redaxios";
 
+import { GridLayerStyle } from "../interfaces";
 import { geohashToJSON, getDataBins, getZoomConfig } from "../utils/grid";
 import { parseGeoserverLayersXml } from "../utils/naksha";
 
@@ -119,12 +120,24 @@ export const axGetGeoserverLayerStyle = async (
   }
 };
 
+/**
+ * Fill colour for grid cells from fixed steps: `colors[0]` below `breaks[0]`,
+ * `colors[i]` from `breaks[i - 1]`, and the last colour from the last break up
+ */
+const getStepColor = (colors: string[], breaks: number[]) => [
+  "step",
+  ["get", "count"],
+  colors[0],
+  ...breaks.flatMap((brk, index) => [brk, colors[index + 1]]),
+];
+
 export const getGridLayerData = async (
   fetcher,
   bounds,
   zoom,
   binCount = 6,
-  colorScheme = "YlOrRd"
+  colorScheme = "YlOrRd",
+  style: GridLayerStyle = {}
 ) => {
   try {
     const [geoAggegationPrecision, level, squareSize] = getZoomConfig(zoom);
@@ -140,19 +153,25 @@ export const getGridLayerData = async (
     const data = await fetcher(params);
 
     const geojson = geohashToJSON(data, level);
-    const bins = getDataBins(data, binCount);
-    const stops = bins.map((bin, index) => [
-      bin,
-      cb[colorScheme][binCount][index],
-    ]);
+    const hasFixedSteps =
+      style.colors?.length && style.breaks?.length === style.colors.length - 1;
+
+    // legend stops are [upper bound, colour]
+    const stops = hasFixedSteps
+      ? style.colors!.map((color, index) => [
+          style.breaks![index] ? style.breaks![index] - 1 : Infinity,
+          color,
+        ])
+      : getDataBins(data, binCount).map((bin, index) => [
+          bin,
+          cb[colorScheme][binCount][index],
+        ]);
     const paint = {
-      "fill-color": {
-        property: "count",
-        default: "yellow",
-        stops,
-      },
-      "fill-outline-color": "rgba(0,0,0,0.2)",
-      "fill-opacity": 0.7,
+      "fill-color": hasFixedSteps
+        ? getStepColor(style.colors!, style.breaks!)
+        : { property: "count", default: "yellow", stops },
+      "fill-outline-color": style.outlineColor || "rgba(0,0,0,0.2)",
+      "fill-opacity": style.opacity ?? 0.7,
     };
 
     return { success: true, geojson, paint, stops, squareSize };

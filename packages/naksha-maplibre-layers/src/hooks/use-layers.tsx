@@ -17,6 +17,7 @@ import {
   PROPERTY_ID,
   SELECTION_STYLE,
 } from "../static/constants";
+import { getFeatureBBox } from "../utils/grid";
 import { getLayerStyle } from "../utils/naksha";
 
 declare const confirm;
@@ -203,7 +204,9 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
         if (feats.length) {
           const fId = feats[0]?.id || feats[0]?.properties?.[PROPERTY_ID];
 
-          if (fId === hoverFeatures?.id) return;
+          // If same feature of the same layer as earlier don't recompute properties
+          if (fId === hoverFeatures?.id && lastLayerId === hoverFeatures?.layerId)
+            return;
 
           const layer = layers[getLayerIndexById(lastLayerId)];
           if (!layer) return;
@@ -215,16 +218,30 @@ export const LayersProvider = ({ mp: _mp, children }: LayersProviderProps) => {
 
           setHoverFeatures({
             id: fId,
+            layerId: lastLayerId,
             title: layer.title,
             data: hoverProperties || [],
             coordinates: e.lngLat,
+            // a layer's own popup content replaces the property table
+            content: layer?.onHover?.({
+              bbox: getFeatureBBox(feats[0]),
+              feature: feats[0],
+              layerId: lastLayerId,
+            }),
           });
         } else {
           setHoverFeatures((prev) => (prev !== undefined ? undefined : prev));
         }
       } catch (e) {}
     },
-    [selectedLayerIds, mapl, hoverFeatures?.id, layers, getLayerIndexById]
+    [
+      selectedLayerIds,
+      mapl,
+      hoverFeatures?.id,
+      hoverFeatures?.layerId,
+      layers,
+      getLayerIndexById,
+    ]
   );
 
   const toggleLayer = useCallback(
