@@ -32,6 +32,8 @@ export interface NakshaMaplibreLayersProps {
   showScaleControl?: boolean;
   /** button that returns the map to `defaultViewState` */
   showResetControl?: boolean;
+  /** attribution shows when the map loads, then folds behind its (i) button after 5 seconds */
+  collapseAttribution?: boolean;
 
   managePublishing?: boolean;
   nakshaEndpointToken?: string;
