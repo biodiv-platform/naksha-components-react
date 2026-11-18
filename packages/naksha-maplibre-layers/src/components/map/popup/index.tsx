@@ -11,7 +11,23 @@ export default function HoverPopup({ coordinates }: { coordinates?: any }) {
   const { hover } = useLayers();
   const coords = coordinates || hover.features?.coordinates;
 
-  return coords?.lat && hover.features ? (
+  if (!coords?.lat || !hover.features) return null;
+
+  // a layer's own content (onHover) replaces the property table
+  if (hover.features.content) {
+    return (
+      <Pop
+        latitude={coords.lat}
+        longitude={coords.lng}
+        closeButton={false}
+        maxWidth="320px"
+      >
+        {hover.features.content}
+      </Pop>
+    );
+  }
+
+  return (
     <Pop
       latitude={coords.lat}
       longitude={coords.lng}
@@ -43,5 +59,5 @@ export default function HoverPopup({ coordinates }: { coordinates?: any }) {
         </tbody>
       </table>
     </Pop>
-  ) : null;
+  );
 }

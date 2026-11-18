@@ -43,7 +43,10 @@ export default function GridLayer({
       await getGridLayerData(
         data.source.fetcher,
         bounds,
-        zoom
+        zoom,
+        undefined,
+        undefined,
+        data.source
       );
 
     if (success) {
