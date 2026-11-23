@@ -20,6 +20,9 @@ import HoverPopup from "./popup";
 import ResetViewControl from "./reset-view-control";
 
 const NavControl: any = NavigationControl;
+
+/** How long the attribution stays open before folding behind its (i) button */
+const ATTRIBUTION_VISIBLE_MS = 5000;
 const Pop: any = Popup;
 
 export default function Map() {
@@ -91,6 +94,73 @@ export default function Map() {
     };
   }, []);
 
+  // MapLibre opens its compact attribution once the map's credits are known (sometimes only after
+  // a slow source has loaded) and folds it on the first drag. Also fold it ATTRIBUTION_VISIBLE_MS
+  // after it has opened, unless the user has used the (i) button: the credit is seen first, then
+  // tucked away, as the OSM attribution guidelines allow.
+  const foldRef = React.useRef<{
+    timer?: ReturnType<typeof setTimeout>;
+    observer?: MutationObserver;
+  }>({});
+
+  const onMapLoad = React.useCallback(
+    (e) => {
+      if (!mp.collapseAttribution) return;
+
+      const attribution = e.target
+        .getContainer()
+        .querySelector(".maplibregl-ctrl-attrib");
+      if (!attribution) return;
+
+      let userToggled = false;
+      // capture runs before MapLibre's own click handler toggles the attribution
+      attribution
+        .querySelector(".maplibregl-ctrl-attrib-button")
+        ?.addEventListener(
+          "click",
+          () => {
+            userToggled = true;
+          },
+          { capture: true, once: true }
+        );
+
+      const isOpen = () =>
+        attribution.classList.contains("maplibregl-compact-show");
+      const foldLater = () => {
+        foldRef.current.timer = setTimeout(() => {
+          if (!userToggled)
+            attribution.classList.remove("maplibregl-compact-show");
+        }, ATTRIBUTION_VISIBLE_MS);
+      };
+
+      if (isOpen()) {
+        foldLater();
+        return;
+      }
+      // not open yet: wait for MapLibre to open it. The observer only reads, then stops.
+      const observer = new MutationObserver(() => {
+        if (!isOpen()) return;
+        observer.disconnect();
+        foldLater();
+      });
+      observer.observe(attribution, {
+        attributes: true,
+        attributeFilter: ["class"],
+      });
+      foldRef.current.observer = observer;
+    },
+    [mp.collapseAttribution]
+  );
+
+  useEffect(
+    () => () => {
+      const { timer } = foldRef.current;
+      if (timer) clearTimeout(timer);
+      foldRef.current.observer?.disconnect();
+    },
+    []
+  );
+
   return (
     <div className={tw`h-full w-full relative bg-gray-100`}>
       {mp.loadToC && <Sidebar />}
@@ -105,6 +175,10 @@ export default function Map() {
         maxZoom={layer.maxZoom}
         onClick={onMapClick}
         onMouseMove={handleOnMouseMove}
+        attributionControl={
+          mp.collapseAttribution ? { compact: true } : undefined
+        }
+        onLoad={onMapLoad}
       >
         {/* bottom controls stack upwards, so the first added sits lowest */}
         {mp.showScaleControl && <ScaleControl position="bottom-right" />}
